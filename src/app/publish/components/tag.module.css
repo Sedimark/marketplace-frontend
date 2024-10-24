@@ -1,0 +1,15 @@
+.tagInput :global(.rti--container) {
+  --rti-bg: #f9fafb;
+}
+
+.test :global(.rti--input) {
+  width: 100%;
+}
+/*  TODO: Find a way to remove the border */
+/* Current attempts with `border: 0/none` and `border-style: none` do not override the border */
+/* Investigate alternative CSS properties or methods to remove the border */
+.test :global(.rti--input:focus) {
+  border: 0;
+  border-style: none;
+  width: 100%;
+}
