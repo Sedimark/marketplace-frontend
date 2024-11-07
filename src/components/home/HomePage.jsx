@@ -5,7 +5,7 @@ import Banner from '@/components/home/Banner'
 import { getCatalogue, getProviders } from 'src/services/server'
 
 const HomePage = async () => {
-    // Fetch catalogue data passing default parameters to set total of offerings on homepage
+  // Fetch catalogue data passing default parameters to set total of offerings on homepage
   const data = await getCatalogue('', 1)
   // Fetch providers data to display total of participants on the homepage
   const providers = await getProviders()
@@ -21,7 +21,7 @@ const HomePage = async () => {
           </Suspense>
         </div>
         <div>
-          <Banner totalVcs={data.total} providers={providers}/>
+          <Banner totalVcs={data.total} providers={providers} />
         </div>
       </div>
     </div>
