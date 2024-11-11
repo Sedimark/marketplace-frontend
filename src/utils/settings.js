@@ -14,7 +14,7 @@
  * @type {Settings}
  */
 const settings = {
-  batchSize: process.env.BATCH_SIZE ?? 40,
+  batchSize: 40,
   federatedCatalogueApi: new URL('/query_page', process.env.FEDERATED_CATALOGUE_API),
   federatedCatalogueProviders: new URL('/api/providers', process.env.FEDERATED_CATALOGUE_API),
   federatedCatalogueFilters: new URL('/api/filters-data', process.env.FEDERATED_CATALOGUE_API)

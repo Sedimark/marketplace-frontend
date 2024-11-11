@@ -7,22 +7,20 @@ import { useSearchParams } from 'next/navigation'
 import CustomPagination from '@/components/pagination/Pagination'
 import LoadingCard from '@/app/catalogue/components/LoadingCard'
 import CatalogueSideBar from './SideBar'
-import { fetcher } from '@/app/catalogue/utils/fetcher'
 import ResultsList from './ResultsList'
 import settings from '@/utils/settings'
+import mockCatalogue from '@/utils/data/mockCatalogue.json'
 
 /**
  * Component responsible for rendering a pane to display catalogue query results.
  *
  * @param {Object} props - The component props.
  * @param {Array} props.providers - Array of Available providers returned by filters endpoint.
- * @param {Object} props.providersMapping - - An object mapping the IDs of providers to their Name || LegalName.
  * @param {Array} props.keywords - The list of keywords returned by filters endpoint.
  * @returns {JSX.Element} A JSX element representing the rendered pane of results.
  */
 export default function ResultsPane ({
   providers,
-  providersMapping,
   keywords
 }) {
   // Component state
@@ -37,34 +35,8 @@ export default function ResultsPane ({
   const [selectedKeywords, setSelectedKeywords] = useState([])
   const [selectedProviders, setSelectedProviders] = useState([])
   const [totalVcs, setTotalVcs] = useState(0)
-  const url = settings.federatedCatalogueApi
-  /**
-   * Generates the SWR key based on the selected providers, keywords AND/OR query.
-   * By generating a unique key the SWR library can cache and retrieve
-   * the data associated with that specific combination of filters.
-   * This allows for efficient caching and revalidation of data,
-   * ensuring that the UI remains responsive and up-to-date.
-   * For more information on SWR arguments, see the SWR documentation:
-   * https://swr.vercel.app/docs/arguments
-   * @returns {string} The SWR key.
-   */
-  function getSWRKey () {
-    const filters = {
-      ...(selectedProviders.length > 0 && { provider_ids: selectedProviders }),
-      ...(selectedKeywords.length > 0 && { keywords: selectedKeywords }),
-      ...(query && { search_service_name: query }),
-      page: currentPage
-    }
-    return JSON.stringify(filters)
-  }
-  // Fetch data using SWR
-  const { data, error } = useSWR(
-    getSWRKey(),
-    (key) => fetcher(key, url, currentPage, settings.batchSize),
-    {
-      revalidateOnFocus: false
-    }
-  )
+
+  const data = mockCatalogue
 
   // Update state when selected providers or keywords change
   useEffect(() => {
@@ -99,10 +71,10 @@ export default function ResultsPane ({
       setLoading(false)
       setResults(data.results)
       setTotalVcs(data.total)
-    } else if (!data && !error) {
+    } else if (!data ) {
       setLoading(true)
     }
-  }, [data, error])
+  }, [data])
 
   /**
    * Calculates the total number of pages based on the total number of VCs and the batch size.
@@ -115,20 +87,20 @@ export default function ResultsPane ({
     return Math.floor((totalVcs || 0) / batchSize)
   }
 
-  const totalPages = useMemo(() => calculateTotalPages(totalVcs, settings.batchSize), [totalVcs])
+  const totalPages = useMemo( () => calculateTotalPages( totalVcs, settings.batchSize ), [totalVcs] )
   const totalPagesToDisplay = totalPages
 
   return (
     <div className='flex flex-row bg-gray-50'>
       <CatalogueSideBar
-        providersMapping={providers}
+        providers={providers}
         keywords={keywords}
         selectedProviders={selectedProviders}
         setSelectedProviders={setSelectedProviders}
         selectedKeywords={selectedKeywords}
         setSelectedKeywords={setSelectedKeywords}
       />
-      {error && !loading && ( // Error during fetch (potentially Catalogue unavailable)
+      { !loading && !data && ( // Error during fetch (potentially Catalogue unavailable)
         <div className='flex flex-col w-full gap-4 p-4'>
           <div className='w-full gap-4 p-6 text-center bg-white border border-gray-200 rounded-lg shadow'>
             <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Catalogue service unavailable. Please try again later.</h5>
@@ -146,7 +118,7 @@ export default function ResultsPane ({
               <path clipRule='evenodd' fillRule='evenodd' d='M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z' />
             </svg>
           </Button>}
-        {!loading && !results.length && data && !error && (
+        {!loading && !results.length && data && (
           <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
             <div className='w-full gap-4 p-6 text-center bg-white border border-gray-200 rounded-lg shadow'>
               <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Whoops! There are no results matching your filters criteria.</h5>
@@ -157,7 +129,7 @@ export default function ResultsPane ({
         {!loading && results.length > 0 && (
           <div className='w-full bg-gray-50 '>
             <p className='flex justify-end pr-4 pt-2.5 text-xs'> {(currentPage * settings.batchSize) - (settings.batchSize - 1)} - {currentPage * settings.batchSize} of over {totalVcs} results</p>
-            <ResultsList results={results} providersMapping={providersMapping} />
+            <ResultsList results={results} />
             <CustomPagination totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </div>
         )}

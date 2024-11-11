@@ -1,10 +1,7 @@
 function OfferingItem ({ vc, providerName, price }) {
-  if (Array.isArray(vc)) {
-    for (const vcItem of vc) {
-      if (vcItem.credentialSubject) {
-        const name = vcItem.credentialSubject['gx:name'] ?? 'No name'
-        const description = vcItem.credentialSubject['gx:description'] ?? ' '
-        const issuanceDate = vcItem.issuanceDate ? new Date(vcItem.issuanceDate) : new Date()
+        const name = vc.title
+        const description = vc.short_description
+        const issuanceDate = vc.created_at ? new Date(vc.created_at) : new Date()
         const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
         const providedBy = providerName ?? 'OTHER'
         const validatedPrice = price ?? '0'
@@ -82,8 +79,5 @@ function OfferingItem ({ vc, providerName, price }) {
           </div>
         )
       }
-    }
-  }
-}
 
 export default OfferingItem

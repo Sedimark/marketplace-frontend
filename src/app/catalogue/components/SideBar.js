@@ -6,7 +6,6 @@ import { Button, Checkbox, Label, ListGroup } from 'flowbite-react'
  * It also allows the user to filter the catalogue by providers and keywords.
  *
  * @param {Object} props - The properties passed to the component.
- * @param {Object} props.providersMapping - An object mapping the IDs of 'gx:LegalParticipant' to their 'gx:legalName'.
  * @param {Array} props.keywords - A sorted array of unique keywords found in the 'gx:keyword' property of 'gx:ServiceOffering'.
  * @param {Array} props.selectedProviders - An array of selected provider IDs.
  * @param {Function} props.setSelectedProviders - A function to set the selected providers.
@@ -16,19 +15,19 @@ import { Button, Checkbox, Label, ListGroup } from 'flowbite-react'
  * @returns {JSX.Element} A JSX element representing the rendered sidebar.
  */
 export default function CatalogueSideBar ({
-  providersMapping,
+  providers,
   keywords,
   selectedProviders,
   setSelectedProviders,
   selectedKeywords,
   setSelectedKeywords
-}) {
-  const handleProviderChange = (id) => {
-    const index = selectedProviders.indexOf(id)
+} ) {
+  const handleProviderChange = (provider) => {
+    const index = selectedProviders.indexOf(provider)
     if (index > -1) {
       setSelectedProviders(selectedProviders.filter((_, i) => i !== index))
     } else {
-      setSelectedProviders([...selectedProviders, id])
+      setSelectedProviders([...selectedProviders, provider])
     }
   }
 
@@ -56,24 +55,23 @@ export default function CatalogueSideBar ({
             Clear all Providers
           </Button>
         )}
-        {/* TODO: Fix style of side bar, it was using bootstrap */}
         <ListGroup className='w-48 '>
-          {Object.entries(providersMapping).map(([id, name]) => (
+          {providers.map((provider) => (
             <ListGroup.Item
-              key={`provider-${id}-filter`}
+              key={`provider-${provider}-filter`}
               className='flex items-center text-left cursor-pointer last:border-b-0'
               onClick={() => {
-                handleProviderChange(id)
+                handleProviderChange(provider)
               }}
             >
               <Checkbox
-                id={id}
+                id={provider}
                 className='mr-2'
-                checked={selectedProviders.includes(id)}
+                checked={selectedProviders.includes(provider)}
                 readOnly
               />
               <Label className='py-1 text-left'>
-                {name}
+                {provider}
               </Label>
             </ListGroup.Item>
           ))}
@@ -93,9 +91,9 @@ export default function CatalogueSideBar ({
 
         <div>
           <ListGroup className='w-48 h-64 overflow-auto'>
-            {keywords.map((keyword) => (
+            {keywords.map((keyword, index) => (
               <ListGroup.Item
-                key={`keyword-${keyword}-filter`}
+                key={`keyword-${keyword}-filter` + index }
                 className='flex items-center cursor-pointer last:border-b-0'
                 onClick={() => handleKeywordChange(keyword)}
               >
