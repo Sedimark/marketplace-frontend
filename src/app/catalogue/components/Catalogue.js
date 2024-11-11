@@ -4,10 +4,15 @@ import mockProviders from '@/utils/data/mockProviders.json'
 import mockFilters from '@/utils/data/mockFilters.json'
 
 /**
- * Wrapper around the ResultsPane component that queries the catalogue. *
- * @returns {Promise<JSX.Element>} A promise that resolves to a JSX element representing the rendered catalogueresults
+ * Renders the Catalogue component.
+ *
+ * This function fetches mock providers and keywords, and then renders the ResultsPane component
+ * with the fetched data. The ResultsPane component is wrapped in a Suspense component to handle
+ * asynchronous loading.
+ *
+ * @returns {JSX.Element} The Catalogue component.
  */
-export default async function Catalogue () {
+export default function Catalogue () {
   const providers = mockProviders
   const keywords = mockFilters
   
