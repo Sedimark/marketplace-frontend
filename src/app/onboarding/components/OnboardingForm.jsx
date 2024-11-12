@@ -254,7 +254,7 @@ export default function FormSteps () {
                   <CustomTextInput
                     label='Website'
                     name='website'
-                    placeholder='http://eviden.com'
+                    placeholder='http://sedimark.com'
                   />
                 </div>
                 <div className='flex gap-6 mb-2 md:grid-cols-2 pt-4'>

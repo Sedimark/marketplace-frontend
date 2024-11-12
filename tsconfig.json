@@ -28,9 +28,6 @@
       "@/app/*": [
         "src/app/*"
       ],
-      "@/hooks/*": [
-        "src/hooks/*"
-      ],
       "@/utils/*": [
         "src/utils/*"
       ],

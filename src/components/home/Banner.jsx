@@ -1,4 +1,4 @@
-const Banner = () => {
+const Banner = ({ totalVcs, providers }) => {
   return (
     <div className='relative h-60 w-full bg-sedimark-light-blue text-black grid place-content-center'>
       <div className='flex flex-row gap-52'>
@@ -8,7 +8,7 @@ const Banner = () => {
           </svg>
           <div className='flex flex-col items-center'>
             <span className='font-bold text-black text-xl'>
-              234
+              {providers.length}
             </span>
             <span className='font-medium text-black text-base'>
               Participants
@@ -22,7 +22,7 @@ const Banner = () => {
 
           <div className='flex flex-col items-center'>
             <span className='font-bold text-black text-xl'>
-              1035
+              {totalVcs}
             </span>
             <span className='font-medium text-black text-base'>
               Offerings

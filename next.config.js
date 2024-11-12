@@ -2,6 +2,10 @@ const nextConfig = {
   reactStrictMode: true,
   // swcMinify: true,
   output: 'standalone',
+  env: {
+    BATCH_SIZE: process.env.BATCH_SIZE ?? '40',
+    FEDERATED_CATALOGUE_API: process.env.FEDERATED_CATALOGUE_API
+  },
   async headers () {
     return [
       {
