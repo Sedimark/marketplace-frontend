@@ -55,7 +55,7 @@ export default function CatalogueSideBar ({
             Clear all Providers
           </Button>
         )}
-        <ListGroup className='w-48 '>
+        <ListGroup className='w-48 h-80 overflow-auto '>
           {providers.map((provider) => (
             <ListGroup.Item
               key={`provider-${provider}-filter`}

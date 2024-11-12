@@ -1,5 +1,4 @@
 'use client'
-import useSWR from 'swr'
 import { Button } from 'flowbite-react'
 import { useEffect, useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
