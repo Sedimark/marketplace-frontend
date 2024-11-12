@@ -15,7 +15,7 @@ import mockFilters from '@/utils/data/mockFilters.json'
 export default function Catalogue () {
   const providers = mockProviders
   const keywords = mockFilters
-  
+
   return (
     <Suspense>
       <ResultsPane

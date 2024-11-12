@@ -21,7 +21,7 @@ export default function CatalogueSideBar ({
   setSelectedProviders,
   selectedKeywords,
   setSelectedKeywords
-} ) {
+}) {
   const handleProviderChange = (provider) => {
     const index = selectedProviders.indexOf(provider)
     if (index > -1) {
@@ -93,7 +93,7 @@ export default function CatalogueSideBar ({
           <ListGroup className='w-48 h-64 overflow-auto'>
             {keywords.map((keyword, index) => (
               <ListGroup.Item
-                key={`keyword-${keyword}-filter` + index }
+                key={`keyword-${keyword}-filter` + index}
                 className='flex items-center cursor-pointer last:border-b-0'
                 onClick={() => handleKeywordChange(keyword)}
               >
