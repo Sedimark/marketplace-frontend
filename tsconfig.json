@@ -42,7 +42,7 @@
     "**/*.tsx",
     "**/*.js",
     ".next/types/**/*.ts"
-  ],
+, "src/app/catalogue/asset/components/Asset.jsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -11,7 +11,7 @@ module.exports = {
           DEFAULT: '#ff6d43'
         },
         'sedimark-deep-blue': {
-          DEFAULT: '#4C83B9'
+          DEFAULT: '#1A56DB'
         },
         'sedimark-dark-deep-blue': {
           DEFAULT: '#32567A'
@@ -27,7 +27,14 @@ module.exports = {
         },
         'sedimark-white': {
           DEFAULT: '#ffffff'
+        },
+        'sedimark-clear-blue': {
+          DEFAULT: '#E1EFFE'
+        },
+        'sedimark-medium-gray': {
+          DEFAULT: '#c0c5c6'
         }
+
       }
     }
 
