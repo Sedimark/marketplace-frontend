@@ -1,4 +1,5 @@
 import { Card } from 'flowbite-react'
+import { TermsNConditions } from './Terms&ConditionsModal'
 function PriceCard ({ price }) {
   return (
     <Card className='flex max-w-sm min-w-fit max-h-72 min-h-fit pt-2 sticky top-28'>
@@ -13,7 +14,7 @@ function PriceCard ({ price }) {
         <span className='text-base font-normal leading-tight text-gray-500 dark:text-gray-400'>Accessible for three months</span>
       </div>
       <div className='flex flex-col items-center'>
-        <a className='text-sedimark-deep-blue mb-2' rel='stylesheet' href=''>Terms & Conditions</a>
+              <TermsNConditions/>
         <button
           type='button'
           className='inline-flex w-full justify-center rounded-lg bg-sedimark-deep-blue px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-900'

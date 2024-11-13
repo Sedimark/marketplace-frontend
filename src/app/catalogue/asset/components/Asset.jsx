@@ -52,13 +52,13 @@ function Asset ({ asset }) {
           <img src={imageUrl} alt='cartoon, humans analysing data from the earth' className='max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />
           <p className='text-xs text-right text-gray-500'>Designed by <a href='https://www.freepik.com' target='_blank' rel='noreferrer' className='text-blue-500'>Freepik</a></p>
         </div>
-        <h5 className='text-xl tracking-tight text-black dark:text-white'>
+        <h5 className='text-xl tracking-tight text-black dark:text-white mb-2'>
           {title}
         </h5>
         <p className='font-normal text-gray-700 dark:text-gray-400'>
           {shortDescription}
         </p>
-        <h5 className='text-xl tracking-tight text-black dark:text-white mt-2'>
+        <h5 className='text-xl tracking-tight text-black dark:text-white mt-2 mb-2'>
           Database entry description
         </h5>
         <p className='font-normal text-gray-700 dark:text-gray-400'>
