@@ -1,4 +1,5 @@
 import { Badge } from 'flowbite-react'
+import Image from 'next/image'
 import Credentials from './Credentials'
 import ProviderCard from './ProviderCard'
 import mockProvider from '@/utils/data/mockProvider.json'
@@ -49,7 +50,7 @@ function Asset ({ asset }) {
       {/* Descriptions */}
       <div className='bg-sedimark-light-blue'>
         <div className='float-left  mr-5'>
-          <img src={imageUrl} alt='cartoon, humans analysing data from the earth' className='max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />
+          <Image src={imageUrl} alt='cartoon, humans analysing data from the earth' width={224} height={224} className='max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />
           <p className='text-xs text-right text-gray-500'>Designed by <a href='https://www.freepik.com' target='_blank' rel='noreferrer' className='text-blue-500'>Freepik</a></p>
         </div>
         <h5 className='text-xl tracking-tight text-black dark:text-white mb-2'>

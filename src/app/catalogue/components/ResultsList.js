@@ -18,6 +18,7 @@ export default function ResultsList ({ results }) {
             vc={vc}
             providerName={vc.provider}
             price={vc.price}
+            color='bg-gray-50'
           />
         )
       })}

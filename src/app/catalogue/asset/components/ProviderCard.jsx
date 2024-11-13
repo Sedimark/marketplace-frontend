@@ -1,3 +1,4 @@
+import Image from 'next/image'
 function ProviderCard ({ provider }) {
   const imageUrl = '/img/mock_provider.png'
   return (
@@ -5,7 +6,7 @@ function ProviderCard ({ provider }) {
       <h5 className='text-xl font-bold'>Provided by</h5>
       <div className='flex flex-wrap m-5 ml-0'>
         <div className='float-left mr-5'>
-          <img src={imageUrl} alt='cartoon, humans analysing data from the earth' className='max-w-16 max-h-16 object-cover object-center rounded-lg shadow-lg' />
+          <Image width={64} height={64} src={imageUrl} alt='cartoon, humans analysing data from the earth' className='max-w-16 max-h-16 object-cover object-center rounded-lg shadow-lg' />
           <p className='text-xs text-center text-black pt-1'><a href={provider.url} target='_blank' rel='noreferrer'>{provider.name}</a></p>
         </div>
         <div className='flex flex-col justify-around'>

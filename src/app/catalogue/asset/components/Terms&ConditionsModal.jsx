@@ -8,7 +8,7 @@ export function TermsNConditions () {
 
   return (
     <>
-      <a className='text-sedimark-deep-blue mb-2' rel='stylesheet' href='#' onClick={() => setOpenModal( true )}>Terms & Conditions</a>
+      <a className='text-sedimark-deep-blue mb-2' rel='stylesheet' href='#' onClick={() => setOpenModal(true)}>Terms & Conditions</a>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Terms of Service</Modal.Header>
         <Modal.Body>
