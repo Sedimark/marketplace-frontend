@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import OfferingItem from '../../components/OfferingItem'
 function Recommender ({ recommendations }) {
   return (
@@ -6,13 +7,14 @@ function Recommender ({ recommendations }) {
       <div className='flex gap-4 overflow-x-auto p-4 w-full'>
         {recommendations.map((offering, index) => {
           return (
-            <OfferingItem
-              key={`${offering.title}-${offering.created_at}-${index + 1}`}
-              vc={offering}
-              providerName={offering.provider}
-              price={offering.price}
-              color='bg-sedimark-light-blue bg-red'
-            />
+            <Link key={`${offering.title}-${offering.created_at}-${index + 1}`} href='#'>
+              <OfferingItem
+                vc={offering}
+                providerName={offering.provider}
+                price={offering.price}
+                color='bg-sedimark-light-blue bg-red'
+              />
+            </Link>
           )
         })}
       </div>
