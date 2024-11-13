@@ -1,10 +1,10 @@
 import { Card } from 'flowbite-react'
-function PriceCard ({ asset }) {
+function PriceCard ({ price }) {
   return (
     <Card className='flex max-w-sm min-w-fit max-h-72 min-h-fit pt-2 sticky top-28'>
       <div className='flex flex-row-reverse text-gray-900 dark:text-white'>
         <span className='flex items-end text-3xl font-bold ml-1'>€</span>
-        <span className='text-5xl font-bold tracking-tight'>{asset.price}</span>
+        <span className='text-5xl font-bold tracking-tight'>{price}</span>
       </div>
       <div className='my-3 flex space-x-3'>
         <svg class='w-6 h-6 text-sedimark-deep-blue dark:text-white' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' viewBox='0 0 24 24'>

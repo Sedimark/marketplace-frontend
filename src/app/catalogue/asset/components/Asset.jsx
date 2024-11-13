@@ -1,4 +1,6 @@
-import { Card, Badge } from 'flowbite-react'
+import { Badge } from 'flowbite-react'
+import Credentials from './Credentials'
+
 function Asset ({ asset }) {
   const title = asset.title
   const imageUrl = '/img/mock_asset_img.jpg'
@@ -44,7 +46,7 @@ function Asset ({ asset }) {
       <div className='bg-sedimark-light-blue'>
         <div className='float-left w-1/3 h-1/3 mr-5'>
           <img src={imageUrl} alt='cartoon, humans analysing data from the earth' />
-          <p className='text-xs text-right text-gray-500'>Designed by <a href="https://www.freepik.com" target="_blank">Freepik</a></p>
+          <p className='text-xs text-right text-gray-500'>Designed by <a href='https://www.freepik.com' target='_blank' rel='noreferrer'>Freepik</a></p>
         </div>
         <h5 className='text-xl tracking-tight text-gray-900 dark:text-white'>
           {title}
@@ -66,6 +68,7 @@ function Asset ({ asset }) {
           })}
         </div>
       </div>
+      <Credentials asset={asset} />
     </div>
   )
 }
