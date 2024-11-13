@@ -17,10 +17,10 @@ module.exports = {
           DEFAULT: '#32567A'
         },
         'sedimark-light-blue': {
-          DEFAULT: '#F4F8FC'
+          DEFAULT: '#EBF5FF'
         },
         'sedimark-light-gray': {
-          DEFAULT: '#D3DBDD'
+          DEFAULT: '#E5E7EB'
         },
         'sedimark-black': {
           DEFAULT: '#000000'
@@ -33,6 +33,9 @@ module.exports = {
         },
         'sedimark-medium-gray': {
           DEFAULT: '#c0c5c6'
+        },
+        'sedimark-dark-gray': {
+          DEFAULT: '#1F2A37'
         }
 
       }
