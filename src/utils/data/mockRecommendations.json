@@ -1,0 +1,79 @@
+{
+  "recommendations": [
+    {
+      "title": "Wildlife Species 2020",
+      "id": "did:web:example.com:dataset:wildlife-species-2020",
+      "short_description": "Species data by region",
+      "provider": "WWF",
+      "price": 90,
+      "created_at": "2020-07-07T12:00:00",
+      "updated_at": "2023-10-05T14:30:00",
+      "keywords": [
+        "wildlife",
+        "species"
+      ],
+      "location": "Gland, Switzerland",
+      "description": "This dataset provides comprehensive data on wildlife species for the year 2020. It includes detailed information on species distribution, population, and conservation status by region and habitat. The data is sourced from the World Wildlife Fund (WWF) and is designed to support research and policy-making efforts related to wildlife conservation, biodiversity, and sustainable development."
+    },
+    {
+      "title": "Renewable Energy 2023",
+      "id": "did:web:example.com:dataset:renewable-energy-2023",
+      "short_description": "Data on renewable sources",
+      "provider": "EcoEnergy",
+      "price": 80,
+      "created_at": "2023-02-03T11:05:00",
+      "updated_at": "2023-10-05T14:30:00",
+      "keywords": [
+        "renewable",
+        "energy"
+      ],
+      "location": "New York, USA",
+      "description": "This dataset provides comprehensive data on various renewable energy sources for the year 2023. It includes detailed information on wind, solar, hydro, and geothermal energy production, capacity, and potential. The data is sourced from EcoEnergy and is designed to support research and policy-making efforts related to renewable energy adoption and sustainability."
+    },
+    {
+      "title": "Ocean Plastic Pollution 2020",
+      "id": "did:web:example.com:dataset:ocean-plastic-pollution-2020",
+      "short_description": "Plastic pollution in oceans",
+      "provider": "OceanWatch",
+      "price": 75,
+      "created_at": "2020-06-25T09:30:00",
+      "updated_at": "2023-10-05T14:30:00",
+      "keywords": [
+        "plastic",
+        "pollution"
+      ],
+      "location": "Sydney, Australia",
+      "description": "This dataset provides comprehensive data on plastic pollution in oceans for the year 2020. It includes detailed information on plastic waste sources, distribution, and impact on marine life and ecosystems. The data is sourced from OceanWatch and is designed to support research and policy-making efforts related to ocean conservation and sustainable development."
+    },
+    {
+      "title": "World GDP 2022",
+      "id": "did:web:example.com:dataset:world-gdp-2022",
+      "short_description": "Global GDP data",
+      "provider": "World Bank",
+      "price": 120,
+      "created_at": "2022-04-15T18:22:00",
+      "updated_at": "2023-10-05T14:30:00",
+      "keywords": [
+        "GDP",
+        "economics"
+      ],
+      "location": "Washington D.C., USA",
+      "description": "This dataset provides comprehensive data on global GDP for the year 2022. It includes detailed information on GDP growth, composition, and distribution by country and region. The data is sourced from the World Bank and is designed to support research and policy-making efforts related to economic development and international trade."
+    },
+    {
+      "title": "City Population 2021",
+      "id": "did:web:example.com:dataset:city-population-2021",
+      "short_description": "Urban population data",
+      "provider": "UN",
+      "price": 45,
+      "created_at": "2021-10-13T07:44:00",
+      "updated_at": "2023-10-05T14:30:00",
+      "keywords": [
+        "population",
+        "urban"
+      ],
+      "location": "New York, USA",
+      "description": "This dataset provides comprehensive data on urban population for the year 2021. It includes detailed information on population growth, distribution, and density by city and country. The data is sourced from the United Nations and is designed to support research and policy-making efforts related to urban planning, housing, and infrastructure development."
+    }
+  ]
+}
