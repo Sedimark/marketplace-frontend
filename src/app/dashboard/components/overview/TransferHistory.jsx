@@ -3,7 +3,7 @@ import { Table, Accordion } from 'flowbite-react'
 function TransferHistory ({ history }) {
   const historyData = ['', 'Asset', 'Counterparty ID', 'Status', 'Date']
   return (
-    <Accordion className='mt-5 mb-5'>
+    <Accordion className='mt-5 mb-5 p-10 border-none'>
       <Accordion.Panel>
         <Accordion.Title>
           <div className='flex flex-row gap-2'>
