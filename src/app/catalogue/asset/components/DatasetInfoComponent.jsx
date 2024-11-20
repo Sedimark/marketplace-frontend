@@ -1,6 +1,7 @@
 import Asset from './Asset'
 import PriceCard from './PriceCard'
 import mockAsset from '@/utils/data/mockAsset.json'
+
 function DatasetInfoComponent () {
   const asset = mockAsset
   return (

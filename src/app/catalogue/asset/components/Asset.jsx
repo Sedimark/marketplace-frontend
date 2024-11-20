@@ -6,7 +6,7 @@ import mockProvider from '@/utils/data/mockProvider.json'
 
 function Asset ({ asset }) {
   const title = asset.title
-  const imageUrl = '/img/mock_asset_img.jpg'
+  const imageUrl = asset.picture
   const shortDescription = asset.short_description
   const keywords = asset.keywords
   const createdAt = new Date(asset.created_at)
@@ -50,7 +50,7 @@ function Asset ({ asset }) {
       {/* Descriptions */}
       <div className='bg-sedimark-light-blue'>
         <div className='float-left  mr-5'>
-          <Image src={imageUrl} alt='cartoon, humans analysing data from the earth' width={224} height={224} className='max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />
+          <Image src={imageUrl} alt={title} width={224} height={224} className='max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />
           <p className='text-xs text-right text-gray-500'>Designed by <a href='https://www.freepik.com' target='_blank' rel='noreferrer' className='text-blue-500'>Freepik</a></p>
         </div>
         <h5 className='text-xl tracking-tight text-black dark:text-white mb-2'>
@@ -59,16 +59,14 @@ function Asset ({ asset }) {
         <p className='font-normal text-gray-700 dark:text-gray-400'>
           {shortDescription}
         </p>
-        <h5 className='text-xl tracking-tight text-black dark:text-white mt-2 mb-2'>
-          Database entry description
-        </h5>
         <p className='font-normal text-gray-700 dark:text-gray-400'>
           {description}
         </p>
-        <div className='flex flex-wrap'>
+        <div className='flex items-center flex-wrap'>
+          <h4 className='text-lg font-bold text-center m-3 ml-0'>Keywords:</h4>
           {keywords.map((keyword, index) => {
             return (
-              <Badge key={`${keyword}-${index}`} className='text-sedimark-deep-blue bg-sedimark-clear-blue m-3 ml-0'>{keyword}</Badge>
+              <Badge key={`${keyword}-${index}`} className='text-sedimark-deep-blue bg-sedimark-clear-blue m-3 ml-0 mb-2'>{keyword}</Badge>
             )
           })}
         </div>
