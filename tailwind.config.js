@@ -11,23 +11,33 @@ module.exports = {
           DEFAULT: '#ff6d43'
         },
         'sedimark-deep-blue': {
-          DEFAULT: '#4C83B9'
+          DEFAULT: '#1A56DB'
         },
         'sedimark-dark-deep-blue': {
           DEFAULT: '#32567A'
         },
         'sedimark-light-blue': {
-          DEFAULT: '#F4F8FC'
+          DEFAULT: '#EBF5FF'
         },
         'sedimark-light-gray': {
-          DEFAULT: '#D3DBDD'
+          DEFAULT: '#E5E7EB'
         },
         'sedimark-black': {
           DEFAULT: '#000000'
         },
         'sedimark-white': {
           DEFAULT: '#ffffff'
+        },
+        'sedimark-clear-blue': {
+          DEFAULT: '#E1EFFE'
+        },
+        'sedimark-medium-gray': {
+          DEFAULT: '#c0c5c6'
+        },
+        'sedimark-dark-gray': {
+          DEFAULT: '#1F2A37'
         }
+
       }
     }
 

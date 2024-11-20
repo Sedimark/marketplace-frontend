@@ -1,4 +1,4 @@
-function OfferingItem ({ vc, providerName, price }) {
+function OfferingItem ({ vc, providerName, price, color }) {
   const name = vc.title
   const description = vc.short_description
   const issuanceDate = vc.created_at ? new Date(vc.created_at) : new Date()
@@ -6,7 +6,7 @@ function OfferingItem ({ vc, providerName, price }) {
   const providedBy = providerName ?? 'OTHER'
   const validatedPrice = price ?? '0'
   return (
-    <div className='flex flex-col p-4 rounded-lg shadow-lg bg-gray-50 hover:bg-gray-100'>
+    <div className={`flex flex-col p-4 rounded-lg shadow-lg ${color} hover:bg-gray-100`}>
       <div className='text-lg font-semibold'>{name}</div>
       <div className='flex items-center justify-between w-full'>
         <div>{description}</div>
@@ -37,25 +37,9 @@ function OfferingItem ({ vc, providerName, price }) {
               viewBox='0 0 20 20'
               xmlns='http://www.w3.org/2000/svg'
             >
-              <path
-                clipRule='evenodd'
-                d='M10 1c3.866 0 7 1.79 7 4s-3.134 4-7 4-7-1.79-7-4 3.134-4 7-4Zm5.694 8.13c.464-.264.91-.583 1.306-.952V10c0 2.21-3.134 4-7 4s-7-1.79-7-4V8.178c.396.37.842.688 1.306.953C5.838 10.006 7.854 10.5 10 10.5s4.162-.494 5.694-1.37ZM3 13.179V15c0 2.21 3.134 4 7 4s7-1.79 7-4v-1.822c-.396.37-.842.688-1.306.953-1.532.875-3.548 1.369-5.694 1.369s-4.162-.494-5.694-1.37A7.009 7.009 0 0 1 3 13.179Z'
-                fillRule='evenodd'
-              />
-            </svg>
-            <p>Service</p>
-          </div>
-          <div className='flex flex-row items-center gap-2'>
-            <svg
-              className='w-8 h-8'
-              aria-hidden='true'
-              fill='currentColor'
-              viewBox='0 0 20 20'
-              xmlns='http://www.w3.org/2000/svg'
-            >
               <path d='M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z' />
             </svg>
-            <p>{providedBy}</p>
+            <p className='pr-2'>{providedBy}</p>
           </div>
         </div>
         <div className='flex flex-row items-center gap-2 w-36'>
