@@ -1,0 +1,138 @@
+[
+  {
+    "title": "Breast cancer data (2022 update)",
+    "id": "did:web:example.com:dataset:climate-change-analysis-2022",
+    "short_description": "Breast cancer labelled data from 2020 to 2022 in France",
+    "provider": {
+      "name": "Care & Co SARL ",
+      "id": "did:web:example.com:provider:climate-change-analysis-2022",
+      "email": "example@noaa.com",
+      "url": "https://oceanservice.noaa.gov/",
+      "picture": "https://picsum.photos/200"
+    },
+    "price": 50,
+    "picture": "/img/mock_asset_img.jpg",
+    "created_at": "2023-12-03T10:24:00",
+    "updated_at": "2023-10-05T14:30:00",
+    "keywords": [
+      "cancer",
+      "health "
+    ],
+    "location": "London, UK",
+    "description": "This dataset provides comprehensive data on various climate metrics for the year 2022. It includes detailed information on temperature changes, precipitation patterns, and carbon emissions. The data is sourced from the National Oceanic and Atmospheric Administration (NOAA) and is designed to support research and policy-making efforts related to climate change. Users can analyze trends over time and compare data across different regions to gain insights into the impacts of climate change."
+  },
+  {
+    "title": "Eviden HPC",
+    "id": "did:web:example.com:dataset:climate-change-analysis-2022",
+    "short_description": "Eviden HPC service to execute expensive computing tasks quickly and easily",
+    "provider": {
+      "name": "Bruxelloise des logiciels SRL",
+      "id": "did:web:example.com:provider:climate-change-analysis-2022",
+      "email": "example@noaa.com",
+      "url": "https://oceanservice.noaa.gov/",
+      "picture": "https://picsum.photos/200"
+    },
+    "price": 6,
+    "picture": "/img/mock_asset_img.jpg",
+    "created_at": "2023-11-09T10:24:00",
+    "updated_at": "2023-10-05T14:30:00",
+    "keywords": [
+      "cancer",
+      "health "
+    ],
+    "location": "London, UK",
+    "description": "This dataset provides comprehensive data on various climate metrics for the year 2022. It includes detailed information on temperature changes, precipitation patterns, and carbon emissions. The data is sourced from the National Oceanic and Atmospheric Administration (NOAA) and is designed to support research and policy-making efforts related to climate change. Users can analyze trends over time and compare data across different regions to gain insights into the impacts of climate change."
+  },
+  {
+    "title": "Renewable Energy Trends",
+    "id": "did:web:example.com:dataset:renewable-energy-2023",
+    "short_description": "A dataset covering global renewable energy trends and statistics.",
+    "provider": {
+      "name": "Green Energy Analytics",
+      "id": "did:web:example.com:provider:renewable-energy",
+      "email": "contact@gea.com",
+      "url": "https://renewableanalytics.com",
+      "picture": "https://picsum.photos/200"
+    },
+    "price": 25,
+    "picture": "/img/energy_asset_img.jpg",
+    "created_at": "2024-01-15T10:24:00",
+    "updated_at": "2024-02-05T14:30:00",
+    "keywords": [
+      "renewable",
+      "energy",
+      "sustainability"
+    ],
+    "location": "Berlin, Germany",
+    "description": "Explore global renewable energy adoption trends, including solar, wind, and hydroelectric power data from 2023."
+  },
+  {
+    "title": "Urban Mobility Insights",
+    "id": "did:web:example.com:dataset:urban-mobility",
+    "short_description": "Urban mobility statistics and insights from 2022.",
+    "provider": {
+      "name": "City Move Analytics",
+      "id": "did:web:example.com:provider:urban-mobility",
+      "email": "support@citymove.com",
+      "url": "https://citymoveanalytics.com",
+      "picture": "https://picsum.photos/200"
+    },
+    "price": 15,
+    "picture": "/img/mobility_asset_img.jpg",
+    "created_at": "2023-10-12T12:24:00",
+    "updated_at": "2023-11-01T14:30:00",
+    "keywords": [
+      "mobility",
+      "transportation",
+      "cities"
+    ],
+    "location": "Amsterdam, Netherlands",
+    "description": "Comprehensive data on urban transportation patterns, including ride-sharing, public transit, and traffic congestion metrics."
+  },
+  {
+    "title": "AI Ethics Dataset",
+    "id": "did:web:example.com:dataset:ai-ethics",
+    "short_description": "AI ethics case studies and policy recommendations.",
+    "provider": {
+      "name": "EthicsAI",
+      "id": "did:web:example.com:provider:ai-ethics",
+      "email": "info@ethicsai.org",
+      "url": "https://ethicsai.org",
+      "picture": "https://picsum.photos/200"
+    },
+    "price": 40,
+    "picture": "/img/ai_ethics_img.jpg",
+    "created_at": "2023-05-20T11:24:00",
+    "updated_at": "2023-06-15T16:30:00",
+    "keywords": [
+      "AI",
+      "ethics",
+      "policy"
+    ],
+    "location": "San Francisco, USA",
+    "description": "Case studies and insights on the ethical implications of artificial intelligence in various domains."
+  },
+  {
+    "title": "Wildlife Conservation Metrics",
+    "id": "did:web:example.com:dataset:wildlife-conservation",
+    "short_description": "Wildlife conservation data from 2021 to 2023.",
+    "provider": {
+      "name": "EcoData Foundation",
+      "id": "did:web:example.com:provider:wildlife-conservation",
+      "email": "contact@ecodata.org",
+      "url": "https://ecodata.org",
+      "picture": "https://picsum.photos/200"
+    },
+    "price": 35,
+    "picture": "/img/wildlife_img.jpg",
+    "created_at": "2023-09-05T09:24:00",
+    "updated_at": "2023-12-01T10:30:00",
+    "keywords": [
+      "wildlife",
+      "conservation",
+      "biodiversity"
+    ],
+    "location": "Nairobi, Kenya",
+    "description": "Data covering wildlife conservation efforts, including species population trends and protected area effectiveness."
+  }
+]
