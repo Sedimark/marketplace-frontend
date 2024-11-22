@@ -52,7 +52,6 @@ function Contracts ({ data }) {
               <ContractItem
                 vc={contract}
                 price={contract.price}
-                color='bg-red'
               />
             </Link>
           )
