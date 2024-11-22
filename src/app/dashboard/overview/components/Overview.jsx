@@ -9,10 +9,10 @@ function Overview () {
   return (
     <div className='flex flex row'>
       <SidebarDashboard />
-    <div className='flex flex-col bg-sedimark-light-blue w-full '>
-      <BannerStats overview={mockOverview.overview} />
-      <TransferHistory history={mockTransferHistory.transfer_history} />
-    </div>
+      <div className='flex flex-col bg-sedimark-light-blue w-full '>
+        <BannerStats overview={mockOverview.overview} />
+        <TransferHistory history={mockTransferHistory.transfer_history} />
+      </div>
     </div>
   )
 }

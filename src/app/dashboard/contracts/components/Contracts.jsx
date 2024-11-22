@@ -7,6 +7,7 @@ import { calculateTotalPages } from '@/app/catalogue/utils/paginationHelpers'
 import SidebarDashboard from '../../components/sidebar/Sidebar'
 import ButtonGroup from './ButtonGroup'
 import ContractItem from './ContractItem'
+import icon from '@/utils/icons/icons'
 
 function calculateItemsPerPage (currentPage, size, data, setContracts) {
   const startIndex = (currentPage - 1) * size
@@ -36,9 +37,7 @@ function Contracts ({ data }) {
         <ButtonGroup />
         <div className=' flex flex-row mt-10 mb-8'>
           <div className=' ml-3 flex flex-row items-center  w-60 h-10 bg-gray-50 border border-gray-300 focus:ring-0 focus:border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'>
-            <svg className='w-5 h-5 text-gray-500 dark:text-white' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'>
-              <path stroke='currentColor' strokeLinecap='round' strokeWidth='2' d='m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z' />
-            </svg>
+            {icon.magnifier}
             <input
               className=' h-8 bg-gray-50 border-none focus:ring-0 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'
               type='text'
