@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react'
 import { Checkbox, Label, ListGroup, Sidebar } from 'flowbite-react'
 import { HiSwitchVertical, HiFilter, HiChartPie, HiShoppingBag } from 'react-icons/hi'
 import { usePathname, useRouter } from 'next/navigation'
-import customTheme from './style'
 import FilterDatepicker from './FilterDatePicker'
-import { useEffect, useState } from 'react'
+import customTheme from './style'
+
 function SidebarDashboard () {
   const router = useRouter()
   const pathname = usePathname()
