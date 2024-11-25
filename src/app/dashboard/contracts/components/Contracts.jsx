@@ -1,13 +1,13 @@
 'use client'
 
 import { Pagination } from 'flowbite-react'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { HiSearch } from 'react-icons/hi'
 import { calculateTotalPages } from '@/app/catalogue/utils/paginationHelpers'
 import SidebarDashboard from '../../components/sidebar/Sidebar'
 import ButtonGroup from './ButtonGroup'
 import ContractItem from './ContractItem'
-import icon from '@/utils/icons/icons'
 
 function calculateItemsPerPage (currentPage, size, data, setContracts) {
   const startIndex = (currentPage - 1) * size
@@ -17,6 +17,8 @@ function calculateItemsPerPage (currentPage, size, data, setContracts) {
 function Contracts ({ data }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [contracts, setContracts] = useState([])
+  const ref = useRef(null)
+
   useEffect(() => {
     if (data) {
       setContracts(data)
@@ -27,6 +29,11 @@ function Contracts ({ data }) {
     window.scrollTo(0, 0, 'smooth')
     calculateItemsPerPage(currentPage, 2, data, setContracts)
   }, [currentPage, data])
+
+  const handleSearch = (e) => {
+    console.log('Searching contracts by: ', e.target.value)
+    ref.current.value = ''
+  }
   const totalPages = useMemo(() => calculateTotalPages(data.length, 2), [data.length])
   const totalPagesToDisplay = totalPages
   const onPageChange = (page) => setCurrentPage(page)
@@ -37,11 +44,17 @@ function Contracts ({ data }) {
         <ButtonGroup />
         <div className=' flex flex-row mt-10 mb-8'>
           <div className=' ml-3 flex flex-row items-center  w-60 h-10 bg-gray-50 border border-gray-300 focus:ring-0 focus:border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'>
-            {icon.magnifier}
+            <HiSearch size={20} />
             <input
               className=' h-8 bg-gray-50 border-none focus:ring-0 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'
               type='text'
               placeholder='Search  ...'
+              ref={ref}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch(e)
+                }
+              }}
             />
           </div>
           <Pagination currentPage={currentPage} totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} onPageChange={onPageChange} className='h-8 flex items-center ml-48' />
