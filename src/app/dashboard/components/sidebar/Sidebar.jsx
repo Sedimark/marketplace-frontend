@@ -70,6 +70,7 @@ function SidebarDashboard () {
                 </div>
               </Sidebar.Collapse>
               <Sidebar.Collapse icon={HiFilter} label='Filters'>
+                <h4 className='text-sm ml-2'>Creation date</h4>
                 <FilterDatepicker />
               </Sidebar.Collapse>
             </Sidebar.ItemGroup>}
