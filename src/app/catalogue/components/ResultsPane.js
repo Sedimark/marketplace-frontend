@@ -81,7 +81,7 @@ export default function ResultsPane ({
   useEffect(() => {
     window.scrollTo(0, 0, 'smooth')
     calculateItemsPerPage(currentPage, settings, data, setVcs)
-  }, [currentPage])
+  }, [currentPage, data])
 
   const totalPages = useMemo(() => calculateTotalPages(totalVcs, settings.batchSize), [totalVcs])
   const totalPagesToDisplay = totalPages
