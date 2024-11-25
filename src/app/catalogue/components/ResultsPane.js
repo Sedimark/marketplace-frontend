@@ -2,6 +2,7 @@
 import { Button } from 'flowbite-react'
 import { useEffect, useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { HiOutlineX } from 'react-icons/hi'
 import CustomPagination from '@/components/pagination/Pagination'
 import LoadingCard from '@/app/catalogue/components/LoadingCard'
 import CatalogueSideBar from './SideBar'
@@ -109,10 +110,10 @@ export default function ResultsPane ({
       <div className='flex flex-col w-full bg-gray-50'>
         {!loading && query &&
           <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray' onClick={() => setQuery('')}>
-            {query}
-            <svg className='w-5 h-5 ml-4' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'>
-              <path clipRule='evenodd' fillRule='evenodd' d='M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 8.94 8.28 7.22Z' />
-            </svg>
+            <span className='flex items-center '>
+              {query}
+              <HiOutlineX className='ml-2' />
+            </span>
           </Button>}
         {!loading && !results.length && data && (
           <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>

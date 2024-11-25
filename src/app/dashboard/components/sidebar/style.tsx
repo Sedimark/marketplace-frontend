@@ -1,4 +1,5 @@
 import { FlowbiteSidebarTheme } from 'flowbite-react'
+
 const customTheme: FlowbiteSidebarTheme = {
   "root": {
     "base": "h-full",

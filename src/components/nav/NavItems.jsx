@@ -7,7 +7,7 @@ export const NavItems = () => {
     // THESE TWO SHOULD BE PROTECTED, ONLY ACCESSED BY REGISTERED USERS
     // @TODO: Implement Metamask plugin + a session provider to show only if logged in.
     { href: '/publish', label: 'Publish' },
-    { href: '/dashboard', label: 'Dashboard' }
+    { href: '/dashboard/overview', label: 'Dashboard' }
   ]
 
   return (
