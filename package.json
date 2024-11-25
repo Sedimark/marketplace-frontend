@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroicons/react": "^2.0.18",
+    "@heroicons/react": "^2.2.0",
     "@metamask/sdk-react": "^0.27.0",
     "dayjs": "^1.11.13",
     "flowbite-react": "^0.7.2",
