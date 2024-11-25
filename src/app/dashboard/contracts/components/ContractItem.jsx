@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Accordion, Table } from 'flowbite-react'
-import icon from '@/utils/icons/icons'
+import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclamationCircle } from 'react-icons/hi'
 import mockContractTransfer from '@/utils/data/mockContractTransfers.json'
 
 function ContractItem ({ vc, price }) {
@@ -28,11 +28,11 @@ function ContractItem ({ vc, price }) {
                 {/* Price and date */}
                 <div className='flex flex-row items-end mt-3'>
                   <div className='flex flex-row gap-2 w-36 mt-2'>
-                    {icon.calendar}
+                    <HiCalendar size={20} />
                     <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
                   </div>
                   <div className='flex flex-row gap-2 w-36'>
-                    {icon.euro}
+                    <HiOutlineCurrencyEuro size={20} />
                     <p className='text-sm'>{validatedPrice} euros</p>
                   </div>
                 </div>
@@ -58,15 +58,15 @@ function ContractItem ({ vc, price }) {
                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
                       {asset.status === 'Completed' &&
                         <Table.Cell className='max-w-fit'>
-                          {icon.completed}
+                          <HiCheck size={20} />
                         </Table.Cell>}
                       {asset.status === 'In progress' &&
                         <Table.Cell className='max-w-fit'>
-                          {icon.inProgress}
+                          <HiDotsHorizontal size={20} />
                         </Table.Cell>}
                       {asset.status === 'Failed' &&
                         <Table.Cell className='max-w-fit'>
-                          {icon.failed}
+                          <HiExclamationCircle size={20} />
                         </Table.Cell>}
                       <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.status}</Table.Cell>
                       <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.date}</Table.Cell>

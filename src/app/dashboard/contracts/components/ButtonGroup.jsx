@@ -1,4 +1,4 @@
-import icon from '@/utils/icons/icons'
+import { HiDownload, HiUpload } from 'react-icons/hi'
 import { Button } from 'flowbite-react'
 
 function ButtonGroup () {
@@ -6,13 +6,13 @@ function ButtonGroup () {
     <div className='flex justify-center mt-5'>
       <Button className='w-48 h-20 items-center bg-sedimark-deep-blue shadow-lg text-black rounded-r-none focus:ring-0'>
         <div className='flex flex-col items-center text-center'>
-          {icon.transferIn}
+          <HiDownload size={20} />
           Consumed
         </div>
       </Button>
       <Button className='w-48 h-20 items-center bg-white text-black shadow-lg rounded-l-none focus:ring-0'>
         <div className='flex flex-col items-center text-center'>
-          {icon.transferOut}
+          <HiUpload size={20} />
           Provided
         </div>
       </Button>

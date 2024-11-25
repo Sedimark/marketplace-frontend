@@ -2,6 +2,7 @@
 import { Button } from 'flowbite-react'
 import { useEffect, useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { HiOutlineX } from 'react-icons/hi'
 import CustomPagination from '@/components/pagination/Pagination'
 import LoadingCard from '@/app/catalogue/components/LoadingCard'
 import CatalogueSideBar from './SideBar'
@@ -9,7 +10,6 @@ import ResultsList from './ResultsList'
 import settings from '@/utils/settings'
 import mockCatalogue from '@/utils/data/mockCatalogue.json'
 import { calculateItemsPerPage, calculateTotalPages } from '../utils/paginationHelpers'
-import icon from '@/utils/icons/icons'
 
 /**
  * Component responsible for rendering a pane to display catalogue query results.
@@ -110,8 +110,10 @@ export default function ResultsPane ({
       <div className='flex flex-col w-full bg-gray-50'>
         {!loading && query &&
           <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray' onClick={() => setQuery('')}>
-            {query}
-            {icon.close}
+            <span className='flex items-center '>
+              {query}
+              <HiOutlineX className='ml-2' />
+            </span>
           </Button>}
         {!loading && !results.length && data && (
           <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>

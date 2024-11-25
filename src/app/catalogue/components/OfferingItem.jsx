@@ -1,4 +1,4 @@
-import icon from '@/utils/icons/icons'
+import { HiOutlineCurrencyEuro, HiCalendar, HiUser } from 'react-icons/hi'
 
 function OfferingItem ({ vc, providerName, price, color }) {
   const name = vc.title
@@ -13,19 +13,19 @@ function OfferingItem ({ vc, providerName, price, color }) {
       <div className='flex items-center justify-between w-full'>
         <div>{description}</div>
         <div className='flex flex-row items-center gap-2 w-36'>
-          {icon.euro}
+          <HiOutlineCurrencyEuro size={20} />
           <p>{validatedPrice} euros</p>
         </div>
       </div>
       <div className='flex justify-between'>
         <div className='flex flex-row gap-4'>
           <div className='flex flex-row items-center gap-2'>
-            {icon.user}
+            <HiUser size={20} />
             <p className='pr-2'>{providedBy}</p>
           </div>
         </div>
         <div className='flex flex-row items-center gap-2 w-36'>
-          {icon.calendar}
+          <HiCalendar size={20} />
           <p>{date.toISOString().split('T')[0]}</p>
         </div>
       </div>

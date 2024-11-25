@@ -1,8 +1,8 @@
 import { Badge } from 'flowbite-react'
 import Image from 'next/image'
+import { HiLocationMarker, HiCalendar, HiOutlineRefresh } from 'react-icons/hi'
 import Credentials from './Credentials'
 import ProviderCard from './ProviderCard'
-import icon from '@/utils/icons/icons'
 import mockProvider from '@/utils/data/mockProvider.json'
 
 function Asset ({ asset }) {
@@ -23,15 +23,15 @@ function Asset ({ asset }) {
       <div className='flex justify-between m-6 ml-0'>
         <div className='flex flex-row flex-wrap gap-4'>
           <div className='flex flex-row items-center gap-2'>
-            {icon.location}
+            <HiLocationMarker />
             <p>{location}</p>
           </div>
           <div className='flex flex-row items-center gap-2'>
-            {icon.calendar}
+            <HiCalendar />
             <p>Published {createdAt.toISOString().split('T')[0]}</p>
           </div>
           <div className='flex flex-row items-center gap-2'>
-            {icon.update}
+            <HiOutlineRefresh />
             <p>Updated {updatedAt.toISOString().split('T')[0]}</p>
           </div>
         </div>

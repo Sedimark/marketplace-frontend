@@ -1,5 +1,5 @@
 import { Table, Accordion } from 'flowbite-react'
-import icon from '@/utils/icons/icons'
+import { HiDownload, HiUpload, HiDotsHorizontal, HiExclamationCircle } from 'react-icons/hi'
 
 function TransferHistory ({ history }) {
   const historyData = ['', 'Asset', 'Counterparty ID', 'Status', 'Date']
@@ -28,19 +28,19 @@ function TransferHistory ({ history }) {
                     <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
                       {asset.transfer_in &&
                         <Table.Cell className='max-w-fit'>
-                          {icon.transferIn}
+                          <HiDownload size={20} />
                         </Table.Cell>}
                       {asset.transfer_out &&
                         <Table.Cell className='max-w-fit'>
-                          {icon.transferOut}
+                          <HiUpload size={20} />
                         </Table.Cell>}
                       {!asset.transfer_out && !asset.transfer_in && asset.status === 'Pending' &&
                         <Table.Cell className='max-w-fit'>
-                          {icon.pending}
+                          <HiDotsHorizontal size={20} />
                         </Table.Cell>}
                       {!asset.transfer_out && !asset.transfer_in && asset.status === 'Failed' &&
                         <Table.Cell className='max-w-fit'>
-                          {icon.failed}
+                          <HiExclamationCircle size={20} />
                         </Table.Cell>}
                       <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white flex flex-row gap-2 ml-0'>
                         {asset.asset}

@@ -1,4 +1,4 @@
-import icon from '@/utils/icons/icons'
+import { HiOutlineCurrencyEuro, HiCalendar, HiUser } from 'react-icons/hi'
 
 function RecommenderItem ({ vc, providerName, price, color }) {
   const maxLengthTitle = 42
@@ -16,11 +16,11 @@ function RecommenderItem ({ vc, providerName, price, color }) {
         <div className='text-sm mr-4'>{description}</div>
         <span>
           <div className='flex flex-row gap-2 w-36'>
-            {icon.euro}
+            <HiOutlineCurrencyEuro size={20} />
             <p className='text-sm'>{validatedPrice} euros</p>
           </div>
           <div className='flex flex-row gap-2 w-36 mt-2'>
-            {icon.calendar}
+            <HiCalendar size={20} />
             <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
           </div>
         </span>
@@ -28,7 +28,7 @@ function RecommenderItem ({ vc, providerName, price, color }) {
       <div className='flex justify-between'>
         <div className='flex flex-row gap-4'>
           <div className='flex flex-row items-center gap-2'>
-            {icon.user}
+            <HiUser size={20} />
             <p className='pr-2 text-sm'>{providedBy}</p>
           </div>
         </div>

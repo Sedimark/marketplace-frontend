@@ -1,6 +1,6 @@
 import { Card } from 'flowbite-react'
+import { HiClock, HiShoppingCart } from 'react-icons/hi'
 import { TermsNConditions } from './Terms&ConditionsModal'
-import icon from '@/utils/icons/icons'
 
 function PriceCard ({ price }) {
   return (
@@ -10,7 +10,7 @@ function PriceCard ({ price }) {
         <span className='text-5xl font-bold tracking-tight'>{price}</span>
       </div>
       <div className='my-3 flex space-x-3'>
-        {icon.clock}
+        <HiClock size={20} />
         <span className='text-base font-normal leading-tight text-gray-500 dark:text-gray-400'>Accessible for three months</span>
       </div>
       <div className='flex flex-col items-center'>
@@ -19,8 +19,10 @@ function PriceCard ({ price }) {
           type='button'
           className='inline-flex w-full justify-center rounded-lg bg-sedimark-deep-blue px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-900'
         >
-          {icon.cart}
-          Buy
+          <span className='flex items center'>
+            <HiShoppingCart size={18} className='mr-1' />
+            Buy
+          </span>
         </button>
       </div>
     </Card>
