@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marketplace-frontend
+  namespace: marketplace-frontend
+  labels:
+    app: marketplace-frontend
+spec:
+  selector:
+    matchLabels:
+      app: marketplace-frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: marketplace-frontend
+    spec:
+      containers:
+      - name: marketplace-frontend
+        image: ghcr.io/sedimark/marketplace-frontend:${MARKETPLACE_IMAGETAG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+          name: marketplace
+        volumeMounts:
+        - name: marketplace-frontend-secret
+          mountPath: /app/.env.production
+          subPath: .env.production
+      volumes:
+        - name: marketplace-frontend-secret
+          secret:
+            secretName: marketplace-frontend-secret
+      restartPolicy: Always
+---
+
