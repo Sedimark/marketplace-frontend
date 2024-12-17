@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react'
-import { Checkbox, Label, ListGroup, Sidebar } from 'flowbite-react'
+import { Label, ListGroup, Sidebar, Radio } from 'flowbite-react'
 import { HiSwitchVertical, HiFilter, HiChartPie, HiShoppingBag } from 'react-icons/hi'
 import { usePathname, useRouter } from 'next/navigation'
 import FilterDatepicker from './FilterDatePicker'
 import customTheme from './style'
 
 function SidebarDashboard () {
+
   const router = useRouter()
   const pathname = usePathname()
   const [isContracts, setContracts] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState( null )
 
-  const handleItemClick = (path) => {
-    if (path === 'contracts') {
+  const handleItemClick = (item) => {
+    if (item === 'contracts') {
       setContracts(true)
     }
-    router.push(`/dashboard/${path}`)
+    
+    router.push(`/dashboard/${item}`)
   }
 
   const handleCheckbox = (category) => {
@@ -35,13 +37,14 @@ function SidebarDashboard () {
       <Sidebar className='bg-white' theme={customTheme}>
         <Sidebar.Items>
           <Sidebar.ItemGroup className='flex flex-col'>
-            <Sidebar.Item onClick={() => handleItemClick('overview')}>
+            {/* //TODO:first do it, then do it right */}
+            <Sidebar.Item onClick={() => handleItemClick('overview')}className={`${pathname === '/dashboard/overview' ? 'bg-gray-100' : ''}`} > 
               <div className='flex flex-row gap-2'>
                 <HiChartPie className='h-5 w-5' />
                 Overview
               </div>
             </Sidebar.Item>
-            <Sidebar.Item onClick={() => handleItemClick('contracts')} labelColor='dark'>
+            <Sidebar.Item onClick={() => handleItemClick('contracts')} className={`${isContracts ? 'bg-gray-100' : ''}`}>
               <div className='flex flex-row gap-2'>
                 <HiShoppingBag className='h-5 w-5' />
                 Contracts
@@ -50,7 +53,7 @@ function SidebarDashboard () {
           </Sidebar.ItemGroup>
           {isContracts &&
             <Sidebar.ItemGroup className='w-60'>
-              <Sidebar.Collapse icon={HiSwitchVertical} label='Sort'>
+              <Sidebar.Collapse icon={HiSwitchVertical} label='Sort' open>
                 <div>
                   <ListGroup className='overflow-auto border-none ml-4 focus:ring-0'>
                     {sort.map((category, index) => (
@@ -58,7 +61,7 @@ function SidebarDashboard () {
                         key={`${category}-${index}`}
                         className='flex items-center border-none focus:ring-0 m-2 ml-4'
                       >
-                        <Checkbox
+                        <Radio
                           id={category}
                           className='mr-2 focus:ring-0'
                           checked={selectedCategory === category}
@@ -70,7 +73,7 @@ function SidebarDashboard () {
                   </ListGroup>
                 </div>
               </Sidebar.Collapse>
-              <Sidebar.Collapse icon={HiFilter} label='Filters'>
+              <Sidebar.Collapse icon={HiFilter} label='Filters' open>
                 <h4 className='text-sm ml-2'>Creation date</h4>
                 <FilterDatepicker />
               </Sidebar.Collapse>

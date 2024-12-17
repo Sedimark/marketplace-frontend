@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import { Accordion, Table } from 'flowbite-react'
-import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclamationCircle } from 'react-icons/hi'
+import { Accordion, Table, Button } from 'flowbite-react'
+import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclamationCircle, HiChevronDoubleRight, HiPlay } from 'react-icons/hi'
 import mockContractTransfer from '@/utils/data/mockContractTransfers.json'
 
 function ContractItem ({ vc, price }) {
@@ -17,11 +17,11 @@ function ContractItem ({ vc, price }) {
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
 
   return (
-    <Accordion collapseAll flush className=' min-w-fit overflow-auto m-5 shadow-md rounded-md '>
+    <Accordion collapseAll className=' min-w-fit overflow-auto m-5 shadow-md rounded-md'>
       <Accordion.Panel>
-        <Accordion.Title className='flex bg-white'>
-          <div className='flex'>
-            <div className='flex flex-col'>
+        <Accordion.Title className='bg-white'>
+          <div className='grid grid-cols-3'>
+            <div className=''>
               <div className=' flex text-lg font-semibold'>{name}</div>
               <div className='flex flex-col mt-4 w-96 min-w-40 max-w-96'>
                 <div className=' text-sm mr-4 w-2/3'>{description}</div>
@@ -38,15 +38,22 @@ function ContractItem ({ vc, price }) {
                 </div>
               </div>
             </div>
-            <div className='flex gap-2 max-h-16'>
-              <Image width={64} height={64} src={provider.picture} alt={provider.name} className='max-w-16 max-h-16 object-cover object-center rounded-lg shadow-lg ml-2' />
-              <p className=' flex pr-2 text-sm font-semibold'>{providedBy}</p>
+            <div className='col-start-3 w-1/2 mx-auto flex'>
+              <Image width={64} height={64} src={provider.picture} alt={provider.name} className='max-h-16 max-w-16 rounded-lg shadow-lg ml-2' />
+              <p className='pr-2 ml-2 text-sm font-semibold'>{providedBy}</p>
             </div>
           </div>
         </Accordion.Title>
         <Accordion.Content className='bg-white max-h-56 overflow-y-auto'>
+          <ul className='divide-y'>
+          <div className='grid grid-cols-3 w-full'>
+          <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
+            <HiPlay size={24} className='mr-2'/>
+            Start transfer
+          </Button>
+          </div>
           <div className='overflow-x-auto mt-2'>
-            <Table>
+            <Table className='mt-4'>
               <Table.Head>
                 {historyData.map((nameColumn, index) => {
                   return (<Table.HeadCell className='bg-white p-0 pl-6' key={`${nameColumn}-${index}`}>{nameColumn}</Table.HeadCell>)
@@ -77,6 +84,7 @@ function ContractItem ({ vc, price }) {
               </Table.Body>
             </Table>
           </div>
+          </ul>
         </Accordion.Content>
       </Accordion.Panel>
     </Accordion>

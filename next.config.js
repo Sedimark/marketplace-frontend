@@ -4,6 +4,7 @@ const nextConfig = {
   output: 'standalone',
   env: {
     BATCH_SIZE: process.env.BATCH_SIZE ?? '40',
+    CONTRACTS_PAGE_SIZE: process.env.CONTRACTS_PAGE_SIZE ?? '5',
     FEDERATED_CATALOGUE_API: process.env.FEDERATED_CATALOGUE_API
   },
   async headers () {
@@ -19,7 +20,8 @@ const nextConfig = {
       }
     ]
   },
-  images: {
+  // TODO: remove when integrating backend component
+  images: { 
     remotePatterns: [
       {
         protocol: 'https',
