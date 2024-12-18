@@ -6,28 +6,14 @@ import FilterDatepicker from './FilterDatePicker'
 import customTheme from './style'
 
 function SidebarDashboard () {
-  const router = useRouter()
   const pathname = usePathname()
-  const [isContracts, setContracts] = useState(false)
+
   const [selectedCategory, setSelectedCategory] = useState(null)
-
-  const handleItemClick = (item) => {
-    if (item === 'contracts') {
-      setContracts(true)
-    }
-
-    router.push(`/dashboard/${item}`)
-  }
 
   const handleCheckbox = (category) => {
     setSelectedCategory(category === selectedCategory ? null : category)
     console.log('Filtering contracts by:', category)
   }
-  useEffect(() => {
-    if (pathname === '/dashboard/contracts') {
-      setContracts(true)
-    }
-  }, [pathname])
 
   const sort = ['Creation date', 'Name', 'Price']
 
@@ -36,21 +22,20 @@ function SidebarDashboard () {
       <Sidebar className='bg-white' theme={customTheme}>
         <Sidebar.Items>
           <Sidebar.ItemGroup className='flex flex-col'>
-            {/* //TODO:first do it, then do it right */}
-            <Sidebar.Item onClick={() => handleItemClick('overview')} className={`${pathname === '/dashboard/overview' ? 'bg-gray-100' : ''}`}>
+            <Sidebar.Item href='/dashboard/overview' className={`${pathname === '/dashboard/overview' ? 'bg-gray-100' : ''}`}>
               <div className='flex flex-row gap-2'>
                 <HiChartPie className='h-5 w-5' />
                 Overview
               </div>
             </Sidebar.Item>
-            <Sidebar.Item onClick={() => handleItemClick('contracts')} className={`${isContracts ? 'bg-gray-100' : ''}`}>
+            <Sidebar.Item href='/dashboard/contracts' className={`${pathname === '/dashboard/contracts' ? 'bg-gray-100' : ''}`}>
               <div className='flex flex-row gap-2'>
                 <HiShoppingBag className='h-5 w-5' />
                 Contracts
               </div>
             </Sidebar.Item>
           </Sidebar.ItemGroup>
-          {isContracts &&
+          {pathname === '/dashboard/contracts' &&
             <Sidebar.ItemGroup className='w-60'>
               <Sidebar.Collapse icon={HiSwitchVertical} label='Sort' open>
                 <div>
