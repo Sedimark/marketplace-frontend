@@ -1,0 +1,9 @@
+services:
+  marketplace:
+    image: ghcr.io/sedimark/marketplace-frontend:${MARKETPLACE_IMAGETAG}
+    container_name: marketplace-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - BATCH_SIZE=40

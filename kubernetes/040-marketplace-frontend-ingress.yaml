@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: marketplace-frontend-ingress
+  namespace: marketplace-frontend
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls.certresolver: default
+    traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-traefik-chain-oauth@kubernetescrd
+spec:
+  rules:
+  - host: marketplace.${PUBLIC_NODE_DOMAIN}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: marketplace-frontend
+            port:
+              number: 3000
+---
+

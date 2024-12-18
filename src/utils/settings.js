@@ -3,9 +3,6 @@
  *
  * @typedef {Object} Settings
  * @property {number} batchSize - The total of items per page.
- * @property {URL} federatedCatalogueApi - The URL for the federated catalogue API.
- * @property {URL} federatedCatalogueProviders - The URL for the federated catalogue providers API.
- * @property {URL} federatedCatalogueFilters - The URL for the federated catalogue filters API.
  */
 
 /**
