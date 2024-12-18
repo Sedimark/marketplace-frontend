@@ -20,19 +20,18 @@ function Contracts ({ data }) {
 
   useEffect(() => {
     if (data) {
-      setContracts( data )
+      setContracts(data)
     }
-  }, [data] )
-  
+  }, [data])
 
   useEffect(() => {
-    calculateItemsPerPage(currentPage, settings.contractsPageSize , data, setContracts)
+    calculateItemsPerPage(currentPage, settings.contractsPageSize, data, setContracts)
   }, [currentPage, data])
 
   const totalPages = useMemo(() => calculateTotalPages(data.length, settings.contractsPageSize), [data.length])
   const totalPagesToDisplay = totalPages
-  const onPageChange = ( page ) => setCurrentPage( page )
-  
+  const onPageChange = (page) => setCurrentPage(page)
+
   return (
     <div className='flex flex-row bg-sedimark-light-blue overflow-auto'>
       <SidebarDashboard />
@@ -43,11 +42,11 @@ function Contracts ({ data }) {
         </div>
         {contracts.map((contract, index) => {
           return (
-              <ContractItem
-                vc={contract}
-                price={contract.price}
-                key={`${contract.title}-${contract.created_at}-${index + 1}`}
-              />
+            <ContractItem
+              vc={contract}
+              price={contract.price}
+              key={`${contract.title}-${contract.created_at}-${index + 1}`}
+            />
           )
         })}
       </div>

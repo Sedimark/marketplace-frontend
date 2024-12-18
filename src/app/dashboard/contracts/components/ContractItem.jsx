@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Accordion, Table, Button } from 'flowbite-react'
-import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclamationCircle, HiChevronDoubleRight, HiPlay } from 'react-icons/hi'
+import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclamationCircle, HiPlay } from 'react-icons/hi'
 import mockContractTransfer from '@/utils/data/mockContractTransfers.json'
 
 function ContractItem ({ vc, price }) {
@@ -44,46 +44,46 @@ function ContractItem ({ vc, price }) {
             </div>
           </div>
         </Accordion.Title>
-        <Accordion.Content className='bg-white max-h-56 overflow-y-auto'>
+        <Accordion.Content className='bg-white max-h-80 overflow-y-clip'>
           <ul className='divide-y'>
-          <div className='grid grid-cols-3 w-full'>
-          <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
-            <HiPlay size={24} className='mr-2'/>
-            Start transfer
-          </Button>
-          </div>
-          <div className='overflow-x-auto mt-2'>
-            <Table className='mt-4'>
-              <Table.Head>
-                {historyData.map((nameColumn, index) => {
-                  return (<Table.HeadCell className='bg-white p-0 pl-6' key={`${nameColumn}-${index}`}>{nameColumn}</Table.HeadCell>)
-                })}
-              </Table.Head>
-              <Table.Body className='divide-y'>
-                {history.map((asset, index) => {
-                  return (
-                    <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
-                      {asset.status === 'Completed' &&
-                        <Table.Cell className='max-w-fit'>
-                          <HiCheck size={20} />
-                        </Table.Cell>}
-                      {asset.status === 'In progress' &&
-                        <Table.Cell className='max-w-fit'>
-                          <HiDotsHorizontal size={20} />
-                        </Table.Cell>}
-                      {asset.status === 'Failed' &&
-                        <Table.Cell className='max-w-fit'>
-                          <HiExclamationCircle size={20} />
-                        </Table.Cell>}
-                      <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.status}</Table.Cell>
-                      <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.date}</Table.Cell>
-                      <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.transfer_id}</Table.Cell>
-                    </Table.Row>
-                  )
-                })}
-              </Table.Body>
-            </Table>
-          </div>
+            <div className='grid grid-cols-3 w-full'>
+              <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
+                <HiPlay size={24} className='mr-2' />
+                Start transfer
+              </Button>
+            </div>
+            <div className='overflow-x-auto mt-2'>
+              <Table className='mt-4'>
+                <Table.Head>
+                  {historyData.map((nameColumn, index) => {
+                    return (<Table.HeadCell className='bg-white p-0 pl-6' key={`${nameColumn}-${index}`}>{nameColumn}</Table.HeadCell>)
+                  })}
+                </Table.Head>
+                <Table.Body className='divide-y'>
+                  {history.map((asset, index) => {
+                    return (
+                      <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
+                        {asset.status === 'Completed' &&
+                          <Table.Cell className='max-w-fit'>
+                            <HiCheck size={20} />
+                          </Table.Cell>}
+                        {asset.status === 'In progress' &&
+                          <Table.Cell className='max-w-fit'>
+                            <HiDotsHorizontal size={20} />
+                          </Table.Cell>}
+                        {asset.status === 'Failed' &&
+                          <Table.Cell className='max-w-fit'>
+                            <HiExclamationCircle size={20} />
+                          </Table.Cell>}
+                        <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.status}</Table.Cell>
+                        <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.date}</Table.Cell>
+                        <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.transfer_id}</Table.Cell>
+                      </Table.Row>
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+            </div>
           </ul>
         </Accordion.Content>
       </Accordion.Panel>

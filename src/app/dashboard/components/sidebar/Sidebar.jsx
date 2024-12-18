@@ -6,17 +6,16 @@ import FilterDatepicker from './FilterDatePicker'
 import customTheme from './style'
 
 function SidebarDashboard () {
-
   const router = useRouter()
   const pathname = usePathname()
   const [isContracts, setContracts] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState( null )
+  const [selectedCategory, setSelectedCategory] = useState(null)
 
   const handleItemClick = (item) => {
     if (item === 'contracts') {
       setContracts(true)
     }
-    
+
     router.push(`/dashboard/${item}`)
   }
 
@@ -38,7 +37,7 @@ function SidebarDashboard () {
         <Sidebar.Items>
           <Sidebar.ItemGroup className='flex flex-col'>
             {/* //TODO:first do it, then do it right */}
-            <Sidebar.Item onClick={() => handleItemClick('overview')}className={`${pathname === '/dashboard/overview' ? 'bg-gray-100' : ''}`} > 
+            <Sidebar.Item onClick={() => handleItemClick('overview')} className={`${pathname === '/dashboard/overview' ? 'bg-gray-100' : ''}`}>
               <div className='flex flex-row gap-2'>
                 <HiChartPie className='h-5 w-5' />
                 Overview

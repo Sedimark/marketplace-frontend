@@ -21,7 +21,7 @@ const nextConfig = {
     ]
   },
   // TODO: remove when integrating backend component
-  images: { 
+  images: {
     remotePatterns: [
       {
         protocol: 'https',
