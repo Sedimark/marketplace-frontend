@@ -37,7 +37,7 @@ function Contracts ({ data }) {
       <SidebarDashboard />
       <div className='w-full'>
         <ButtonGroup />
-        <div className=' flex flex-row mt-10 mb-8'>
+        <div className=' flex flex-row justify-center mr-52 mt-10 mb-8'>
           <Pagination currentPage={currentPage} totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} onPageChange={onPageChange} className='h-8 flex items-center ml-48' />
         </div>
         {contracts.map((contract, index) => {
