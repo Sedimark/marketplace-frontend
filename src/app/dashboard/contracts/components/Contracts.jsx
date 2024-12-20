@@ -17,6 +17,8 @@ function calculateItemsPerPage (currentPage, size, data, setContracts) {
 function Contracts ({ data }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [contracts, setContracts] = useState([])
+  const [providedContract, setProvidedContract] = useState(false)
+  const [consumedContracts, setConsumedContracts] = useState(true)
   const ref = useRef(null)
 
   useEffect(() => {
@@ -28,7 +30,11 @@ function Contracts ({ data }) {
   useEffect(() => {
     window.scrollTo(0, 0, 'smooth')
     calculateItemsPerPage(currentPage, 2, data, setContracts)
-  }, [currentPage, data])
+  }, [currentPage, data] )
+  
+  // useEffect( () => {
+  //   console.log('hello')
+  // },[consumedContracts, providedContract])
 
   const handleSearch = (e) => {
     console.log('Searching contracts by: ', e.target.value)
@@ -41,7 +47,7 @@ function Contracts ({ data }) {
     <div className='flex flex-row bg-sedimark-light-blue overflow-auto'>
       <SidebarDashboard />
       <div className='w-full'>
-        <ButtonGroup />
+        <ButtonGroup setConsumedContract={setConsumedContracts} setProvidedContract={setProvidedContract} />
         <div className=' flex flex-row mt-10 mb-8'>
           <div className=' ml-3 flex flex-row items-center  w-60 h-10 bg-gray-50 border border-gray-300 focus:ring-0 focus:border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5'>
             <HiSearch size={20} />
@@ -65,6 +71,8 @@ function Contracts ({ data }) {
               <ContractItem
                 vc={contract}
                 price={contract.price}
+                isProvidedContract={providedContract}
+                isConsumedContract={consumedContracts}
               />
             </Link>
           )

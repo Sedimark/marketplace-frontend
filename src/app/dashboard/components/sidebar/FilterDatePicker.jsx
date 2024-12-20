@@ -9,15 +9,15 @@ const FilterDatepicker = () => {
   }
 
   return (
-      <Datepicker
-        displayFormat='DD/MM/YYYY'
-        onChange={handleChange}
-        primaryColor='cyan'
-        value={value}
-        separator='to'
-        placeholder='Select period'
-        containerClassName='overflow-x-auto'
-      />
+    <Datepicker
+      displayFormat='DD/MM/YYYY'
+      onChange={handleChange}
+      primaryColor='cyan'
+      value={value}
+      separator='to'
+      placeholder='Select period'
+      containerClassName='overflow-x-auto'
+    />
   )
 }
 
