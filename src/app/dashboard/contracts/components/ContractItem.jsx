@@ -24,7 +24,7 @@ function ContractItem ({ vc, price }) {
             <div className=''>
               <div className=' flex text-lg font-semibold'>{name}</div>
               <div className='flex flex-col mt-4 w-96 min-w-40 max-w-96'>
-                <div className=' text-sm mr-4 w-2/3'>{description}</div>
+                <div className=' text-sm mr-4'>{description}</div>
                 {/* Price and date */}
                 <div className='flex flex-row items-end mt-3'>
                   <div className='flex flex-row gap-2 w-36 mt-2'>
