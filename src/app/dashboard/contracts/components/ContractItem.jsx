@@ -4,8 +4,8 @@ import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclama
 import mockContractTransfer from '@/utils/data/mockContractTransfers.json'
 
 function ContractItem ({ vc, price }) {
-  const maxLengthTitle = 42
-  const maxLengthDescription = 60
+  const maxLengthTitle = 70
+  const maxLengthDescription = 120
   const name = vc.title.length > maxLengthTitle ? vc.title.substring(0, maxLengthTitle) + '...' : vc.title
   const description = vc.short_description.length > maxLengthDescription ? vc.short_description.substring(0, maxLengthDescription) + '...' : vc.short_description
   const issuanceDate = vc.created_at ? new Date(vc.created_at) : new Date()
