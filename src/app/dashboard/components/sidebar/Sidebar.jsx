@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Label, ListGroup, Sidebar, Radio } from 'flowbite-react'
 import { HiSwitchVertical, HiFilter, HiChartPie, HiShoppingBag } from 'react-icons/hi'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import FilterDatepicker from './FilterDatePicker'
 import customTheme from './style'
 
