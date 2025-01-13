@@ -4,7 +4,7 @@ const nextConfig = {
   output: 'standalone',
   env: {
     BATCH_SIZE: process.env.BATCH_SIZE ?? '40',
-    FEDERATED_CATALOGUE_API: process.env.FEDERATED_CATALOGUE_API
+    CONTRACTS_PAGE_SIZE: process.env.CONTRACTS_PAGE_SIZE ?? '5',
   },
   async headers () {
     return [
@@ -16,6 +16,17 @@ const nextConfig = {
             value: cspHeader.replace(/\n/g, '')
           }
         ]
+      }
+    ]
+  },
+  // TODO: remove when integrating backend component
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/200'
       }
     ]
   }
