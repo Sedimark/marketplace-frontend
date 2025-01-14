@@ -1,11 +1,19 @@
 import Datepicker from 'react-tailwindcss-datepicker'
 import { useState } from 'react'
 
+/**
+ * Renders a date range picker for filtering contracts.
+ * 
+ * - Tracks the selected date range using state (`value`).
+ * - Ensures the current selection is displayed in the `Datepicker` by passing 
+ *   the `value` prop; without it, the placeholder is shown instead.
+ */
 const FilterDatepicker = () => {
   const [value, setValue] = useState()
+
+  //TODO: FIX -> When passing setValue directly to onchange there are too many re-renders and the app crashes
   const handleChange = (value) => {
     setValue(value)
-    console.log('Filtering contracts by: date range - ', value)
   }
 
   return (
@@ -16,7 +24,7 @@ const FilterDatepicker = () => {
       value={value}
       separator='to'
       placeholder='Select period'
-      containerClassName='overflow-x-auto'
+      containerClassName='overflow-x-clip'
     />
   )
 }

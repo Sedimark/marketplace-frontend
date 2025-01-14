@@ -13,7 +13,7 @@ function TransferHistory ({ history }) {
             </svg>Transfer history
           </div>
         </Accordion.Title>
-        <Accordion.Content className='bg-white max-h-56 overflow-y-auto'>
+        <Accordion.Content className='bg-white max-h-96 overflow-y-auto'>
           <div className='overflow-x-auto'>
             <Table>
               <Table.Head>

@@ -4,7 +4,7 @@ const nextConfig = {
   output: 'standalone',
   env: {
     BATCH_SIZE: process.env.BATCH_SIZE ?? '40',
-    FEDERATED_CATALOGUE_API: process.env.FEDERATED_CATALOGUE_API
+    CONTRACTS_PAGE_SIZE: process.env.CONTRACTS_PAGE_SIZE ?? '5',
   },
   async headers () {
     return [
@@ -19,6 +19,7 @@ const nextConfig = {
       }
     ]
   },
+  // TODO: remove when integrating backend component
   images: {
     remotePatterns: [
       {

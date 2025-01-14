@@ -1,5 +1,6 @@
 import { FlowbiteSidebarTheme } from 'flowbite-react'
 
+// Custom theme needed to override the root.inner property.
 const customTheme: FlowbiteSidebarTheme = {
   "root": {
     "base": "h-full",
