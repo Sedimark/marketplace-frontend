@@ -3,7 +3,7 @@ import { Accordion, Table, Button } from 'flowbite-react'
 import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclamationCircle, HiPlay } from 'react-icons/hi'
 import mockContractTransfer from '@/utils/data/mockContractTransfers.json'
 
-function ContractItem ({ vc, price }) {
+function ContractItem ({ vc, price, selected }) {
   const maxLengthTitle = 70
   const maxLengthDescription = 120
   const name = vc.title.length > maxLengthTitle ? vc.title.substring(0, maxLengthTitle) + '...' : vc.title
@@ -15,6 +15,15 @@ function ContractItem ({ vc, price }) {
   const validatedPrice = price ?? '0'
   const history = mockContractTransfer.transfer_history
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
+   const policyConstrains = vc.policies
+    ? vc.policies[0]
+    : {
+        period: {
+          startDate: '00-00-00',
+          endDate: '00-00-00'
+        },
+        policyName: 'Not inforced'
+      }
 
   return (
     <Accordion collapseAll className=' min-w-fit overflow-auto m-5 shadow-md rounded-md'>
@@ -44,6 +53,7 @@ function ContractItem ({ vc, price }) {
             </div>
           </div>
         </Accordion.Title>
+        {selected === 'consumed' &&
         <Accordion.Content className='bg-white max-h-80 overflow-y-clip'>
           <ul className='divide-y'>
             <div className='grid grid-cols-3 w-full'>
@@ -85,7 +95,16 @@ function ContractItem ({ vc, price }) {
               </Table>
             </div>
           </ul>
-        </Accordion.Content>
+        </Accordion.Content>}
+        {selected === 'provided' &&
+          <Accordion.Content>
+          <div>
+            <h4 className='font-bold'>Policy constraints:</h4>
+            <ul>
+              <li className='text-sm mt-2 ml-4 list-disc'>{policyConstrains.policyName} : {policyConstrains.period.startDate.split( 'T' )[0]} to {policyConstrains.period.endDate.split( 'T' )[0]}</li>
+            </ul>
+            </div>
+          </Accordion.Content>}
       </Accordion.Panel>
     </Accordion>
   )

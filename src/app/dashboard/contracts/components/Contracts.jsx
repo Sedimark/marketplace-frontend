@@ -16,7 +16,8 @@ function calculateItemsPerPage (currentPage, size, data, setContracts) {
 
 function Contracts ({ data }) {
   const [currentPage, setCurrentPage] = useState(1)
-  const [contracts, setContracts] = useState([])
+  const [contracts, setContracts] = useState( [] )
+  const [selected, setSelected] = useState('consumed')
 
   useEffect(() => {
     if (data) {
@@ -36,7 +37,7 @@ function Contracts ({ data }) {
     <div className='flex flex-row bg-sedimark-light-blue overflow-auto'>
       <SidebarDashboard />
       <div className='w-full'>
-        <ButtonGroup />
+        <ButtonGroup setSelected={setSelected} />
         <div className=' flex flex-row justify-center mr-52 mt-10 mb-8'>
           <Pagination currentPage={currentPage} totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} onPageChange={onPageChange} className='h-8 flex items-center ml-48' />
         </div>
@@ -46,6 +47,7 @@ function Contracts ({ data }) {
               vc={contract}
               price={contract.price}
               key={`${contract.title}-${contract.created_at}-${index + 1}`}
+              selected={selected}
             />
           )
         })}

@@ -4,7 +4,7 @@ const nextConfig = {
   output: 'standalone',
   env: {
     BATCH_SIZE: process.env.BATCH_SIZE ?? '40',
-    CONTRACTS_PAGE_SIZE: process.env.CONTRACTS_PAGE_SIZE ?? '5',
+    CONTRACTS_PAGE_SIZE: process.env.CONTRACTS_PAGE_SIZE ?? '5'
   },
   async headers () {
     return [
