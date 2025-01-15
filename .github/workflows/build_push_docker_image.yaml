@@ -4,12 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - '*'
-      - '!main'
+      - "**"
+      - "!main"
 
 jobs:
   build-and-push:
     runs-on: self-hosted
+    permissions:
+      packages: write
 
     steps:
       - name: Checkout repo
