@@ -1,0 +1,41 @@
+name: Build and push Sedimark marketplace frontend development docker image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*'
+      - '!main'
+
+jobs:
+  build-and-push:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install standardjs
+        run: |
+          npm install standard --global
+
+      - name: Standard linting check
+        run: |
+          standard
+
+      - name: Kaniko build & push
+        uses: aevea/action-kaniko@master
+        with:
+          image: marketplace-frontend
+          cache: "true"
+          tag: development
+          path: .
+          debug: true
+          registry: ghcr.io
+          password: ${{ secrets.GITHUB_TOKEN }}
