@@ -16,7 +16,7 @@ function calculateItemsPerPage (currentPage, size, data, setContracts) {
 
 function Contracts ({ data }) {
   const [currentPage, setCurrentPage] = useState(1)
-  const [contracts, setContracts] = useState( [] )
+  const [contracts, setContracts] = useState([])
   const [selected, setSelected] = useState('consumed')
 
   useEffect(() => {
