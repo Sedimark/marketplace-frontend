@@ -97,7 +97,7 @@ function ContractItem ({ vc, price, selected }) {
           </ul>
         </Accordion.Content>}
         {selected === 'provided' &&
-          <Accordion.Content>
+          <Accordion.Content className='bg-white max-h-80 overflow-y-clip'>
           <div>
             <h4 className='font-bold'>Policy constraints:</h4>
             <ul>

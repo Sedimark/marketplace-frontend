@@ -34,10 +34,10 @@ function Contracts ({ data }) {
   const onPageChange = (page) => setCurrentPage(page)
 
   return (
-    <div className='flex flex-row bg-sedimark-light-blue overflow-auto'>
+    <div className='flex flex-row overflow-auto'>
       <SidebarDashboard />
-      <div className='w-full'>
-        <ButtonGroup setSelected={setSelected} />
+      <div className='w-full bg-sedimark-light-blue'>
+        <ButtonGroup setSelected={setSelected} selected={selected} />
         <div className=' flex flex-row justify-center mr-52 mt-10 mb-8'>
           <Pagination currentPage={currentPage} totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} onPageChange={onPageChange} className='h-8 flex items-center ml-48' />
         </div>
