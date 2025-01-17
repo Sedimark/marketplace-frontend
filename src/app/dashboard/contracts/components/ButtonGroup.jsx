@@ -1,18 +1,33 @@
 import { HiDownload, HiUpload } from 'react-icons/hi'
 import { Button } from 'flowbite-react'
 
-function ButtonGroup () {
+function ButtonGroup ({ setSelected, selected }) {
   return (
     <div className='flex justify-center mt-5'>
-      <Button className='w-48 h-20 items-center bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded-r-none focus:ring-0'>
+      <Button
+        className={`w-48 h-20 items-center shadow-lg rounded-r-none focus:ring-0 ${
+      selected === 'consumed'
+        ? 'bg-sedimark-deep-blue hover:bg-sedimark-light-blue text-white'
+        : 'bg-white hover:bg-gray-200 text-black'
+    }`}
+        onClick={() => setSelected('consumed')}
+      >
+
         <div className='flex flex-col items-center text-center'>
-          <HiDownload size={20} color='white' />
+          <HiDownload size={20} color={selected === 'consumed' ? 'white' : 'black'} />
           Consumed
         </div>
       </Button>
-      <Button className='w-48 h-20 items-center bg-white text-black shadow-lg rounded-l-none focus:ring-0'>
+      <Button
+        className={`w-48 h-20 items-center shadow-lg rounded-l-none focus:ring-0 ${
+      selected === 'provided'
+        ? 'bg-sedimark-deep-blue hover:bg-sedimark-light-blue text-white'
+        : 'bg-white hover:bg-gray-200 text-black'
+    }`}
+        onClick={() => setSelected('provided')}
+      >
         <div className='flex flex-col items-center text-center'>
-          <HiUpload size={20} />
+          <HiUpload size={20} color={selected === 'provided' ? 'white' : 'black'} />
           Provided
         </div>
       </Button>
