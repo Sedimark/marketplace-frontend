@@ -12,7 +12,6 @@ function ButtonGroup ({ setSelected, selected }) {
     }`}
         onClick={() => setSelected('consumed')}
       >
-        {/* {'flex items-center space-x-2.5 rtl:space-x-reverse ' + (activeStep === index ? 'text-blue-600' : 'text-gray-500') */}
 
         <div className='flex flex-col items-center text-center'>
           <HiDownload size={20} color={selected === 'consumed' ? 'white' : 'black'} />

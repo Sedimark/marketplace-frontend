@@ -75,16 +75,16 @@ function ContractItem ({ vc, price, selected }) {
                         <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
                           {asset.status === 'Completed' &&
                             <Table.Cell className='max-w-fit'>
-                            <HiCheck size={20} />
-                          </Table.Cell>}
+                              <HiCheck size={20} />
+                            </Table.Cell>}
                           {asset.status === 'In progress' &&
                             <Table.Cell className='max-w-fit'>
-                            <HiDotsHorizontal size={20} />
-                          </Table.Cell>}
+                              <HiDotsHorizontal size={20} />
+                            </Table.Cell>}
                           {asset.status === 'Failed' &&
                             <Table.Cell className='max-w-fit'>
-                            <HiExclamationCircle size={20} />
-                          </Table.Cell>}
+                              <HiExclamationCircle size={20} />
+                            </Table.Cell>}
                           <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.status}</Table.Cell>
                           <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.date}</Table.Cell>
                           <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.transfer_id}</Table.Cell>
