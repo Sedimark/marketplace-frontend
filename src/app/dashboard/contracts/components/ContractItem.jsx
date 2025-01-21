@@ -15,6 +15,7 @@ function ContractItem ({ vc, price }) {
   const validatedPrice = price ?? '0'
   const history = mockContractTransfer.transfer_history
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
+  const policyConstrains = vc.policies
 
   return (
     <Accordion collapseAll className=' min-w-fit overflow-auto m-5 shadow-md rounded-md'>
@@ -86,6 +87,18 @@ function ContractItem ({ vc, price }) {
             </div>
           </ul>
         </Accordion.Content>
+        {policyConstrains && policyConstrains.length > 0 && (
+          <Accordion.Content className='bg-white max-h-80 overflow-y-clip'>
+            <div>
+              <h4 className='font-bold'>Policy constraints:</h4>
+              {policyConstrains.map((policy, index) => (
+                <li key={index} className='text-sm mt-2 ml-4 list-disc'>
+                  {policy.policyName}: {policy.period.startDate.split('T')[0]} to {policy.period.endDate.split('T')[0]}
+                </li>
+              ))}
+            </div>
+          </Accordion.Content>
+        )}
       </Accordion.Panel>
     </Accordion>
   )
