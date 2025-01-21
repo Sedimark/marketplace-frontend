@@ -47,7 +47,6 @@ function Contracts ({ data }) {
               vc={contract}
               price={contract.price}
               key={`${contract.title}-${contract.created_at}-${index + 1}`}
-              selected={selected}
             />
           )
         })}
