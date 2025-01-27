@@ -1,8 +1,7 @@
 export const initialValuesAssetDefinitionEmpty = {
-  name: '',
-  short_description: '',
+  title: '',
   description: '',
-  picture_url: '',
+  image: '',
   keywords: []
 }
 
@@ -25,8 +24,8 @@ export const initialValuesAccessEmpty = {
   purpose: '',
   data_protection_contract_point: '',
   consent_withdrawal_contact_point: '',
-  switchQuery: true,
-  switchPII: true
+  switchQuery: false,
+  switchPII: false
 }
 
 export const initialValuesPolicyEmpty = {

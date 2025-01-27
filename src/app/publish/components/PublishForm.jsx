@@ -1,10 +1,11 @@
 'use client'
 import { useState } from 'react'
-import { Card } from 'flowbite-react'
+import { Button, Card, Dropdown } from 'flowbite-react'
 import AssetDefinition from './steps/AssetDefinition'
 import Access from './steps/Access'
 import Policy from './steps/Policy'
 import { initialValuesAccessEmpty, initialValuesAssetDefinitionEmpty, initialValuesPolicyEmpty } from './steps/initialValues'
+import mockExistingAssets from '@/utils/data/mockExistingAssets.json'
 
 /**
  * FormSteps component renders a multi-step form with navigation controls.
@@ -39,16 +40,48 @@ import { initialValuesAccessEmpty, initialValuesAssetDefinitionEmpty, initialVal
  * @property {function} setInitialValuesStepThree - Function to update initial values for step three.
  */
 export default function FormSteps () {
-  const [activeStep, setActiveStep] = useState(0)
-
-  const handleNext = () => setActiveStep((cur) => cur + 1)
-  const handlePrev = () => setActiveStep((cur) => cur - 1)
-
   const steps = ['Asset Definition', 'Access', 'Pricing & Policies', 'Review & Submit']
 
   const [initialValuesAssetDefinition, setInitialValuesAssetDefinition] = useState(initialValuesAssetDefinitionEmpty)
   const [initialValuesAccess, setInitialValuesAccess] = useState(initialValuesAccessEmpty)
+  const [render, setRender] = useState(false)
   const [initialValuesPolicy, setInitialValuesPolicy] = useState(initialValuesPolicyEmpty)
+  const existingAssets = mockExistingAssets
+
+  const handleSelectExisting = (asset) => {
+    setInitialValuesAssetDefinition({
+      title: asset.title,
+      description: asset.description,
+      image: asset.image,
+      keywords: asset.keywords
+    })
+    setInitialValuesAccess({
+      url: asset.endpointURL,
+      url_action: 'POST',
+      headers: [{ key: 'hello', value: 'world' }],
+      queries: [{
+        name: '',
+        label: '',
+        description: asset.endpointDescription,
+        type: 'text',
+        default_value: '',
+        required: true
+      }],
+      license: asset.license,
+      terms_and_condition: '',
+      data_controller: '',
+      legal_basis: '',
+      purpose: '',
+      data_protection_contract_point: '',
+      consent_withdrawal_contact_point: '',
+      switchQuery: false,
+      switchPII: false
+    })
+    setInitialValuesPolicy({
+      policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
+    } )
+    setRender(true)
+  }
 
   return (
     <div className='flex flex-col items-center justify-center mt-4'>
@@ -56,10 +89,11 @@ export default function FormSteps () {
       <Card className='items-center w-1/2 mt-8'>
         <ol className='items-center w-full space-y-4 xl:flex xl:space-x-8 xl:space-y-0 rtl:space-x-reverse'>
           {steps.map((_step, index) => (
-            <li key={index} className={'flex items-center space-x-2.5 rtl:space-x-reverse ' + (activeStep === index ? 'text-blue-600' : 'text-gray-500')}>
-              <span className={'flex items-center justify-center w-6 h-6 border border-blue-600 rounded-full shrink-0 ' + (activeStep === index ? 'border-blue-600' : 'border-gray-500')}>
-                {index + 1}
-              </span>
+            // <li key={index} className={'flex items-center space-x-2.5 rtl:space-x-reverse ' + (activeStep === index ? 'text-blue-600' : 'text-gray-500')}>
+            //   <span className={'flex items-center justify-center w-6 h-6 border border-blue-600 rounded-full shrink-0 ' + (activeStep === index ? 'border-blue-600' : 'border-gray-500')}>
+            //     {index + 1}
+            <li key={index} className='flex items-center space-x-2.5 rtl:space-x-reverse '>
+              <span className='flex items-center justify-center w-6 h-6 border border-blue-600 rounded-full shrink-0 ' />
               <span className='pr-2'>
                 <h3 className='font-medium leading-tight'>{_step}</h3>
               </span>
@@ -71,12 +105,22 @@ export default function FormSteps () {
           ))}
         </ol>
       </Card>
-      {/* --------------- Step 1 ---------------  */}
-      {activeStep === 0 && AssetDefinition(initialValuesAssetDefinition, setInitialValuesAssetDefinition, handleNext)}
+      <Card className=' flex items-center w-1/2 mt-8'>
+        <p>Do you wish to reuse an existing asset ?</p>
+        <div className='flex flex-row'>
+          <Dropdown label='Select Existing' dismissOnClick={false} className='focus:ring-0'>
+            {existingAssets.map((asset, index) => (
+              <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
+            ))}
+          </Dropdown>
+          <Button className='ml-6 focus:ring-0' onClick={() => console.log('hello')}>Create New</Button>
+        </div>
+      </Card>
+      {render && AssetDefinition(initialValuesAssetDefinition, setInitialValuesAssetDefinition)}
       {/* --------------- Step 2 ---------------  */}
-      {activeStep === 1 && Access(initialValuesAccess, setInitialValuesAccess, handleNext, handlePrev)}
+      {render && Access(initialValuesAccess, setInitialValuesAccess)}
       {/* --------------- Step 3 ---------------  */}
-      {activeStep === 2 && Policy(initialValuesPolicy, setInitialValuesPolicy, handleNext, handlePrev)}
+      {render && Policy(initialValuesPolicy, setInitialValuesPolicy)}
     </div>
   )
 }
