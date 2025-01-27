@@ -44,8 +44,8 @@ export default function FormSteps () {
 
   const [initialValuesAssetDefinition, setInitialValuesAssetDefinition] = useState(initialValuesAssetDefinitionEmpty)
   const [initialValuesAccess, setInitialValuesAccess] = useState(initialValuesAccessEmpty)
-  const [render, setRender] = useState(false)
   const [initialValuesPolicy, setInitialValuesPolicy] = useState(initialValuesPolicyEmpty)
+  const [currentAsset, setCurrentAsset] = useState(null)
   const existingAssets = mockExistingAssets
 
   const handleSelectExisting = (asset) => {
@@ -79,8 +79,8 @@ export default function FormSteps () {
     })
     setInitialValuesPolicy({
       policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
-    } )
-    setRender(true)
+    })
+    setCurrentAsset(asset.id)
   }
 
   return (
@@ -116,11 +116,14 @@ export default function FormSteps () {
           <Button className='ml-6 focus:ring-0' onClick={() => console.log('hello')}>Create New</Button>
         </div>
       </Card>
-      {render && AssetDefinition(initialValuesAssetDefinition, setInitialValuesAssetDefinition)}
-      {/* --------------- Step 2 ---------------  */}
-      {render && Access(initialValuesAccess, setInitialValuesAccess)}
-      {/* --------------- Step 3 ---------------  */}
-      {render && Policy(initialValuesPolicy, setInitialValuesPolicy)}
+      {currentAsset &&
+        <div className='items-center w-1/2 mt-8' key={currentAsset}>
+          {AssetDefinition(initialValuesAssetDefinition, setInitialValuesAssetDefinition)}
+
+          {Access(initialValuesAccess, setInitialValuesAccess)}
+
+          {Policy(initialValuesPolicy, setInitialValuesPolicy)}
+        </div>}
     </div>
   )
 }

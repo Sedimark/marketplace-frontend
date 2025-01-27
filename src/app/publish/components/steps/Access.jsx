@@ -47,7 +47,7 @@ const validationSchemaAccess = yup.lazy(values =>
  */
 const Access = (initialValuesAccess, setInitialValuesAccess) => {
   return (
-    <Accordion className=' w-1/2 bg-white mt-4'>
+    <Accordion className='bg-white mt-4'>
       <Accordion.Panel>
         <Accordion.Title className='bg-white mb-2 text-2xl font-bold tracking-tight text-gray-900'>
           Access Type
