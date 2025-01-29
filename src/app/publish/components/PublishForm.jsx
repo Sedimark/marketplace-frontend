@@ -6,36 +6,14 @@ import mockExistingAssets from '@/utils/data/mockExistingAssets.json'
 import AssetForm from './assetDefinition/AssetForm'
 
 /**
- * FormSteps component renders a multi-step form with navigation controls.
+ * FormSteps component for creating or reusing assets.
  *
- * @component
- * @example
- * return (
- *   <FormSteps />
- * )
+ * This component provides a multi-step form for defining and publishing assets.
+ * Users can choose to create a new asset or reuse an existing one.  The form
+ * guides users through defining the asset's properties, access permissions,
+ * pricing and policies, and finally, reviewing and submitting the information.
  *
- * @returns {JSX.Element} The rendered component.
- *
- * @description
- * This component manages the state of the active step in the form and provides
- * navigation controls to move between steps. It renders a stepper to indicate
- * the current step and conditionally renders the content of each step based on
- * the active step.
- *
- * @function
- * @name FormSteps
- *
- * @property {number} activeStep - The current active step in the form.
- * @property {function} setActiveStep - Function to update the active step.
- * @property {function} handleNext - Function to move to the next step.
- * @property {function} handlePrev - Function to move to the previous step.
- * @property {Array<string>} steps - Array of step names.
- * @property {object} initialValuesStepOne - Initial values for step one.
- * @property {function} setInitialValuesStepOne - Function to update initial values for step one.
- * @property {object} initialValuesStepTwo - Initial values for step two.
- * @property {function} setInitialValuesStepTwo - Function to update initial values for step two.
- * @property {object} initialValuesStepThree - Initial values for step three.
- * @property {function} setInitialValuesStepThree - Function to update initial values for step three.
+ * @returns {JSX.Element} The FormSteps component.
  */
 export default function FormSteps () {
   const steps = ['Asset Definition', 'Access', 'Pricing & Policies', 'Review & Submit']

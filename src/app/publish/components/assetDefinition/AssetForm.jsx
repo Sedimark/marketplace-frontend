@@ -6,6 +6,17 @@ import CustomTextInput from '../CustomTextInput'
 import CustomDatepicker from '../CustomDatePicker'
 import style from './tag.module.css'
 
+/**
+ * Validation schema for the Asset Definition form.
+ *
+ * This schema uses Yup for validation and defines the constraints for each field
+ * in the Asset Definition form.  It uses `yup.lazy` to dynamically define
+ * the validation rules for the `queries`, `data_controller`, `legal_basis`, `purpose`,
+ * `data_protection_contract_point`, and `consent_withdrawal_contact_point` fields
+ * based on the values of `switchQuery` and `switchPII` respectively.
+ *
+ * @type {yup.ObjectSchema}
+ */
 const validationSchemaAssetDefinition = yup.lazy(values =>
   yup.object({
     title: yup.string().required('Title is required'),
@@ -44,6 +55,21 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
       policyName: yup.string().required('A name is required for the policy')
     }))
   }))
+
+/**
+ * AssetForm component for creating or updating assets.
+ *
+ * This component renders a form for defining and publishing assets. It uses Formik
+ * for form management and Yup for validation. The form includes sections for
+ * asset definition, access type, pricing & policies.  It handles form submission
+ * and updates the `initialValues` state.
+ *
+ * @param {object} initialValues The initial values for the form.
+ * @param {function} setInitialValues A function to update the initial values.
+ * @param {boolean} openModal A boolean state variable to control modal visibility.
+ * @param {function} setOpenModal A function to update the modal visibility state.
+ * @returns {JSX.Element} The AssetForm component.
+ */
 export default function AssetForm (initialValues, setInitialValues, openModal, setOpenModal) {
   return (
     <>
