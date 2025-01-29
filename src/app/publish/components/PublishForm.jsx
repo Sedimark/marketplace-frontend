@@ -1,11 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { Button, Card, Dropdown } from 'flowbite-react'
-import AssetDefinition from './steps/AssetDefinition'
-import Access from './steps/Access'
-import Policy from './steps/Policy'
-import { initialValuesAccessEmpty, initialValuesAssetDefinitionEmpty, initialValuesPolicyEmpty } from './steps/initialValues'
+import { Button, Card, Dropdown, Modal, Popover } from 'flowbite-react'
+import { initialValuesEmpty } from './assetDefinition/initialValues'
 import mockExistingAssets from '@/utils/data/mockExistingAssets.json'
+import AssetForm from './assetDefinition/AssetForm'
 
 /**
  * FormSteps component renders a multi-step form with navigation controls.
@@ -41,21 +39,17 @@ import mockExistingAssets from '@/utils/data/mockExistingAssets.json'
  */
 export default function FormSteps () {
   const steps = ['Asset Definition', 'Access', 'Pricing & Policies', 'Review & Submit']
-
-  const [initialValuesAssetDefinition, setInitialValuesAssetDefinition] = useState(initialValuesAssetDefinitionEmpty)
-  const [initialValuesAccess, setInitialValuesAccess] = useState(initialValuesAccessEmpty)
-  const [initialValuesPolicy, setInitialValuesPolicy] = useState(initialValuesPolicyEmpty)
+  const [openModal, setOpenModal] = useState(false)
+  const [initialValues, setInitialValues] = useState(initialValuesEmpty)
   const [currentAsset, setCurrentAsset] = useState(null)
   const existingAssets = mockExistingAssets
 
   const handleSelectExisting = (asset) => {
-    setInitialValuesAssetDefinition({
+    setInitialValues({
       title: asset.title,
       description: asset.description,
       image: asset.image,
-      keywords: asset.keywords
-    })
-    setInitialValuesAccess({
+      keywords: asset.keywords,
       url: asset.endpointURL,
       url_action: 'POST',
       headers: [{ key: 'hello', value: 'world' }],
@@ -75,23 +69,22 @@ export default function FormSteps () {
       data_protection_contract_point: '',
       consent_withdrawal_contact_point: '',
       switchQuery: false,
-      switchPII: false
-    })
-    setInitialValuesPolicy({
+      switchPII: false,
       policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
-    })
+    }
+    )
     setCurrentAsset(asset.id)
+  }
+  const handleNewAsset = () => {
+    setInitialValues(initialValuesEmpty)
+    setCurrentAsset(`Empty + ${Date.now()}`)
   }
 
   return (
     <div className='flex flex-col items-center justify-center mt-4'>
-      {/* Stepper */}
       <Card className='items-center w-1/2 mt-8'>
         <ol className='items-center w-full space-y-4 xl:flex xl:space-x-8 xl:space-y-0 rtl:space-x-reverse'>
           {steps.map((_step, index) => (
-            // <li key={index} className={'flex items-center space-x-2.5 rtl:space-x-reverse ' + (activeStep === index ? 'text-blue-600' : 'text-gray-500')}>
-            //   <span className={'flex items-center justify-center w-6 h-6 border border-blue-600 rounded-full shrink-0 ' + (activeStep === index ? 'border-blue-600' : 'border-gray-500')}>
-            //     {index + 1}
             <li key={index} className='flex items-center space-x-2.5 rtl:space-x-reverse '>
               <span className='flex items-center justify-center w-6 h-6 border border-blue-600 rounded-full shrink-0 ' />
               <span className='pr-2'>
@@ -113,16 +106,53 @@ export default function FormSteps () {
               <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
             ))}
           </Dropdown>
-          <Button className='ml-6 focus:ring-0' onClick={() => console.log('hello')}>Create New</Button>
+          <Button className='ml-6 focus:ring-0' onClick={() => handleNewAsset()}>Create New</Button>
         </div>
       </Card>
       {currentAsset &&
         <div className='items-center w-1/2 mt-8' key={currentAsset}>
-          {AssetDefinition(initialValuesAssetDefinition, setInitialValuesAssetDefinition)}
+          {AssetForm(initialValues, setInitialValues, openModal, setOpenModal)}
+        </div>}
 
-          {Access(initialValuesAccess, setInitialValuesAccess)}
+      {openModal &&
+        <div className='flow-root'>
+          <Modal show={openModal} onClose={() => setOpenModal(false)}>
+            <Modal.Header>Review Asset information:</Modal.Header>
+            <Modal.Body>
+              <pre>
+                {JSON.stringify(initialValues, null, 2)}
+              </pre>
+            </Modal.Body>
+            <Modal.Footer>
 
-          {Policy(initialValuesPolicy, setInitialValuesPolicy)}
+              <Popover
+                aria-labelledby='default-popover'
+                content={
+                  <div className='w-64 text-sm text-gray-500 dark:text-gray-400'>
+                    <div className='px-3 py-2'>
+                      <p>To close use the X</p>
+                    </div>
+                  </div>
+}
+              >
+                <Button>I accept</Button>
+              </Popover>
+              <Popover
+                aria-labelledby='default-popover'
+                content={
+                  <div className='w-64 text-sm text-gray-500 dark:text-gray-400'>
+                    <div className='px-3 py-2'>
+                      <p>This is not implemented, what is the next step after submit?</p>
+                    </div>
+                  </div>
+}
+              >
+                <Button color='gray'>
+                  Decline
+                </Button>
+              </Popover>
+            </Modal.Footer>
+          </Modal>
         </div>}
     </div>
   )

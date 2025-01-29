@@ -1,11 +1,8 @@
-export const initialValuesAssetDefinitionEmpty = {
+export const initialValuesEmpty = {
   title: '',
   description: '',
   image: '',
-  keywords: []
-}
-
-export const initialValuesAccessEmpty = {
+  keywords: [],
   url: '',
   url_action: 'POST',
   headers: [{ key: '', value: '' }],
@@ -25,9 +22,6 @@ export const initialValuesAccessEmpty = {
   data_protection_contract_point: '',
   consent_withdrawal_contact_point: '',
   switchQuery: false,
-  switchPII: false
-}
-
-export const initialValuesPolicyEmpty = {
+  switchPII: false,
   policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
 }
