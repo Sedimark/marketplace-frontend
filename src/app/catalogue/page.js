@@ -12,7 +12,6 @@ import LoadingCard from './components/LoadingCard'
  * @returns {Promise<JSX.Element>} A promise that resolves to a JSX element representing the rendered page.
  */
 export default function Page ({ searchParams }) {
-  const type = searchParams?.type || 'services'
   const query = searchParams?.query || ''
   const currentPage = Number(searchParams?.page) || 1
 
@@ -20,10 +19,10 @@ export default function Page ({ searchParams }) {
     <div className='bg-sedimark-dark-deep-blue'>
       <SearchBar />
       <Suspense
-        key={type + query + currentPage} // Ensures the Catalogue component is re-rendered when the search parameters change
+        key={query + currentPage} // Ensures the Catalogue component is re-rendered when the search parameters change
         fallback={<LoadingCard />}
       >
-        <Catalogue queryType={type} query={query} currentPage={currentPage} />
+        <Catalogue query={query} currentPage={currentPage} />
       </Suspense>
     </div>
   )
