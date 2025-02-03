@@ -14,11 +14,10 @@ export default function ResultsList ({ results }) {
     <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
       {results.map((vc, index) => {
         return (
-          <Link key={`${vc.title}-${vc.created_at}-${index + 1}`} href='catalogue/asset'>
+          <Link key={`${vc.title.value}-${vc.created.value}-${index + 1}`} href='catalogue/asset'>
             <OfferingItem
               vc={vc}
-              providerName={vc.provider}
-              price={vc.price}
+              providerName={vc.publisher.value}
               color='bg-gray-50'
             />
           </Link>

@@ -1,9 +1,9 @@
 import { HiOutlineCurrencyEuro, HiCalendar, HiUser } from 'react-icons/hi'
 
 function OfferingItem ({ vc, providerName, price, color }) {
-  const name = vc.title
-  const description = vc.short_description
-  const issuanceDate = vc.created_at ? new Date(vc.created_at) : new Date()
+  const name = vc.title.value
+  const description = vc.description.value
+  const issuanceDate = vc.created.value ? new Date(vc.created.value) : new Date()
   const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
   const providedBy = providerName ?? 'OTHER'
   const validatedPrice = price ?? '0'

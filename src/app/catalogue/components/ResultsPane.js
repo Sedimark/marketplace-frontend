@@ -21,7 +21,8 @@ import { calculateItemsPerPage, calculateTotalPages } from '../utils/paginationH
  */
 export default function ResultsPane ({
   providers,
-  keywords
+  keywords,
+  data
 }) {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('query') || ''
@@ -37,7 +38,7 @@ export default function ResultsPane ({
   const [totalVcs, setTotalVcs] = useState(0)
   const [vcs, setVcs] = useState([])
 
-  const data = mockCatalogue
+  // const data = mockCatalogue
 
   // Update state when selected providers or keywords change
   useEffect(() => {
@@ -70,9 +71,9 @@ export default function ResultsPane ({
     if (data) {
       window.scrollTo(0, 0, 'smooth')
       setLoading(false)
-      setVcs(data.results.slice(0, settings.batchSize))
-      setResults(data.results)
-      setTotalVcs(data.total)
+      setVcs(data.results.bindings.slice(0, settings.batchSize))
+      setResults(data.results.bindings)
+      setTotalVcs(data.results.bindings.length)
     } else if (!data) {
       setLoading(true)
     }
