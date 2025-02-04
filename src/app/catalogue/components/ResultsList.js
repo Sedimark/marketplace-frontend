@@ -12,12 +12,11 @@ import OfferingItem from './OfferingItem'
 export default function ResultsList ({ results }) {
   return (
     <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
-      {results.map((vc, index) => {
+      {results.map((offering, index) => {
         return (
-          <Link key={`${vc.title.value}-${vc.created.value}-${index + 1}`} href='catalogue/asset'>
+          <Link key={`${offering.offering.value}-${offering.created.value}-${index + 1}`} href='catalogue/asset'>
             <OfferingItem
-              vc={vc}
-              providerName={vc.publisher.value}
+              offering={offering}
               color='bg-gray-50'
             />
           </Link>
