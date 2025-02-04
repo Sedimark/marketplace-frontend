@@ -80,6 +80,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
         onSubmit={values => {
           console.log(values)
           setInitialValues(values)
+          setOpenModal(true)
         }}
       >
         {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
@@ -450,7 +451,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
               </Accordion.Panel>
             </Accordion>
             <div className='flow-root'>
-              <Button className='float-right' type='submit' onClick={() => setOpenModal(true)}>Submit</Button>
+              <Button className='float-right' type='submit'>Submit</Button>
             </div>
           </Form>
         )}

@@ -111,7 +111,7 @@ export default function FormSteps () {
                       <p>To close use the X</p>
                     </div>
                   </div>
-}
+                }
               >
                 <Button>I accept</Button>
               </Popover>
@@ -123,7 +123,7 @@ export default function FormSteps () {
                       <p>This is not implemented, what is the next step after submit?</p>
                     </div>
                   </div>
-}
+                }
               >
                 <Button color='gray'>
                   Decline
