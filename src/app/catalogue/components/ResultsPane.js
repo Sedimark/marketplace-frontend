@@ -8,7 +8,6 @@ import LoadingCard from '@/app/catalogue/components/LoadingCard'
 import CatalogueSideBar from './SideBar'
 import ResultsList from './ResultsList'
 import settings from '@/utils/settings'
-import mockCatalogue from '@/utils/data/mockCatalogue.json'
 import { calculateItemsPerPage, calculateTotalPages } from '../utils/paginationHelpers'
 
 /**
