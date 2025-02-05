@@ -2,14 +2,13 @@ import { Suspense } from 'react'
 import SearchBar from '@/components/home/SearchBar'
 import Slideshow from '@/components/home/Slideshow'
 import Banner from '@/components/home/Banner'
-import mockProviders from '@/utils/data/mockProviders.json'
-import mockCatalogue from '@/utils/data/mockCatalogue.json'
+import { fetchOfferingsCount, fetchParticipantsCount } from '@/utils/catalogue'
 
-const HomePage = () => {
+async function HomePage () {
   // Fetch catalogue data passing default parameters to set total of offerings on homepage
-  const data = mockCatalogue
+  const offeringsCount = await fetchOfferingsCount()
   // Fetch providers data to display total of participants on the homepage
-  const providers = mockProviders
+  const participantsCount = await fetchParticipantsCount()
   return (
     <div className='flex flex-col'>
       <div className='w-full rounded-t-xl bg-sedimark-dark-deep-blue'>
@@ -22,7 +21,7 @@ const HomePage = () => {
           </Suspense>
         </div>
         <div>
-          <Banner totalVcs={data.total} providers={providers} />
+          <Banner offeringsCount={offeringsCount} participantsCount={participantsCount} />
         </div>
       </div>
     </div>

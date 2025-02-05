@@ -13,6 +13,20 @@ const prefixes = `
     PREFIX vocab: <https://w3id.org/sedimark/vocab#>
 `
 
+function getOfferingQueryFilter (query) {
+  return `
+    ?offering a sedi:Offering .
+    ?offering sedi:hasAsset ?asset .
+    ?offering dct:title ?title .
+    ?offering dct:description ?description .
+    ?offering dct:publisher ?publisher .
+    ?offering dct:created ?created .
+    FILTER(
+      (contains(str(?title), "${query}") || contains(str(?description), "${query}"))
+    )
+  `
+}
+
 async function fetchFromCatalogue (sparQLQuery) {
   const options = {
     method: 'POST',
@@ -34,15 +48,7 @@ function getSparQLOfferingQueryString (query, currentPage, batchSize) {
 
     SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created
     WHERE {
-      ?offering a sedi:Offering .
-      ?offering sedi:hasAsset ?asset .
-      ?offering dct:title ?title .
-      ?offering dct:description ?description .
-      ?offering dct:publisher ?publisher .
-      ?offering dct:created ?created .
-      FILTER(
-        (contains(str(?title), "${query}") || contains(str(?description), "${query}"))
-      )
+      ${getOfferingQueryFilter(query)}
     }
     ORDER BY ?created
     LIMIT ${batchSize}
@@ -51,32 +57,69 @@ function getSparQLOfferingQueryString (query, currentPage, batchSize) {
   return encodeURI(baseString)
 }
 
-export default async function fetchOfferings (query, currentPage) {
+export async function fetchOfferings (query, currentPage) {
   const sparQLQuery = getSparQLOfferingQueryString(query, currentPage, settings.batchSize)
   return fetchFromCatalogue(sparQLQuery)
 }
 
-function getSparQLProvidersQueryString () {
+function getSparQLOfferingsCountQueryString () {
   const baseString = `
     ${prefixes}
 
-    SELECT DISTINCT ?participant
+    SELECT DISTINCT (COUNT(?offering) as ?count)
     WHERE {
-      ?participant a sedi:Participant .
       ?offering a sedi:Offering .
-      ?offering dct:publisher ?participant .
     }
-    ORDER BY ?participant
   `
   return encodeURI(baseString)
 }
 
-export async function fetchProviders () {
-  const sparQLQuery = getSparQLProvidersQueryString()
-  return fetchFromCatalogue(sparQLQuery)
+export async function fetchOfferingsCount () {
+  const sparQLQuery = getSparQLOfferingsCountQueryString()
+  const data = await fetchFromCatalogue(sparQLQuery)
+  return data.results.bindings[0].count.value
 }
 
-function getSparQLKeywordsQueryString () {
+function getSparQLProvidersQueryString (query) {
+  const baseString = `
+    ${prefixes}
+
+    SELECT DISTINCT ?publisher
+    WHERE {
+      ?publisher a sedi:Participant .
+      ${getOfferingQueryFilter(query)}
+    }
+    ORDER BY ?publisher
+  `
+  return encodeURI(baseString)
+}
+
+export async function fetchProviders (query) {
+  const sparQLQuery = getSparQLProvidersQueryString(query)
+  const data = await fetchFromCatalogue(sparQLQuery)
+  const providers = data.results.bindings.map(binding => binding.publisher.value)
+  return providers
+}
+
+function getSparQLParticipantsCountQueryString () {
+  const baseString = `
+    ${prefixes}
+
+    SELECT DISTINCT (COUNT(?participant) as ?count)
+    WHERE {
+      ?participant a sedi:Participant .
+    }
+  `
+  return encodeURI(baseString)
+}
+
+export async function fetchParticipantsCount () {
+  const sparQLQuery = getSparQLParticipantsCountQueryString()
+  const data = await fetchFromCatalogue(sparQLQuery)
+  return data.results.bindings[0].count.value
+}
+
+function getSparQLKeywordsQueryString (query) {
   const baseString = `
     ${prefixes}
 
@@ -84,13 +127,16 @@ function getSparQLKeywordsQueryString () {
     WHERE {
       ?asset a vocab:DataAsset .
       ?asset dcat:keyword ?keyword .
+      ${getOfferingQueryFilter(query)}
     }
     ORDER BY ?keyword
   `
   return encodeURI(baseString)
 }
 
-export async function fetchKeywords () {
-  const sparQLQuery = getSparQLKeywordsQueryString()
-  return fetchFromCatalogue(sparQLQuery)
+export async function fetchKeywords (query) {
+  const sparQLQuery = getSparQLKeywordsQueryString(query)
+  const data = await fetchFromCatalogue(sparQLQuery)
+  const keywords = data.results.bindings.map(binding => binding.keyword.value)
+  return keywords
 }

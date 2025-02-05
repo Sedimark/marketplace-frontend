@@ -1,8 +1,6 @@
 import { Suspense } from 'react'
 import ResultsPane from './ResultsPane'
-import mockProviders from '@/utils/data/mockProviders.json'
-import mockFilters from '@/utils/data/mockFilters.json'
-import fetchOfferings from '@/utils/catalogue'
+import { fetchOfferings, fetchProviders, fetchKeywords } from '@/utils/catalogue'
 
 /**
  * Renders the Catalogue component.
@@ -14,8 +12,8 @@ import fetchOfferings from '@/utils/catalogue'
  * @returns {JSX.Element} The Catalogue component.
  */
 export default async function Catalogue ({ query, currentPage }) {
-  const providers = mockProviders
-  const keywords = mockFilters
+  const providers = await fetchProviders(query)
+  const keywords = await fetchKeywords(query)
   const data = await fetchOfferings(query, currentPage)
 
   return (
