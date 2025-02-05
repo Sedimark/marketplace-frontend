@@ -41,7 +41,7 @@ async function fetchFromCatalogue (sparQLQuery) {
   return data
 }
 
-function getSparQLOfferingQueryString (query, currentPage, batchSize) {
+function getSparQLOfferingQueryString (query, currentPage, batchSize = settings.batchSize) {
   const offset = (currentPage - 1) * batchSize
   const baseString = `
     ${prefixes}
@@ -58,7 +58,7 @@ function getSparQLOfferingQueryString (query, currentPage, batchSize) {
 }
 
 export async function fetchOfferings (query, currentPage) {
-  const sparQLQuery = getSparQLOfferingQueryString(query, currentPage, settings.batchSize)
+  const sparQLQuery = getSparQLOfferingQueryString(query, currentPage)
   return fetchFromCatalogue(sparQLQuery)
 }
 
@@ -141,7 +141,7 @@ export async function fetchKeywords (query) {
   return keywords
 }
 
-export async function fetchOfferingsDetails (offeringIds) {
+export async function fetchRecommendedOfferings (offeringIds) {
   const idsString = offeringIds.map(id => `<${id}>`).join(', ')
   const sparQLQuery = `
     ${prefixes}
@@ -155,6 +155,31 @@ export async function fetchOfferingsDetails (offeringIds) {
       ?offering dct:publisher ?publisher .
       ?offering dct:created ?created .
       FILTER(?offering IN (${idsString}))
+    }
+  `
+  return fetchFromCatalogue(sparQLQuery)
+}
+
+export async function fetchOfferingDetails (offeringId) {
+  const sparQLQuery = `
+    ${prefixes}
+
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?keywords
+    WHERE {
+      ?offering a sedi:Offering .
+      ?offering sedi:hasAsset ?asset .
+      ?offering dct:title ?title .
+      ?offering dct:description ?description .
+      ?offering dct:publisher ?publisher .
+      ?offering dct:created ?created .
+      FILTER(?offering IN (<${offeringId}>))
+      {
+         SELECT ?asset (group_concat(?kw; separator="${settings.keywordsSeparator}") as ?keywords)
+         WHERE {
+           ?asset dcat:keyword ?kw
+        }
+        GROUP BY ?asset
+      }
     }
   `
   return fetchFromCatalogue(sparQLQuery)

@@ -1,7 +1,7 @@
 import settings from '@/utils/settings'
-import { fetchOfferingsDetails } from '@/utils/catalogue'
+import { fetchRecommendedOfferings } from '@/utils/catalogue'
 
-export async function fetchQueryRecommendations (query, numRecommendations) {
+export async function fetchQueryRecommendations (query, numRecommendations = settings.numRecommendations) {
   const options = {
     method: 'POST',
     headers: {
@@ -13,12 +13,12 @@ export async function fetchQueryRecommendations (query, numRecommendations) {
   const url = `${settings.recommenderUrl}/api/query`
   const data = await fetch(url, options).then(response => response.json())
 
-  const dataRec = await fetchOfferingsDetails(data.offering_ids)
+  const dataRec = await fetchRecommendedOfferings(data.offering_ids)
 
   return dataRec.results.bindings
 }
 
-export async function fetchSimilarRecommendations (offeringId, numRecommendations) {
+export async function fetchSimilarRecommendations (offeringId, numRecommendations = settings.numRecommendations) {
   const options = {
     method: 'POST',
     headers: {
@@ -30,7 +30,7 @@ export async function fetchSimilarRecommendations (offeringId, numRecommendation
   const url = `${settings.recommenderUrl}/api/similar`
   const data = await fetch(url, options).then(response => response.json())
 
-  const dataRec = await fetchOfferingsDetails(data.offering_ids)
+  const dataRec = await fetchRecommendedOfferings(data.offering_ids)
 
   return dataRec.results.bindings
 }

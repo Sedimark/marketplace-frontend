@@ -2,15 +2,13 @@ import { Button } from 'flowbite-react'
 import { HiArrowLeft } from 'react-icons/hi'
 import DatasetInfoComponent from './components/DatasetInfoComponent'
 import Recommender from './components/Recommender'
-import { fetchOfferingsDetails } from '@/utils/catalogue'
+import { fetchOfferingDetails } from '@/utils/catalogue'
 import { fetchSimilarRecommendations } from '@/utils/recommender'
 
 export default async function Page ({ params }) {
   const { offeringId } = params
-  const offeringIdDecoded = atob(offeringId)
-  console.dir(offeringIdDecoded)
-  const offering = await fetchOfferingsDetails([offeringIdDecoded])
-  console.dir(offering.results.bindings[0])
+  const offeringIdDecoded = atob(decodeURIComponent(offeringId))
+  const offering = await fetchOfferingDetails(offeringIdDecoded)
   const recommendations = await fetchSimilarRecommendations(offeringIdDecoded, 5)
   return (
     <>
