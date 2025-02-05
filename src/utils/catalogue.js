@@ -11,6 +11,7 @@ const prefixes = `
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX vocab: <https://w3id.org/sedimark/vocab#>
+    PREFIX schema: <https://schema.org/>
 `
 
 function getOfferingQueryFilter (query) {
