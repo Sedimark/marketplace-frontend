@@ -8,11 +8,11 @@ function Recommender ({ recommendations }) {
       <div className='flex gap-4 overflow-x-auto p-4 w-full'>
         {recommendations.map((recommendation, index) => {
           return (
-            <Link key={`${recommendation.title}-${recommendation.created_at}-${index + 1}`} href='#'>
+            <Link key={`${recommendation.title.value}-${recommendation.created.value}-${index + 1}`} href='#'>
               <RecommenderItem
                 vc={recommendation}
-                providerName={recommendation.provider}
-                price={recommendation.price}
+                providerName={recommendation.publisher.value}
+                price={recommendation?.price ?? 0}
                 color='bg-sedimark-light-blue bg-red'
               />
             </Link>

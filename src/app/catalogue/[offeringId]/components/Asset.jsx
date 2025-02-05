@@ -5,15 +5,16 @@ import Credentials from './Credentials'
 import ProviderCard from './ProviderCard'
 import mockProvider from '@/utils/data/mockProvider.json'
 
-function Asset ({ asset }) {
-  const title = asset.title
-  const imageUrl = asset.picture
-  const shortDescription = asset.short_description
-  const keywords = asset.keywords
-  const createdAt = new Date(asset.created_at)
-  const updatedAt = new Date(asset.updated_at)
-  const location = asset.location
-  const description = asset.description
+function Asset ({ offering }) {
+  console.dir(offering)
+  const title = offering.title.value
+  const imageUrl = offering?.picture?.value ?? 'https://picsum.photos/200'
+  const shortDescription = offering.description.value
+  const keywords = offering?.keywords?.value ?? ['keyword1', 'keyword2', 'keyword3']
+  const createdAt = new Date(offering.created.value)
+  const updatedAt = new Date(offering?.updated?.value ?? offering.created.value)
+  const location = offering?.location?.value ?? 'London'
+  const description = offering.description.value
   return (
     <div className='flex flex-col bg-sedimark-light-blue'>
       <h5 className='text-3xl font-bold tracking-tight text-black dark:text-white'>
@@ -60,7 +61,7 @@ function Asset ({ asset }) {
           })}
         </div>
       </div>
-      <Credentials asset={asset} />
+      <Credentials offering={offering} />
       <ProviderCard provider={mockProvider} />
     </div>
   )

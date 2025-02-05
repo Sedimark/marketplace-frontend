@@ -140,3 +140,22 @@ export async function fetchKeywords (query) {
   const keywords = data.results.bindings.map(binding => binding.keyword.value)
   return keywords
 }
+
+export async function fetchOfferingsDetails (offeringIds) {
+  const idsString = offeringIds.map(id => `<${id}>`).join(', ')
+  const sparQLQuery = `
+    ${prefixes}
+
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created
+    WHERE {
+      ?offering a sedi:Offering .
+      ?offering sedi:hasAsset ?asset .
+      ?offering dct:title ?title .
+      ?offering dct:description ?description .
+      ?offering dct:publisher ?publisher .
+      ?offering dct:created ?created .
+      FILTER(?offering IN (${idsString}))
+    }
+  `
+  return fetchFromCatalogue(sparQLQuery)
+}

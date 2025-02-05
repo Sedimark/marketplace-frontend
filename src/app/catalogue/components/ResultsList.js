@@ -14,7 +14,7 @@ export default function ResultsList ({ results }) {
     <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
       {results.map((offering, index) => {
         return (
-          <Link key={`${offering.offering.value}-${offering.created.value}-${index + 1}`} href='catalogue/asset'>
+          <Link key={`${offering.offering.value}-${offering.created.value}-${index + 1}`} href={`catalogue/${btoa(offering.offering.value)}`}>
             <OfferingItem
               offering={offering}
               color='bg-gray-50'
