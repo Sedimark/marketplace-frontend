@@ -38,7 +38,7 @@ async function fetchFromCatalogue (sparQLQuery) {
   }
   const url = `${settings.catalogueUrl}/catalogue/sparql`
   const data = await fetch(url, options).then(response => response.json())
-  return data
+  return data.results.bindings
 }
 
 function getSparQLOfferingQueryString (query, currentPage, batchSize = settings.batchSize) {
@@ -77,7 +77,7 @@ function getSparQLOfferingsCountQueryString () {
 export async function fetchOfferingsCount () {
   const sparQLQuery = getSparQLOfferingsCountQueryString()
   const data = await fetchFromCatalogue(sparQLQuery)
-  return data.results.bindings[0].count.value
+  return data[0].count.value
 }
 
 function getSparQLProvidersQueryString (query) {
@@ -97,7 +97,7 @@ function getSparQLProvidersQueryString (query) {
 export async function fetchProviders (query) {
   const sparQLQuery = getSparQLProvidersQueryString(query)
   const data = await fetchFromCatalogue(sparQLQuery)
-  const providers = data.results.bindings.map(binding => binding.publisher.value)
+  const providers = data.map(prov => prov.publisher.value)
   return providers
 }
 
@@ -116,7 +116,7 @@ function getSparQLParticipantsCountQueryString () {
 export async function fetchParticipantsCount () {
   const sparQLQuery = getSparQLParticipantsCountQueryString()
   const data = await fetchFromCatalogue(sparQLQuery)
-  return data.results.bindings[0].count.value
+  return data[0].count.value
 }
 
 function getSparQLKeywordsQueryString (query) {
@@ -137,7 +137,7 @@ function getSparQLKeywordsQueryString (query) {
 export async function fetchKeywords (query) {
   const sparQLQuery = getSparQLKeywordsQueryString(query)
   const data = await fetchFromCatalogue(sparQLQuery)
-  const keywords = data.results.bindings.map(binding => binding.keyword.value)
+  const keywords = data.map(binding => binding.keyword.value)
   return keywords
 }
 

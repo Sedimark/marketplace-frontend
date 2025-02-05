@@ -13,9 +13,7 @@ export async function fetchQueryRecommendations (query, numRecommendations = set
   const url = `${settings.recommenderUrl}/api/query`
   const data = await fetch(url, options).then(response => response.json())
 
-  const dataRec = await fetchRecommendedOfferings(data.offering_ids)
-
-  return dataRec.results.bindings
+  return fetchRecommendedOfferings(data.offering_ids)
 }
 
 export async function fetchSimilarRecommendations (offeringId, numRecommendations = settings.numRecommendations) {
@@ -30,7 +28,5 @@ export async function fetchSimilarRecommendations (offeringId, numRecommendation
   const url = `${settings.recommenderUrl}/api/similar`
   const data = await fetch(url, options).then(response => response.json())
 
-  const dataRec = await fetchRecommendedOfferings(data.offering_ids)
-
-  return dataRec.results.bindings
+  return fetchRecommendedOfferings(data.offering_ids)
 }

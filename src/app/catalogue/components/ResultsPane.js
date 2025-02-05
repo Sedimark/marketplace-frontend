@@ -70,9 +70,9 @@ export default function ResultsPane ({
     if (data) {
       window.scrollTo(0, 0, 'smooth')
       setLoading(false)
-      setVcs(data.results.bindings.slice(0, settings.batchSize))
-      setResults(data.results.bindings)
-      setTotalVcs(data.results.bindings.length)
+      setVcs(data.slice(0, settings.batchSize))
+      setResults(data)
+      setTotalVcs(data.length)
     } else if (!data) {
       setLoading(true)
     }

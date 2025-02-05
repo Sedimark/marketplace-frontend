@@ -19,7 +19,7 @@ export default async function Page ({ params }) {
             Back to search
           </span>
         </Button>
-        <DatasetInfoComponent offering={offering.results.bindings[0]} />
+        <DatasetInfoComponent offering={offering[0]} />
         <Recommender recommendations={recommendations} />
       </div>
     </>
