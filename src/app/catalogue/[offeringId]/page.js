@@ -2,14 +2,16 @@ import { Button } from 'flowbite-react'
 import { HiArrowLeft } from 'react-icons/hi'
 import DatasetInfoComponent from './components/DatasetInfoComponent'
 import Recommender from './components/Recommender'
-import { fetchOfferingDetails } from '@/utils/catalogue'
+import { fetchOfferingDetails, fetchProvider } from '@/utils/catalogue'
 import { fetchSimilarRecommendations } from '@/utils/recommender'
 
 export default async function Page ({ params }) {
   const { offeringId } = params
   const offeringIdDecoded = atob(decodeURIComponent(offeringId))
   const offering = await fetchOfferingDetails(offeringIdDecoded)
+  const provider = await fetchProvider(offering.publisher.value)
   const recommendations = await fetchSimilarRecommendations(offeringIdDecoded, 5)
+  console.dir(provider)
   return (
     <>
       <div className='bg-sedimark-light-blue pt-2 pb-2'>
@@ -19,7 +21,7 @@ export default async function Page ({ params }) {
             Back to search
           </span>
         </Button>
-        <DatasetInfoComponent offering={offering[0]} />
+        <DatasetInfoComponent offering={offering} provider={provider} />
         <Recommender recommendations={recommendations} />
       </div>
     </>

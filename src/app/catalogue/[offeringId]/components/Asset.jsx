@@ -2,8 +2,6 @@ import { Badge } from 'flowbite-react'
 import Image from 'next/image'
 import { HiLocationMarker, HiCalendar, HiOutlineRefresh } from 'react-icons/hi'
 import Credentials from './Credentials'
-import ProviderCard from './ProviderCard'
-import mockProvider from '@/utils/data/mockProvider.json'
 import settings from '@/utils/settings'
 
 function Asset ({ offering }) {
@@ -62,7 +60,6 @@ function Asset ({ offering }) {
         </div>
       </div>
       <Credentials offering={offering} />
-      <ProviderCard provider={mockProvider} />
     </div>
   )
 }
