@@ -8,7 +8,7 @@ function ProviderCard ({ provider }) {
       <div className='flex flex-wrap m-5 ml-0'>
         <div className='float-left mr-5'>
           {provider?.image &&
-            <Image width={128} height={128} src={provider.image.value} alt={provider.participant.value} className='object-cover object-center rounded-lg shadow-lg' />}
+            <Image width={96} height={96} src={provider.image.value} alt={provider.participant.value} className='object-cover object-center rounded-lg shadow-lg' />}
         </div>
         <div className='flex flex-col justify-around'>
           <p className='text-md text-black font-bold'>
