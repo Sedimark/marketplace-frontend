@@ -8,7 +8,7 @@ function Recommender ({ recommendations }) {
       <div className='flex gap-4 overflow-x-auto p-4 w-full'>
         {recommendations.map((recommendation, index) => {
           return (
-            <Link key={`${recommendation.title.value}-${recommendation.created.value}-${index + 1}`} href='#'>
+            <Link key={`${recommendation.title.value}-${recommendation.created.value}-${index + 1}`} href={`/catalogue/${btoa(recommendation.offering.value)}`}>
               <RecommenderItem
                 vc={recommendation}
                 providerName={recommendation.publisher.value}
