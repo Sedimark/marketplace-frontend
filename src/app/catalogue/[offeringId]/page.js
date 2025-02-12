@@ -11,7 +11,6 @@ export default async function Page ({ params }) {
   const offering = await fetchOfferingDetails(offeringIdDecoded)
   const provider = await fetchProvider(offering.publisher.value)
   const recommendations = await fetchSimilarRecommendations(offeringIdDecoded, 5)
-  console.dir(provider)
   return (
     <>
       <div className='bg-sedimark-light-blue pt-2 pb-2'>
