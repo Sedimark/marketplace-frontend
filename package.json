@@ -6,6 +6,8 @@
     "dev": "next dev",
     "fast": "next dev --turbo",
     "build": "next build",
+    "compile": "next build --experimental-build-mode compile",
+    "generate": "next build --experimental-build-mode generate",
     "start": "next start",
     "lint": "next lint"
   },
