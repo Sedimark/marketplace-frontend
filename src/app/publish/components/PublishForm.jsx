@@ -1,21 +1,47 @@
 'use client'
 import { useState } from 'react'
 import { Button, Card, Dropdown, Modal, Popover } from 'flowbite-react'
-import { initialValuesEmpty } from './assetDefinition/initialValues'
 import mockExistingAssets from '@/utils/data/mockExistingAssets.json'
 import AssetForm from './assetDefinition/AssetForm'
 
 /**
- * FormSteps component for creating or reusing assets.
+ * PublishForm component for creating or reusing assets.
  *
  * This component provides a multi-step form for defining and publishing assets.
  * Users can choose to create a new asset or reuse an existing one.  The form
  * guides users through defining the asset's properties, access permissions,
  * pricing and policies, and finally, reviewing and submitting the information.
  *
- * @returns {JSX.Element} The FormSteps component.
+ * @returns {JSX.Element} The PublishForm component.
  */
-export default function FormSteps () {
+export default function PublishForm () {
+  const initialValuesEmpty = {
+    title: '',
+    description: '',
+    image: '',
+    keywords: [],
+    url: '',
+    url_action: 'GET',
+    headers: [{ key: '', value: '' }],
+    queries: [{
+      name: '',
+      label: '',
+      description: '',
+      type: 'text',
+      default_value: '',
+      required: true
+    }],
+    license: '',
+    terms_and_condition: '',
+    data_controller: '',
+    legal_basis: '',
+    purpose: '',
+    data_protection_contract_point: '',
+    consent_withdrawal_contact_point: '',
+    switchQuery: false,
+    switchPII: false,
+    policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
+  }
   const steps = ['Asset Definition', 'Access', 'Pricing & Policies', 'Review & Submit']
   const [openModal, setOpenModal] = useState(false)
   const [initialValues, setInitialValues] = useState(initialValuesEmpty)
@@ -29,7 +55,7 @@ export default function FormSteps () {
       image: asset.image,
       keywords: asset.keywords,
       url: asset.endpointURL,
-      url_action: 'POST',
+      url_action: 'GET',
       headers: [{ key: 'hello', value: 'world' }],
       queries: [{
         name: '',
@@ -60,26 +86,10 @@ export default function FormSteps () {
 
   return (
     <div className='flex flex-col items-center justify-center mt-4'>
-      <Card className='items-center w-1/2 mt-8'>
-        <ol className='items-center w-full space-y-4 xl:flex xl:space-x-8 xl:space-y-0 rtl:space-x-reverse'>
-          {steps.map((_step, index) => (
-            <li key={index} className='flex items-center space-x-2.5 rtl:space-x-reverse '>
-              <span className='flex items-center justify-center w-6 h-6 border border-blue-600 rounded-full shrink-0 ' />
-              <span className='pr-2'>
-                <h3 className='font-medium leading-tight'>{_step}</h3>
-              </span>
-              {(index + 1) !== steps.length &&
-                <svg className='w-5 h-5 ms-2 xl:ms-4 rtl:rotate-180' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 12 10'>
-                  <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='m7 9 4-4-4-4M1 9l4-4-4-4' />
-                </svg>}
-            </li>
-          ))}
-        </ol>
-      </Card>
       <Card className=' flex items-center w-1/2 mt-8'>
         <p>Do you wish to reuse an existing asset ?</p>
         <div className='flex flex-row'>
-          <Dropdown label='Select Existing' dismissOnClick={false} className='focus:ring-0'>
+          <Dropdown label='Select Existing' dismissOnClick={true} className='focus:ring-0'>
             {existingAssets.map((asset, index) => (
               <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
             ))}

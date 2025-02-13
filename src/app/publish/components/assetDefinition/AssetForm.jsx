@@ -21,9 +21,9 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
   yup.object({
     title: yup.string().required('Title is required'),
     description: yup.string().required('A detailed description is required'),
-    image: yup.string().required('A URL to a image is required'),
+    // image: yup.string().required('A URL to a image is required'),
     url: yup.string().url('Must be a URL').required('URL is required'),
-    url_action: yup.string().required().oneOf(['GET', 'POST']).label('url_action'),
+    url_action: yup.string().required().oneOf(['GET']).label('url_action'),
     headers: yup.array().of(yup.object().shape({
       key: yup.string().required('A Key is required for the Header'),
       value: yup.string().required('A Value is required for the Header')
@@ -40,8 +40,8 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
         })
       )
       : yup.array(),
-    license: yup.string().required('A License is required'),
-    terms_and_condition: yup.string().required('Terms & Conditions is required'),
+    // license: yup.string().required('A License is required'),
+    // terms_and_condition: yup.string().required('Terms & Conditions is required'),
     data_controller: values.switchPII ? yup.string().required('Data Controller required') : yup.string(),
     legal_basis: values.switchPII ? yup.string().required('Legal Basis required') : yup.string(),
     purpose: values.switchPII ? yup.string().required('Purpose required') : yup.string(),
@@ -131,7 +131,6 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     }
                   }
                   />
-                  <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
@@ -146,8 +145,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                   </div>
                   <div className='flex pb-6'>
                     <Field as={Select} name='url_action' className='w-1/6'>
-                      <option defaultValue>POST</option>
-                      <option>GET</option>
+                      <option defaultValue>GET</option>
                     </Field>
                     <div className='w-full'>
                       <CustomTextInput
@@ -377,7 +375,6 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                       </div>
                     </Card>
                   </div>
-                  <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
@@ -444,9 +441,6 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                       </div>
                     )}
                   />
-
-                  <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
-
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
