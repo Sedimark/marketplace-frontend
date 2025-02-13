@@ -42,7 +42,6 @@ export default function PublishForm () {
     switchPII: false,
     policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
   }
-  const steps = ['Asset Definition', 'Access', 'Pricing & Policies', 'Review & Submit']
   const [openModal, setOpenModal] = useState(false)
   const [initialValues, setInitialValues] = useState(initialValuesEmpty)
   const [currentAsset, setCurrentAsset] = useState(null)
