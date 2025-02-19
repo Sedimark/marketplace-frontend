@@ -6,7 +6,7 @@ import { HiOutlineSearch } from 'react-icons/hi'
 
 export default function SearchBar () {
   const searchParams = useSearchParams()
-  const { replace } = useRouter()
+  const { push } = useRouter()
   const [searchQuery, setSearchQuery] = useState(searchParams.get('query')?.toString())
 
   function triggerSearch () {
@@ -17,7 +17,7 @@ export default function SearchBar () {
       params.delete('query')
     }
 
-    replace(`/catalogue?${params.toString()}`)
+    push(`/catalogue?${params.toString()}`)
   }
 
   return (
