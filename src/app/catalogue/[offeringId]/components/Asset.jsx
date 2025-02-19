@@ -6,7 +6,7 @@ import settings from '@/utils/settings'
 
 function Asset ({ offering }) {
   const title = offering.title.value
-  const imageUrl = offering?.picture?.value ?? 'https://picsum.photos/200'
+  const imageUrl = offering?.picture?.value
   const shortDescription = offering.description.value
   const keywords = offering?.keywords?.value ? offering.keywords.value.split(settings.keywordsSeparator) : []
   const createdAt = new Date(offering.created.value)
@@ -37,10 +37,8 @@ function Asset ({ offering }) {
       </div>
       {/* Descriptions */}
       <div className='bg-sedimark-light-blue'>
-        <div className='float-left  mr-5'>
-          <Image src={imageUrl} alt={title} width={224} height={224} className='max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />
-          <p className='text-xs text-right text-gray-500'>Designed by <a href='https://www.freepik.com' target='_blank' rel='noreferrer' className='text-blue-500'>Freepik</a></p>
-        </div>
+        {imageUrl &&
+          <Image src={imageUrl} alt={title} width={224} height={224} className='float-left mr-5 max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />}
         <h5 className='text-xl tracking-tight text-black dark:text-white mb-2'>
           {title}
         </h5>
