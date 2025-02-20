@@ -10,12 +10,13 @@ export default async function Page ({ params }) {
   const offering = await fetchOfferingDetails(offeringIdDecoded)
   const provider = await fetchProvider(offering.publisher.value)
   const recommendations = await fetchSimilarRecommendations(offeringIdDecoded, 5)
+
   return (
     <>
       <div className='bg-sedimark-light-blue pt-2 pb-2'>
         <BackToSearchButton />
         <DatasetInfoComponent offering={offering} provider={provider} />
-        <Recommender recommendations={recommendations} />
+        {recommendations.length > 0 && <Recommender recommendations={recommendations} />}
       </div>
     </>
   )

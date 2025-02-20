@@ -26,7 +26,12 @@ export async function fetchSimilarRecommendations (offeringId, numRecommendation
     body: `{"id": "${offeringId}", "k": ${numRecommendations}}`
   }
   const url = `${settings.recommenderUrl}/api/similar`
-  const data = await fetch(url, options).then(response => response.json())
+  const res = await fetch(url, options)
+  if (!res.ok) {
+    console.warn(`Error fetching similar recommendations for offering ${offeringId}: ${res.statusText}`)
+    return []
+  }
+  const data = await res.json()
 
   return fetchRecommendedOfferings(data.offering_ids)
 }

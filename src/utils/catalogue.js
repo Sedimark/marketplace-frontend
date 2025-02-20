@@ -175,7 +175,7 @@ export async function fetchOfferingDetails (offeringId) {
       ?offering dct:publisher ?publisher .
       ?offering dct:created ?created .
       FILTER(?offering IN (<${offeringId}>))
-      {
+      OPTIONAL {
          SELECT ?asset (group_concat(?kw; separator="${settings.keywordsSeparator}") as ?keywords)
          WHERE {
            ?asset dcat:keyword ?kw
