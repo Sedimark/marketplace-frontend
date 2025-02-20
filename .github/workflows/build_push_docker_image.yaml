@@ -31,6 +31,11 @@ jobs:
         run: |
           standard
 
+      - name: Create environment file
+        run: |
+          echo "CATALOGUE_URL=${{ secrets.CATALOGUE_URL }}" > .env.production
+          echo "RECOMMENDER_URL=${{ secrets.RECOMMENDER_URL }}" >> .env.production
+
       - name: Kaniko build & push
         uses: aevea/action-kaniko@master
         with:

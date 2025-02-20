@@ -1,5 +1,7 @@
 FROM node:20-alpine AS deps
 
+ARG BUILD_CMD="build"
+
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN apk add --no-cache bind-tools libc6-compat && \
@@ -10,7 +12,7 @@ FROM node:20-alpine as builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN npm run ${BUILD_CMD}
 
 FROM node:18-alpine as runner
 WORKDIR /app

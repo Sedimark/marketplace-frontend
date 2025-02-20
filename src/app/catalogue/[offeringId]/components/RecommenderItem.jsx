@@ -3,9 +3,9 @@ import { HiOutlineCurrencyEuro, HiCalendar, HiUser } from 'react-icons/hi'
 function RecommenderItem ({ vc, providerName, price, color }) {
   const maxLengthTitle = 42
   const maxLengthDescription = 60
-  const name = vc.title.length > maxLengthTitle ? vc.title.substring(0, maxLengthTitle) + '...' : vc.title
-  const description = vc.short_description.length > maxLengthDescription ? vc.short_description.substring(0, maxLengthDescription) + '...' : vc.short_description
-  const issuanceDate = vc.created_at ? new Date(vc.created_at) : new Date()
+  const name = vc.title.value.length > maxLengthTitle ? vc.title.value.substring(0, maxLengthTitle) + '...' : vc.title.value
+  const description = vc.description.value.length > maxLengthDescription ? vc.description.value.substring(0, maxLengthDescription) + '...' : vc.description.value
+  const issuanceDate = vc.created.value ? new Date(vc.created.value) : new Date()
   const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
   const providedBy = providerName ?? 'OTHER'
   const validatedPrice = price ?? '0'

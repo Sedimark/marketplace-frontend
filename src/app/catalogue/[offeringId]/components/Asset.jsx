@@ -2,18 +2,17 @@ import { Badge } from 'flowbite-react'
 import Image from 'next/image'
 import { HiLocationMarker, HiCalendar, HiOutlineRefresh } from 'react-icons/hi'
 import Credentials from './Credentials'
-import ProviderCard from './ProviderCard'
-import mockProvider from '@/utils/data/mockProvider.json'
+import settings from '@/utils/settings'
 
-function Asset ({ asset }) {
-  const title = asset.title
-  const imageUrl = asset.picture
-  const shortDescription = asset.short_description
-  const keywords = asset.keywords
-  const createdAt = new Date(asset.created_at)
-  const updatedAt = new Date(asset.updated_at)
-  const location = asset.location
-  const description = asset.description
+function Asset ({ offering }) {
+  const title = offering.title.value
+  const imageUrl = offering?.picture?.value
+  const shortDescription = offering.description.value
+  const keywords = offering?.keywords?.value ? offering.keywords.value.split(settings.keywordsSeparator) : []
+  const createdAt = new Date(offering.created.value)
+  const updatedAt = new Date(offering?.updated?.value ?? offering.created.value)
+  const location = offering?.location?.value ?? 'London'
+  const description = offering.description.value
   return (
     <div className='flex flex-col bg-sedimark-light-blue'>
       <h5 className='text-3xl font-bold tracking-tight text-black dark:text-white'>
@@ -38,10 +37,8 @@ function Asset ({ asset }) {
       </div>
       {/* Descriptions */}
       <div className='bg-sedimark-light-blue'>
-        <div className='float-left  mr-5'>
-          <Image src={imageUrl} alt={title} width={224} height={224} className='max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />
-          <p className='text-xs text-right text-gray-500'>Designed by <a href='https://www.freepik.com' target='_blank' rel='noreferrer' className='text-blue-500'>Freepik</a></p>
-        </div>
+        {imageUrl &&
+          <Image src={imageUrl} alt={title} width={224} height={224} className='float-left mr-5 max-w-56 max-h-56 min-w-16 min-h-16 rounded-sm shadow-md' />}
         <h5 className='text-xl tracking-tight text-black dark:text-white mb-2'>
           {title}
         </h5>
@@ -51,17 +48,17 @@ function Asset ({ asset }) {
         <p className='font-normal text-gray-700 dark:text-gray-400'>
           {description}
         </p>
-        <div className='flex items-center flex-wrap'>
-          <h4 className='text-lg font-bold text-center m-3 ml-0'>Keywords:</h4>
-          {keywords.map((keyword, index) => {
-            return (
-              <Badge key={`${keyword}-${index}`} className='text-sedimark-deep-blue bg-sedimark-clear-blue m-3 ml-0 mb-2'>{keyword}</Badge>
-            )
-          })}
-        </div>
+        {keywords.length > 0 &&
+          <div className='flex items-center flex-wrap'>
+            <h4 className='text-lg font-bold text-center m-3 ml-0'>Keywords:</h4>
+            {keywords.map((keyword, index) => {
+              return (
+                <Badge key={`${keyword}-${index}`} className='text-sedimark-deep-blue bg-sedimark-clear-blue m-3 ml-0 mb-2'>{keyword}</Badge>
+              )
+            })}
+          </div>}
       </div>
-      <Credentials asset={asset} />
-      <ProviderCard provider={mockProvider} />
+      <Credentials offering={offering} />
     </div>
   )
 }

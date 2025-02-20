@@ -11,7 +11,11 @@
  * @type {Settings}
  */
 const settings = {
-  batchSize: process.env.BATCH_SIZE ?? 40,
+  batchSize: process.env.BATCH_SIZE ?? 10,
+  catalogueUrl: process.env.CATALOGUE_URL,
+  recommenderUrl: process.env.RECOMMENDER_URL,
+  keywordsSeparator: ';',
+  numRecommendations: process.env.NUM_RECOMMENDATIONS ?? 5,
   contractsPageSize: process.env.CONTRACTS_PAGE_SIZE ?? 5
 }
 Object.freeze(settings)
