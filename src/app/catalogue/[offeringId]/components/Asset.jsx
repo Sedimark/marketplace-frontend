@@ -48,14 +48,15 @@ function Asset ({ offering }) {
         <p className='font-normal text-gray-700 dark:text-gray-400'>
           {description}
         </p>
-        {keywords.length > 0 && <div className='flex items-center flex-wrap'>
-          <h4 className='text-lg font-bold text-center m-3 ml-0'>Keywords:</h4>
-          {keywords.map((keyword, index) => {
-            return (
-              <Badge key={`${keyword}-${index}`} className='text-sedimark-deep-blue bg-sedimark-clear-blue m-3 ml-0 mb-2'>{keyword}</Badge>
-            )
-          })}
-        </div>}
+        {keywords.length > 0 &&
+          <div className='flex items-center flex-wrap'>
+            <h4 className='text-lg font-bold text-center m-3 ml-0'>Keywords:</h4>
+            {keywords.map((keyword, index) => {
+              return (
+                <Badge key={`${keyword}-${index}`} className='text-sedimark-deep-blue bg-sedimark-clear-blue m-3 ml-0 mb-2'>{keyword}</Badge>
+              )
+            })}
+          </div>}
       </div>
       <Credentials offering={offering} />
     </div>
