@@ -5,6 +5,6 @@ const brokerAssets = await fetchAssetsFromBroker()
 
 export default function Page () {
   return (
-    <PublishForm brokerAssets={brokerAssets}/>
+    <PublishForm brokerAssets={brokerAssets} />
   )
 }
