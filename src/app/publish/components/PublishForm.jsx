@@ -1,7 +1,6 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Card, Dropdown, Modal, Popover } from 'flowbite-react'
-import mockExistingAssets from '@/utils/data/mockExistingAssets.json'
 import AssetForm from './assetDefinition/AssetForm'
 
 /**
@@ -14,7 +13,7 @@ import AssetForm from './assetDefinition/AssetForm'
  *
  * @returns {JSX.Element} The PublishForm component.
  */
-export default function PublishForm () {
+export default function PublishForm (brokerAssets) {
   const initialValuesEmpty = {
     title: '',
     description: '',
@@ -45,14 +44,14 @@ export default function PublishForm () {
   const [openModal, setOpenModal] = useState(false)
   const [initialValues, setInitialValues] = useState(initialValuesEmpty)
   const [currentAsset, setCurrentAsset] = useState(null)
-  const existingAssets = mockExistingAssets
+  const existingAssets = brokerAssets
 
   const handleSelectExisting = (asset) => {
-    setInitialValues({
+    const setAssetSelected = {
       title: asset.title,
       description: asset.description,
       image: asset.image,
-      keywords: asset.keywords,
+      keywords: asset.keywords || [],
       url: asset.endpointURL,
       url_action: 'GET',
       headers: [{ key: 'hello', value: 'world' }],
@@ -75,7 +74,8 @@ export default function PublishForm () {
       switchPII: false,
       policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
     }
-    )
+    setInitialValues(setAssetSelected)
+    console.log(initialValues)
     setCurrentAsset(asset.id)
   }
   const handleNewAsset = () => {
@@ -89,7 +89,7 @@ export default function PublishForm () {
         <p>Do you wish to reuse an existing asset ?</p>
         <div className='flex flex-row'>
           <Dropdown label='Select Existing' className='focus:ring-0'>
-            {existingAssets.map((asset, index) => (
+            {existingAssets['brokerAssets'].map((asset, index) => (
               <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
             ))}
           </Dropdown>
