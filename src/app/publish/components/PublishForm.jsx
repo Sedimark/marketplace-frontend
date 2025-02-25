@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button, Card, Dropdown, Modal, Popover } from 'flowbite-react'
 import AssetForm from './assetDefinition/AssetForm'
 
@@ -51,7 +51,7 @@ export default function PublishForm (brokerAssets) {
       title: asset.title,
       description: asset.description,
       image: asset.image,
-      keywords: asset.keywords || [],
+      keywords: asset.keyword || [],
       url: asset.endpointURL,
       url_action: 'GET',
       headers: [{ key: 'hello', value: 'world' }],
