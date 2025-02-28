@@ -88,7 +88,7 @@ export default function PublishForm (brokerAssets) {
       <Card className=' flex items-center w-1/2 mt-8'>
         <p>Do you wish to reuse an existing asset ?</p>
         <div className='flex flex-row'>
-          {existingAssets && existingAssets.length > 0 ? (
+          {existingAssets.brokerAssets && existingAssets.brokerAssets.length > 0 ? (
             <Dropdown label='Select Existing' className='focus:ring-0'>
               {existingAssets.brokerAssets.map((asset, index) => (
                 <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
