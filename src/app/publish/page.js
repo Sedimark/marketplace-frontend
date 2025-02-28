@@ -5,12 +5,11 @@ import { fetchAssetsFromBroker } from '@/utils/broker'
 let brokerAssets = {}
 try {
   brokerAssets = await fetchAssetsFromBroker()
-}
-catch (e) {
+} catch (e) {
   console.log(e)
 }
 
-export default function Page() {
+export default function Page () {
   return (
     <PublishForm brokerAssets={brokerAssets} />
   )
