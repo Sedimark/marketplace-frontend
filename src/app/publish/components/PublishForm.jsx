@@ -75,7 +75,6 @@ export default function PublishForm (brokerAssets) {
       policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
     }
     setInitialValues(setAssetSelected)
-    console.log(initialValues)
     setCurrentAsset(asset.id)
   }
   const handleNewAsset = () => {
@@ -83,29 +82,25 @@ export default function PublishForm (brokerAssets) {
     setCurrentAsset(`Empty + ${Date.now()}`)
   }
 
+  console.log(existingAssets)
   return (
     <div className='flex flex-col items-center justify-center mt-4'>
       <Card className=' flex items-center w-1/2 mt-8'>
         <p>Do you wish to reuse an existing asset ?</p>
         <div className='flex flex-row'>
-          {existingAssets.brokerAssets && existingAssets.brokerAssets.length > 0
+          {!existingAssets.brokerAssets?.error
             ? (
               <Dropdown label='Select Existing' className='focus:ring-0'>
-                {existingAssets.brokerAssets.map((asset, index) => (
+                {existingAssets.brokerAssets.data.map((asset, index) => (
                   <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
                 ))}
               </Dropdown>
               )
             : (
               <Dropdown label='Select Existing' className='focus:ring-0'>
-                <Dropdown.Item className='focus:ring-0'>Existing Assets not found</Dropdown.Item>
+                <Dropdown.Item className='focus:ring-0'>Error contacting Broker</Dropdown.Item>
               </Dropdown>
               )}
-          {/* <Dropdown label='Select Existing' className='focus:ring-0'>
-            {existingAssets.brokerAssets.map((asset, index) => (
-              <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
-            ))}
-          </Dropdown> */}
           <Button className='ml-6 focus:ring-0' onClick={() => handleNewAsset()}>Create New</Button>
         </div>
       </Card>
