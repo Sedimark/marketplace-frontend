@@ -71,7 +71,6 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
  * @returns {JSX.Element} The AssetForm component.
  */
 export default function AssetForm (initialValues, setInitialValues, openModal, setOpenModal) {
-  console.log(initialValues)
   return (
     <>
       <Formik
