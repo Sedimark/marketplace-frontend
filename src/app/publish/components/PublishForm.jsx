@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import { Button, Card, Dropdown, Modal, Popover } from 'flowbite-react'
-import mockExistingAssets from '@/utils/data/mockExistingAssets.json'
 import AssetForm from './assetDefinition/AssetForm'
 
 /**
@@ -14,7 +13,7 @@ import AssetForm from './assetDefinition/AssetForm'
  *
  * @returns {JSX.Element} The PublishForm component.
  */
-export default function PublishForm () {
+export default function PublishForm (brokerAssets) {
   const initialValuesEmpty = {
     title: '',
     description: '',
@@ -45,14 +44,14 @@ export default function PublishForm () {
   const [openModal, setOpenModal] = useState(false)
   const [initialValues, setInitialValues] = useState(initialValuesEmpty)
   const [currentAsset, setCurrentAsset] = useState(null)
-  const existingAssets = mockExistingAssets
+  const existingAssets = brokerAssets
 
   const handleSelectExisting = (asset) => {
-    setInitialValues({
+    const setAssetSelected = {
       title: asset.title,
       description: asset.description,
       image: asset.image,
-      keywords: asset.keywords,
+      keywords: asset.keyword || [],
       url: asset.endpointURL,
       url_action: 'GET',
       headers: [{ key: 'hello', value: 'world' }],
@@ -75,7 +74,7 @@ export default function PublishForm () {
       switchPII: false,
       policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
     }
-    )
+    setInitialValues(setAssetSelected)
     setCurrentAsset(asset.id)
   }
   const handleNewAsset = () => {
@@ -83,19 +82,34 @@ export default function PublishForm () {
     setCurrentAsset(`Empty + ${Date.now()}`)
   }
 
+  console.log(existingAssets)
   return (
     <div className='flex flex-col items-center justify-center mt-4'>
       <Card className=' flex items-center w-1/2 mt-8'>
         <p>Do you wish to reuse an existing asset ?</p>
         <div className='flex flex-row'>
-          <Dropdown label='Select Existing' className='focus:ring-0'>
-            {existingAssets.map((asset, index) => (
-              <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
-            ))}
-          </Dropdown>
+          {!existingAssets.brokerAssets?.error
+            ? (
+              <Dropdown label='Select Existing' className='focus:ring-0'>
+                {existingAssets.brokerAssets.data.map((asset, index) => (
+                  <Dropdown.Item className='focus:ring-0' key={index} onClick={() => handleSelectExisting(asset)}>{asset.title}</Dropdown.Item>
+                ))}
+              </Dropdown>
+              )
+            : (
+              <Dropdown label='Select Existing' className='focus:ring-0'>
+                <Dropdown.Item className='focus:ring-0'>Error contacting Broker</Dropdown.Item>
+              </Dropdown>
+              )}
           <Button className='ml-6 focus:ring-0' onClick={() => handleNewAsset()}>Create New</Button>
         </div>
       </Card>
+      {!currentAsset &&
+        <div className='items-center w-1/2 mt-8' key={currentAsset}>
+          <Card className='border-2 border-dashed flex items-center mt-8 h-[500px]'>
+            <p className='text-2xl font-extrablod text-gray-600/50'>Create a new Asset or use one existing as a template</p>
+          </Card>
+        </div>}
       {currentAsset &&
         <div className='items-center w-1/2 mt-8' key={currentAsset}>
           {AssetForm(initialValues, setInitialValues, openModal, setOpenModal)}
