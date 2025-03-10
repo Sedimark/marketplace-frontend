@@ -104,6 +104,12 @@ export default function PublishForm (brokerAssets) {
           <Button className='ml-6 focus:ring-0' onClick={() => handleNewAsset()}>Create New</Button>
         </div>
       </Card>
+      {!currentAsset &&
+        <div className='items-center w-1/2 mt-8' key={currentAsset}>
+          <Card className='border-2 border-dashed flex items-center mt-8 h-[500px]'>
+            <p className='text-2xl font-extrablod text-gray-600/50'>Create a new Asset or use one existing as a template</p>
+          </Card>
+        </div>}
       {currentAsset &&
         <div className='items-center w-1/2 mt-8' key={currentAsset}>
           {AssetForm(initialValues, setInitialValues, openModal, setOpenModal)}
