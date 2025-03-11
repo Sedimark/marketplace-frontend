@@ -1,4 +1,5 @@
 import settings from '@/utils/settings'
+import { fetchData } from '@/utils/helpers/fetchData'
 
 const prefixes = `
     PREFIX http: <http://www.w3.org/2011/http#>
@@ -39,8 +40,15 @@ async function fetchFromCatalogue (sparQLQuery) {
     body: `query=${sparQLQuery}`
   }
   const url = `${settings.catalogueUrl}/catalogue/sparql`
-  const data = await fetch(url, options).then(response => response.json())
-  return data.results.bindings
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    return data.results.bindings
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on fetchFromCatalogue!')
+    console.log(error)
+    return { error }
+  }
 }
 
 function getSparQLOfferingQueryString (query, currentPage, batchSize = settings.batchSize) {
@@ -79,7 +87,7 @@ function getSparQLOfferingsCountQueryString () {
 export async function fetchOfferingsCount () {
   const sparQLQuery = getSparQLOfferingsCountQueryString()
   const data = await fetchFromCatalogue(sparQLQuery)
-  return data[0].count.value
+  return data[0]?.count.value
 }
 
 function getSparQLProvidersQueryString (query) {
@@ -118,7 +126,7 @@ function getSparQLParticipantsCountQueryString () {
 export async function fetchParticipantsCount () {
   const sparQLQuery = getSparQLParticipantsCountQueryString()
   const data = await fetchFromCatalogue(sparQLQuery)
-  return data[0].count.value
+  return data[0]?.count.value
 }
 
 function getSparQLKeywordsQueryString (query) {
