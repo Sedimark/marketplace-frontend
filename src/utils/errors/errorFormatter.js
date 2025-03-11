@@ -13,7 +13,10 @@ export default function formatError (error) {
     return {
       message: 'Network error. Please check your internet connection.',
       code: 'NETWORK_ERROR',
-      details: { error }
+      details: { 
+        originalErrorMessage: error.message,
+        originalStack: error.stack
+      }
     }
   }
 
@@ -21,7 +24,10 @@ export default function formatError (error) {
     return {
       message: 'URL defined to fetch failed.',
       code: 'URL_NOT_VALID',
-      details: { error }
+      details: { 
+        originalErrorMessage: error.message,
+        originalStack: error.stack
+      }
     }
   }
   // Same for other errors (parsing, ...)
@@ -29,6 +35,9 @@ export default function formatError (error) {
   return {
     message: 'An unexpected error occurred.',
     code: 'UNKNOWN_ERROR',
-    details: { error }
+    details: { 
+      originalErrorMessage: error.message,
+      originalStack: error.stack
+    }
   }
 }
