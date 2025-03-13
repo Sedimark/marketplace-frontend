@@ -107,8 +107,11 @@ function getSparQLProvidersQueryString (query) {
 export async function fetchProviders (query) {
   const sparQLQuery = getSparQLProvidersQueryString(query)
   const data = await fetchFromCatalogue(sparQLQuery)
-  const providers = data.map(prov => prov.publisher.value)
-  return providers
+  if (!data.error) {
+    const providers = data.map(prov => prov.publisher.value)
+    return providers
+  }
+  return data
 }
 
 function getSparQLParticipantsCountQueryString () {
@@ -147,8 +150,11 @@ function getSparQLKeywordsQueryString (query) {
 export async function fetchKeywords (query) {
   const sparQLQuery = getSparQLKeywordsQueryString(query)
   const data = await fetchFromCatalogue(sparQLQuery)
-  const keywords = data.map(binding => binding.keyword.value)
-  return keywords
+  if (!data.error) {
+    const keywords = data.map(binding => binding.keyword.value)
+    return keywords
+  }
+  return data
 }
 
 export async function fetchRecommendedOfferings (offeringIds) {

@@ -1,8 +1,9 @@
 'use client'
-import { Button } from 'flowbite-react'
+import { Button, Alert } from 'flowbite-react'
 import { useEffect, useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { HiOutlineX } from 'react-icons/hi'
+import { TbAlertSquareFilled } from 'react-icons/tb'
 import CustomPagination from '@/components/pagination/Pagination'
 import LoadingCard from '@/app/catalogue/components/LoadingCard'
 import CatalogueSideBar from './SideBar'
@@ -67,7 +68,7 @@ export default function ResultsPane ({
 
   // Update state when data is fetched
   useEffect(() => {
-    if (data) {
+    if (data && !data?.error) {
       window.scrollTo(0, 0, 'smooth')
       setLoading(false)
       setVcs(data.slice(0, settings.batchSize))
@@ -115,7 +116,7 @@ export default function ResultsPane ({
               <HiOutlineX className='ml-2' />
             </span>
           </Button>}
-        {!loading && !results.length && data && (
+        {!loading && !results.length && data && !data?.error && (
           <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
             <div className='w-full gap-4 p-6 text-center bg-white border border-gray-200 rounded-lg shadow'>
               <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Whoops! There are no results matching your filters criteria.</h5>
@@ -128,6 +129,14 @@ export default function ResultsPane ({
             <p className='flex justify-end pr-4 pt-2.5 text-xs'> {(currentPage * settings.batchSize) - (settings.batchSize - 1)} - {currentPage * settings.batchSize} of over {totalVcs} results</p>
             <ResultsList results={vcs} />
             <CustomPagination totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          </div>
+        )}
+        {!loading && !results.length && data?.error && (
+          <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
+            <Alert color='failure' icon={TbAlertSquareFilled}>
+              {/* While in this case, the text is static, can be changed depending on the content/code from the error */}
+              <span className='font-bold text-xl'>Catalogue service is not responding. Please, try again.</span>
+            </Alert>
           </div>
         )}
       </div>
