@@ -4,8 +4,6 @@ export const NavItems = () => {
   const commonItems = [
     { href: '/', label: 'Home' },
     { href: '/catalogue', label: 'Catalogue' },
-    // THESE TWO SHOULD BE PROTECTED, ONLY ACCESSED BY REGISTERED USERS
-    // @TODO: Implement Metamask plugin + a session provider to show only if logged in.
     { href: '/publish', label: 'Publish' },
     { href: '/dashboard/overview', label: 'Dashboard' }
   ]

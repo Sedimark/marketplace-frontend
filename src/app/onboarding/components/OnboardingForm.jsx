@@ -13,7 +13,6 @@ import * as yup from 'yup'
 import { Formik, Form, useField } from 'formik'
 import { useState } from 'react'
 import Link from 'next/link'
-import { useSDK } from '@metamask/sdk-react'
 
 /**
  * Custom component to extend Formik into Flowbite React TextInput component.
@@ -72,15 +71,6 @@ export default function FormSteps () {
   const handleNext = () => setActiveStep((cur) => cur + 1)
   const handlePrev = () => setActiveStep((cur) => cur - 1)
   const [openModal, setOpenModal] = useState(false)
-  const { sdk, connecting, account } = useSDK()
-  // Metamask simple connect method
-  const connect = async () => {
-    try {
-      await sdk?.connect()
-    } catch (err) {
-      console.warn('No accounts found', err)
-    }
-  }
   //
   // STEP 2 Validation
   //
@@ -97,34 +87,6 @@ export default function FormSteps () {
     <div className='flex flex-col items-center justify-center mt-4'>
       <h1 className='mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl'>Welcome to SEDIMARK!</h1>
       <p className='mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48'>Create your account with just a few steps, and enjoy sharing data within the SEDIMARK ecosystem.</p>
-      {/* Warning Modal displayed if wallet gets disconnected on step > 0 */}
-      <Modal show={!account && activeStep > 0} onClose={() => setOpenModal(false)}>
-        <Modal.Header>Wallet Disconnected!</Modal.Header>
-        <Modal.Body>
-          <div className='text-center'>
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200'>
-              <path strokeLinecap='round' strokeLinejoin='round' d='M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z' />
-            </svg>
-            <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
-              Seems that your Metamask extension got disconnnected, connect again to continue!
-            </h3>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className='w-full'>
-            <Button
-              className='w-full'
-              color='failure'
-              onClick={() => {
-                setOpenModal(false)
-                setActiveStep(0)
-              }}
-            >
-              Go back to reconnect your wallet!
-            </Button>
-          </div>
-        </Modal.Footer>
-      </Modal>
       {/* Stepper */}
       <Card className='w-1/2 mt-8 items-center'>
         <ol className='items-center w-full space-y-4 xl:flex xl:space-x-8 xl:space-y-0 rtl:space-x-reverse'>
@@ -149,38 +111,13 @@ export default function FormSteps () {
       {activeStep === 0 &&
         <Card className='w-1/2 mt-6'>
           <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Prerequisites</h5>
-          <p>SEDIMARK relies on the IOTA tangle to store identity and smart contracts. The Metamask browser extension is therefore needed to join SEDIMARK.</p>
+          <p>SEDIMARK relies on the IOTA tangle to store identity and smart contracts. You will be asked a few details to create your profile, but only your username will be published in the IOTA tangle.</p>
+          <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
           <div className='flow-root'>
-            <Link target='_blank' rel='noreferrer' href='https://metamask.io/download/'>
-              <Button className='float-right'>Get Metamask</Button>
-            </Link>
             <Link target='_blank' rel='noreferrer' href='https://www.iota.org/get-started/what-is-iota'>
               <Button className='float-left'>Learn more...</Button>
             </Link>
-          </div>
-          <div className='relative flex py-5 items-center'>
-            <div className='flex-grow border-t border-gray-400' />
-            <span className='flex-shrink text-2xl mx-4 text-gray-400'>Already have Metamask?</span>
-            <div className='flex-grow border-t border-gray-400' />
-          </div>
-          {account
-            ? (
-              <div className='py-5 place-content-center'>
-                <p h5 className='mb-2 text-2xl text-center tracking-tight text-gray-900'>Seems you have already a Metamask account linked to SEDIMARK.</p>
-                <p h5 className='mb-2 text-2xl text-center font-bold tracking-tight text-gray-900'>You are ready to go!</p>
-              </div>
-              )
-            : (
-              <Button disabled={connecting} onClick={connect} className='w-full'>
-                <svg className='w-6 h-6 text-white' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'>
-                  <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17 8H5m12 0a1 1 0 0 1 1 1v2.6M17 8l-4-4M5 8a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.6M5 8l4-4 4 4m6 4h-4a2 2 0 1 0 0 4h4a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1Z' />
-                </svg>
-                Connect wallet
-              </Button>
-              )}
-          <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
-          <div className='flow-root'>
-            <Button disabled={!account} className='float-right' onClick={() => handleNext()}>Next: User Details</Button>
+            <Button className='float-right' onClick={() => handleNext()}>Next: User Details</Button>
           </div>
         </Card>}
 
