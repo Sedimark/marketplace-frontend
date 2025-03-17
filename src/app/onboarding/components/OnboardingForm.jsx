@@ -5,7 +5,6 @@ import {
   Label,
   TextInput,
   Card,
-  Avatar,
   Accordion,
   Modal
 } from 'flowbite-react'
@@ -13,6 +12,7 @@ import * as yup from 'yup'
 import { Formik, Form, useField } from 'formik'
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 /**
  * Custom component to extend Formik into Flowbite React TextInput component.
@@ -33,7 +33,6 @@ const CustomTextInput = ({ label, ...props }) => {
         helperText={meta.touched && meta.error ? meta.error : ''}
         color={meta.touched && meta.error ? 'failure' : 'gray'}
       />
-
     </>
   )
 }
@@ -71,16 +70,19 @@ export default function FormSteps () {
   const handleNext = () => setActiveStep((cur) => cur + 1)
   const handlePrev = () => setActiveStep((cur) => cur - 1)
   const [openModal, setOpenModal] = useState(false)
+  const invalidURL = 'Must be a valid URL'
+  const pictRegex = /^https:\/\/[\/|.|\w|\s|-]*\.(?:jpg|jpeg|svg|gif|png)$/
   //
   // STEP 2 Validation
   //
   // Using validationSchema for standard validation. Use a custom validate function for more complex cases.
   const validationSchemaStepTwo = yup.object({
-    first_name: yup.string().required('First name is required'),
-    last_name: yup.string().required('Last name is required'),
-    company: yup.string().required('A company is required'),
-    website: yup.string().url().notRequired('Must be a valid URL'),
-    picture: yup.string().url().notRequired('Must be a valid URL')
+    username: yup.string().required('Username is required'),
+    first_name: yup.string().notRequired(),
+    last_name: yup.string().notRequired(),
+    company: yup.string().notRequired(),
+    website: yup.string().url().notRequired(invalidURL),
+    picture: yup.string().matches(pictRegex, invalidURL).notRequired(invalidURL)
   })
 
   return (
@@ -127,6 +129,7 @@ export default function FormSteps () {
           <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>User Details</h5>
           <Formik
             initialValues={{
+	      username: '',
               first_name: '',
               last_name: '',
               company: '',
@@ -164,50 +167,63 @@ export default function FormSteps () {
                     </div>
                   </Modal.Footer>
                 </Modal>
-                <div className='grid gap-6 mb-2 md:grid-cols-2'>
-                  <div>
-                    <CustomTextInput
-                      label='First name'
-                      name='first_name'
-                      placeholder=''
-                    />
-                  </div>
-                  <div>
-                    <CustomTextInput
-                      label='Last name'
-                      name='last_name'
-                      placeholder=''
-                    />
-                  </div>
-                </div>
-                <div>
-                  <CustomTextInput
-                    label='Company'
-                    name='company'
-                    placeholder='Bruxelloise des logiciels, SRL'
-                  />
-                </div>
-                <div>
-                  <CustomTextInput
-                    label='Website'
-                    name='website'
-                    placeholder='http://sedimark.com'
-                  />
-                </div>
-                <div className='flex gap-6 mb-2 md:grid-cols-2 pt-4'>
-                  <div className='w-3/4'>
-                    <CustomTextInput
-                      label='Profile picture'
-                      name='picture'
-                      placeholder='http://urltoyourimage/img.png'
-                    />
-                  </div>
-                  <div className='w-1/4'>
-                    <Avatar size='lg' img='https://i.pravatar.cc/150?img=68' alt='placeholder avatar' rounded />
-                  </div>
-                </div>
+		<div>
+		  <CustomTextInput
+		    label='Username'
+		    tooltip='The name under which you will be known in the SEDIMARK ecosystem.'
+		    name='username'
+		    placeholder='The name under which you will be known in the SEDIMARK ecosystem.'
+		  />
+		</div>
                 <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
-                <div className='flex flow-root'>
+		<div className='flex flex-col gap-2'>
+		  <div className='grid gap-6 mb-2 md:grid-cols-2'>
+		    <div>
+		      <CustomTextInput
+			label='First name'
+			name='first_name'
+			placeholder=''
+		      />
+		    </div>
+		    <div>
+		      <CustomTextInput
+			label='Last name'
+			name='last_name'
+			placeholder=''
+		      />
+		    </div>
+		  </div>
+		  <div>
+		    <CustomTextInput
+		      label='Company'
+		      name='company'
+		      placeholder='Bruxelloise des logiciels, SRL'
+		    />
+		  </div>
+		  <div>
+		    <CustomTextInput
+		      label='Website'
+		      name='website'
+		      placeholder='http://sedimark.com'
+		    />
+		  </div>
+		  <div className='flex justify-between gap-6 mb-2 pt-4'>
+		    <div className='w-full'>
+		      <CustomTextInput
+			label='Profile picture'
+			name='picture'
+			placeholder='http://urltoyourimage/img.png'
+		      />
+		    </div>
+		    {
+		      // TODO: this is a workaround to prevent Image to crash when the URL is invalid
+                      values.picture.match(pictRegex) &&
+                      <Image width={96} height={96} src={values.picture} alt='Participant image preview' className='object-cover object-center rounded-lg shadow-lg' />
+                    }
+		  </div>
+		</div>
+		<hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
+                <div className='flow-root'>
                   <Button className='float-right' type='submit'>Next</Button>
                   <Button className='float-left' onClick={() => handlePrev()}>Back</Button>
                 </div>
