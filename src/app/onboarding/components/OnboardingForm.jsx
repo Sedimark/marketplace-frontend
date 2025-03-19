@@ -13,6 +13,7 @@ import { Formik, Form, useField } from 'formik'
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { createIdentity } from '@/utils/dlt'
 
 /**
  * Custom component to extend Formik into Flowbite React TextInput component.
@@ -37,33 +38,6 @@ const CustomTextInput = ({ label, ...props }) => {
   )
 }
 
-// This is an example "output" DID, will need to be replaced with the real output on integration with LINKS
-const exampleDID = {
-  '@context': [
-    'https://www.w3.org/ns/did/v1',
-    'https://w3id.org/security/suites/jws-2020/v1'
-  ],
-  id: 'did:web:SEDIMARK.marketplace',
-  verificationMethod: [
-    {
-      id: 'did:web:SEDIMARK.marketplace#owner',
-      type: 'JsonWebKey2020',
-      controller: 'did:web:SEDIMARK.marketplace',
-      publicKeyJwk: {
-        kty: 'EC',
-        crv: 'secp256k1',
-        x: '7afa3a377b5808e4223dd62542a6e7e46ab0be95873464520193c1857ec2bb8f',
-        y: '58b050b73f31f1b8b98c0b04513257433bdad2a51188642d8b0e515fbfb3125f'
-      }
-    }
-  ],
-  authentication: [
-    'did:web:SEDIMARK.marketplace#owner'
-  ],
-  assertionMethod: [
-    'did:web:SEDIMARK.marketplace#owner'
-  ]
-}
 export default function FormSteps () {
   const [activeStep, setActiveStep] = useState(0)
   const steps = ['Prerequisites', 'User details', 'Verifiable Credentials']
@@ -72,6 +46,22 @@ export default function FormSteps () {
   const [openModal, setOpenModal] = useState(false)
   const invalidURL = 'Must be a valid URL'
   const pictRegex = /^https:\/\/[\/|.|\w|\s|-]*\.(?:jpg|jpeg|svg|gif|png)$/
+  const [identity, setIdentity] = useState(null)
+  const [error, setError] = useState(null)
+  const submitID = async (values) => {
+    console.log('Requesting ID to DLT Booth...')
+
+    const idResp = await createIdentity(values.username)
+    console.log('ID Response:')
+    console.log(idResp)
+
+    if (idResp?.error) {
+      setError(idResp.error)
+    } else {
+      setIdentity(idResp)
+      handleNext()
+    }
+  }
   //
   // STEP 2 Validation
   //
@@ -156,12 +146,18 @@ export default function FormSteps () {
                       <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
                         A Verifiable Credential is going to be created with the data, check that the data is correct, <b>you will not be able to go back from this point!</b>
                       </h3>
+		      {error &&
+			<div>
+                          <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
+			  <p className='text-lg font-bold text-red-500'>{`Couldn't create new identity for participant ${values.username}: ${error.message}`}</p>
+			</div>
+		      }
                     </div>
                   </Modal.Body>
                   <Modal.Footer>
                     <div className='w-full'>
                       <div className='flow-root'>
-                        <Button className='float-right' onClick={() => handleNext()}>Continue to next step</Button>
+                        <Button className='float-right' onClick={() => submitID(values)}>Continue to next step</Button>
                         <Button className='float-left' color='failure' onClick={() => setOpenModal(false)}>Go back to check the data</Button>
                       </div>
                     </div>
@@ -240,11 +236,11 @@ export default function FormSteps () {
           <Card className='mt-6 '>
             <Accordion>
               <Accordion.Panel>
-                <Accordion.Title>DID</Accordion.Title>
+                <Accordion.Title>Verifiable Credential</Accordion.Title>
                 <Accordion.Content className='overflow-auto'>
                   <pre>
                     <code>
-                      {JSON.stringify(exampleDID, 'did_example', 2)}
+                      {JSON.stringify(identity, 'did_example', 2)}
                     </code>
                   </pre>
                 </Accordion.Content>

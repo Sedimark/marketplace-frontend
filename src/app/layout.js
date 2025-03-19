@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import NavBar from '@/components/nav/NavBar'
 import Footer from '@/components/footer/Footer'
 
-export default function RootLayout ({ children }) {
+export default async function RootLayout ({ children }) {
   return (
     <html>
       <head>
