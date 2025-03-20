@@ -9,7 +9,7 @@ export default function formatError (error) {
     }
   }
   // Handle network errors
-  if (error instanceof TypeError && error.message === 'Failed to fetch') {
+  if (error instanceof TypeError && error.message.includes('NetworkError')) {
     return {
       message: 'Network error. Please check your internet connection.',
       code: 'NETWORK_ERROR',
