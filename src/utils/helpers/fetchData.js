@@ -4,14 +4,7 @@ export async function fetchData (url, options = {}) {
   try {
     const response = await fetch(url, options)
     if (!response.ok) {
-      // Attempt to parse the error response
-      let errorData
-      try {
-        errorData = await response.json()
-      } catch (e) {
-        errorData = { message: `HTTP error! Status: ${response.status}` }
-      }
-      throw formatError({ ...errorData, status: response.status })
+      throw response
     }
     return response
   } catch (error) {

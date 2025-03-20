@@ -5,7 +5,7 @@ export default function formatError (error) {
     return {
       message: `HTTP error! Status: ${error.status}`,
       code: `HTTP_${error.status}`,
-      details: { status: error.status }
+      details: { status: error.statusText }
     }
   }
   // Handle network errors
