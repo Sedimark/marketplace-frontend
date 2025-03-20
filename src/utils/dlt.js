@@ -1,7 +1,7 @@
 import settings from '@/utils/settings'
 import { fetchData } from './helpers/fetchData'
 
-export async function createIdentity ( username ) {
+export async function createIdentity (username) {
   const options = {
     method: 'POST',
     headers: {
@@ -14,9 +14,9 @@ export async function createIdentity ( username ) {
       },
       services: [
         {
-          id: "#self-description-url",
-          type: "SelfDescription",
-          serviceEndpoint: "http://identityhub:7171/api/identity/identity-hub/self-description"
+          id: '#self-description-url',
+          type: 'SelfDescription',
+          serviceEndpoint: 'http://identityhub:7171/api/identity/identity-hub/self-description'
         }
       ]
     })
@@ -73,7 +73,7 @@ export async function deleteIdentity () {
   }
 }
 
-export async function resolveDID ( did ) {
+export async function resolveDID (did) {
   const options = {
     method: 'GET',
     headers: {
