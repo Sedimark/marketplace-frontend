@@ -24,10 +24,8 @@ export default function formatError (error) {
     return {
       message: 'URL defined to fetch failed.',
       code: 'URL_NOT_VALID',
-      details: {
-        originalErrorMessage: error.message,
-        originalStack: error.stack
-      }
+      details: error.message,
+      stack: error.stack
     }
   }
   // Same for other errors (parsing, ...)
