@@ -13,10 +13,8 @@ export default function formatError (error) {
     return {
       message: 'Network error. Please check your internet connection.',
       code: 'NETWORK_ERROR',
-      details: {
-        originalErrorMessage: error.message,
-        originalStack: error.stack
-      }
+      details: error.message,
+      stack: error.stack
     }
   }
 
