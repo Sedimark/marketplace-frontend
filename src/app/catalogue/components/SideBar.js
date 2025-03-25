@@ -56,25 +56,28 @@ export default function CatalogueSideBar ({
           </Button>
         )}
         <ListGroup className='w-48 h-80 overflow-auto '>
-          {providers.map((provider) => (
-            <ListGroup.Item
-              key={`provider-${provider}-filter`}
-              className='flex items-center text-left cursor-pointer last:border-b-0'
-              onClick={() => {
-                handleProviderChange(provider)
-              }}
-            >
-              <Checkbox
-                id={provider}
-                className='mr-2'
-                checked={selectedProviders.includes(provider)}
-                readOnly
-              />
-              <Label className='py-1 text-left'>
-                {provider}
-              </Label>
-            </ListGroup.Item>
-          ))}
+          {!providers?.error &&
+            <>
+              {providers.map((provider) => (
+                <ListGroup.Item
+                  key={`provider-${provider}-filter`}
+                  className='flex items-center text-left cursor-pointer last:border-b-0'
+                  onClick={() => {
+                    handleProviderChange(provider)
+                  }}
+                >
+                  <Checkbox
+                    id={provider}
+                    className='mr-2'
+                    checked={selectedProviders.includes(provider)}
+                    readOnly
+                  />
+                  <Label className='py-1 text-left'>
+                    {provider}
+                  </Label>
+                </ListGroup.Item>
+              ))}
+            </>}
         </ListGroup>
         <div className='text-lg font-semibold'>Keywords</div>
         {selectedKeywords.length > 0 && (
@@ -91,23 +94,26 @@ export default function CatalogueSideBar ({
 
         <div>
           <ListGroup className='w-48 h-64 overflow-auto'>
-            {keywords.map((keyword, index) => (
-              <ListGroup.Item
-                key={`keyword-${keyword}-filter` + index}
-                className='flex items-center cursor-pointer last:border-b-0'
-                onClick={() => handleKeywordChange(keyword)}
-              >
-                <Checkbox
-                  id={keyword}
-                  className='mr-2'
-                  checked={selectedKeywords.includes(keyword)}
-                  readOnly
-                />
-                <Label className='py-1 text-left'>
-                  {keyword}
-                </Label>
-              </ListGroup.Item>
-            ))}
+            {!keywords?.error &&
+              <>
+                {keywords.map((keyword, index) => (
+                  <ListGroup.Item
+                    key={`keyword-${keyword}-filter` + index}
+                    className='flex items-center cursor-pointer last:border-b-0'
+                    onClick={() => handleKeywordChange(keyword)}
+                  >
+                    <Checkbox
+                      id={keyword}
+                      className='mr-2'
+                      checked={selectedKeywords.includes(keyword)}
+                      readOnly
+                    />
+                    <Label className='py-1 text-left'>
+                      {keyword}
+                    </Label>
+                  </ListGroup.Item>
+                ))}
+              </>}
           </ListGroup>
         </div>
       </div>

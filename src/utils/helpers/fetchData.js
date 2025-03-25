@@ -16,8 +16,8 @@ export async function fetchData (url, options = {}) {
     return response
   } catch (error) {
     // Probably network or CORS errors
-    // Printing on server-side
-    console.log(error)
+    // As we already print on catch where it is, its commented, but in case of deep search for an error, left it here.
+    // console.log(error)
     throw formatError(error)
   }
 }

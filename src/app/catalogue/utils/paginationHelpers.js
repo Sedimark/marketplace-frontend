@@ -12,7 +12,9 @@
 export function calculateItemsPerPage (currentPage, settings, data, setVcs) {
   const startIndex = (currentPage - 1) * settings.batchSize
   const endIndex = (currentPage * settings.batchSize) > data.total ? data.total : currentPage * settings.batchSize
-  setVcs(data.slice(startIndex, endIndex))
+  if (!data?.error) {
+    setVcs(data.slice(startIndex, endIndex))
+  }
 }
 
 /**
