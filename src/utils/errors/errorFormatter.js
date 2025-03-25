@@ -31,9 +31,7 @@ export default function formatError (error) {
   return {
     message: 'An unexpected error occurred.',
     code: 'UNKNOWN_ERROR',
-    details: {
-      originalErrorMessage: error.message,
-      originalStack: error.stack
-    }
+      details: error.message,
+      stack: error.stack
   }
 }
