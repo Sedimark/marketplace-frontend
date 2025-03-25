@@ -5,9 +5,9 @@ import { TbAlertSquareFilled } from 'react-icons/tb'
 
 function Recommender ({ recommendations }) {
   return (
-    <div className='bg-white w-3/3 m-5 mr-10 p-5 rounded-md'>
+    <>
       {!recommendations?.error &&
-        <>
+        <div className='bg-white w-3/3 m-5 mr-10 p-5 rounded-md'>
           <h2 className='font-bold text-2xl'>You may also like...</h2>
           <div className='flex gap-4 overflow-x-auto p-4 w-full'>
             {recommendations.map((recommendation, index) => {
@@ -23,7 +23,7 @@ function Recommender ({ recommendations }) {
               )
             })}
           </div>
-        </>}
+        </div>}
       {recommendations?.error &&
         <>
           <Alert color='failure' icon={TbAlertSquareFilled}>
@@ -31,7 +31,7 @@ function Recommender ({ recommendations }) {
             <span className='font-bold text-2xl'>Recommender service is not responding. Please, try again.</span>
           </Alert>
         </>}
-    </div>
+    </>
   )
 }
 export default Recommender

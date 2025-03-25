@@ -109,6 +109,14 @@ export default function ResultsPane ({
         <LoadingCard />
       )}
       <div className='flex flex-col w-full bg-gray-50'>
+        {!loading && data?.error && (
+          <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
+            <Alert color='failure' icon={TbAlertSquareFilled}>
+              {/* While in this case, the text is static, can be changed depending on the content/code from the error */}
+              <span className='font-bold text-xl'>Catalogue service is not responding. Please, try again.</span>
+            </Alert>
+          </div>
+        )}
         {!loading && query &&
           <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray' onClick={() => setQuery('')}>
             <span className='flex items-center '>
@@ -129,14 +137,6 @@ export default function ResultsPane ({
             <p className='flex justify-end pr-4 pt-2.5 text-xs'> {(currentPage * settings.batchSize) - (settings.batchSize - 1)} - {currentPage * settings.batchSize} of over {totalVcs} results</p>
             <ResultsList results={vcs} />
             <CustomPagination totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-          </div>
-        )}
-        {!loading && !results.length && data?.error && (
-          <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
-            <Alert color='failure' icon={TbAlertSquareFilled}>
-              {/* While in this case, the text is static, can be changed depending on the content/code from the error */}
-              <span className='font-bold text-xl'>Catalogue service is not responding. Please, try again.</span>
-            </Alert>
           </div>
         )}
       </div>
