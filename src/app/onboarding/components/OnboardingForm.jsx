@@ -14,6 +14,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createIdentity } from '@/utils/dlt'
+import { useRegistration } from '@/context/RegistrationContext'
 
 /**
  * Custom component to extend Formik into Flowbite React TextInput component.
@@ -48,6 +49,7 @@ export default function FormSteps () {
   const pictRegex = /^https:\/\/[/|.|\w|\s|-]*\.(?:jpg|jpeg|svg|gif|png)$/
   const [identity, setIdentity] = useState(null)
   const [error, setError] = useState(null)
+  const { completeRegistration } = useRegistration()
   const submitID = async (values) => {
     console.log('Requesting ID to DLT Booth...')
 
@@ -59,6 +61,7 @@ export default function FormSteps () {
       setError(idResp.error)
     } else {
       setIdentity(idResp)
+      completeRegistration(idResp)
       handleNext()
     }
   }

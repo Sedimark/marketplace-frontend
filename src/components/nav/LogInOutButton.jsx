@@ -2,18 +2,27 @@ import { Avatar, Button, Tooltip } from 'flowbite-react'
 import Link from 'next/link'
 import { getIdentity } from '@/utils/dlt'
 import { useState, useEffect } from 'react'
+import { useRegistration } from '@/context/RegistrationContext'
 
 /**
  * Component that will return logIn or logOut buttons depending on the user session.
  * @returns {JSX} JSX depending on the user session.
  */
-export default function LogInButton () {
+export default function LogInOutButton () {
   const [identity, setIdentity] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { registrationComplete, registeredIdentity } = useRegistration()
 
   useEffect(() => {
     async function fetchIdentity () {
+      if (registrationComplete && registeredIdentity) {
+        setIdentity(registeredIdentity)
+        setError(null)
+        setLoading(false)
+        return
+      }
+
       const idResp = await getIdentity()
       console.dir(idResp)
       if (idResp?.error?.code === 'HTTP_404') {
@@ -24,7 +33,7 @@ export default function LogInButton () {
       } else if (idResp?.error) {
         // Unexpected errors
         setError(idResp.error)
-        console.error('Error fetching identity:', error)
+        console.error('Error fetching identity:', idResp.error)
       } else {
         setIdentity(idResp)
         setError(null)
@@ -33,7 +42,7 @@ export default function LogInButton () {
     }
 
     fetchIdentity()
-  }, [])
+  }, [registrationComplete, registeredIdentity])
 
   if (loading) {
     return (

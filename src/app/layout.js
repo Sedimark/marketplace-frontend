@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import NavBar from '@/components/nav/NavBar'
 import Footer from '@/components/footer/Footer'
+import { RegistrationProvider } from '@/context/RegistrationContext'
 
 export default async function RootLayout ({ children }) {
   return (
@@ -15,10 +16,12 @@ export default async function RootLayout ({ children }) {
         />
       </head>
       <body>
-        <NavBar />
-        <div>
-          {children}
-        </div>
+        <RegistrationProvider>
+          <NavBar />
+          <div>
+            {children}
+          </div>
+        </RegistrationProvider>
         <Footer />
       </body>
     </html>
