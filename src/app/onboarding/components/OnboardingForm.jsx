@@ -163,8 +163,8 @@ export default function FormSteps () {
                     <div className='w-full'>
                       <div className='flow-root'>
                         <Button className='float-right w-1/3' onClick={() => submitID(values)}>
-                          { loading ? <Spinner /> : <p>Continue to next step</p>}
-			                  </Button>
+                          {loading ? <Spinner /> : <p>Continue to next step</p>}
+                        </Button>
                         <Button className='float-left w-1/3' color='failure' onClick={() => setOpenModal(false)}>Go back</Button>
                       </div>
                     </div>
