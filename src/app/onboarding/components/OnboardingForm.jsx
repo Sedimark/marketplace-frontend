@@ -6,7 +6,8 @@ import {
   TextInput,
   Card,
   Accordion,
-  Modal
+  Modal,
+  Spinner
 } from 'flowbite-react'
 import * as yup from 'yup'
 import { Formik, Form, useField } from 'formik'
@@ -50,9 +51,10 @@ export default function FormSteps () {
   const [identity, setIdentity] = useState(null)
   const [error, setError] = useState(null)
   const { completeRegistration } = useRegistration()
+  const [loading, setLoading] = useState(false)
   const submitID = async (values) => {
     console.log('Requesting ID to DLT Booth...')
-
+    setLoading(true)
     const idResp = await createIdentity(values.username)
     console.log('ID Response:')
     console.log(idResp)
@@ -64,6 +66,7 @@ export default function FormSteps () {
       completeRegistration(idResp)
       handleNext()
     }
+    setLoading(false)
   }
   //
   // STEP 2 Validation
@@ -159,8 +162,10 @@ export default function FormSteps () {
                   <Modal.Footer>
                     <div className='w-full'>
                       <div className='flow-root'>
-                        <Button className='float-right' onClick={() => submitID(values)}>Continue to next step</Button>
-                        <Button className='float-left' color='failure' onClick={() => setOpenModal(false)}>Go back to check the data</Button>
+                        <Button className='float-right w-1/3' onClick={() => submitID(values)}>
+                          { loading ? <Spinner /> : <p>Continue to next step</p>}
+			                  </Button>
+                        <Button className='float-left w-1/3' color='failure' onClick={() => setOpenModal(false)}>Go back</Button>
                       </div>
                     </div>
                   </Modal.Footer>
