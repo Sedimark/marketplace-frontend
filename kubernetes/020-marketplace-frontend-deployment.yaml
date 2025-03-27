@@ -15,9 +15,11 @@ spec:
       labels:
         app: marketplace-frontend
     spec:
+      imagePullSecrets:
+      - name: docker-registry
       containers:
       - name: marketplace-frontend
-        image: ghcr.io/sedimark/marketplace-frontend:${MARKETPLACE_IMAGETAG}
+        image: ${MARKETPLACE_IMAGE}:${MARKETPLACE_IMAGETAG}
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
