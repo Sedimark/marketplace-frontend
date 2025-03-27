@@ -68,6 +68,11 @@ export default function FormSteps () {
     }
     setLoading(false)
   }
+  const handleModalClose = () => {
+    setError(null)
+    setOpenModal(false)
+  }
+
   //
   // STEP 2 Validation
   //
@@ -142,7 +147,7 @@ export default function FormSteps () {
             {({ values, errors, touched, handleChange, setFieldValue, setFieldTouched }) => (
               <Form>
                 {/* This Modal is a placeholder, in a future integration with LINKS, will need an overhaul (have a service to do API calls, return errors...) */}
-                <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
+                <Modal dismissible show={openModal} onClose={() => handleModalClose()}>
                   <Modal.Header>Warning!</Modal.Header>
                   <Modal.Body>
                     <div className='text-center'>
@@ -165,7 +170,7 @@ export default function FormSteps () {
                         <Button className='float-right w-1/3' onClick={() => submitID(values)}>
                           {loading ? <Spinner /> : <p>Continue to next step</p>}
                         </Button>
-                        <Button className='float-left w-1/3' color='failure' onClick={() => setOpenModal(false)}>Go back</Button>
+                        <Button className='float-left w-1/3' color='failure' onClick={() => handleModalClose()}>Go back</Button>
                       </div>
                     </div>
                   </Modal.Footer>
