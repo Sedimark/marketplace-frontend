@@ -18,7 +18,7 @@ function ContractItem ({ vc, price }) {
   const policyConstrains = vc.policies
 
   return (
-    <Accordion collapseAll className=' min-w-fit overflow-auto m-5 shadow-md rounded-md'>
+    <Accordion collapseAll className=' min-w-fit overflow-auto mx-4 mb-4 shadow-md rounded-md'>
       <Accordion.Panel>
         <Accordion.Title className='bg-white'>
           <div className='grid grid-cols-3'>
