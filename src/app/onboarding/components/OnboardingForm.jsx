@@ -14,7 +14,6 @@ import { Formik, Form, useField } from 'formik'
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { createIdentity } from '@/utils/dlt'
 import { useRegistration } from '@/context/RegistrationContext'
 
 /**
@@ -55,18 +54,33 @@ export default function FormSteps () {
   const submitID = async (values) => {
     console.log('Requesting ID to DLT Booth...')
     setLoading(true)
-    const idResp = await createIdentity(values.username)
-    console.log('ID Response:')
-    console.log(idResp)
+    
+    try {
+      const response = await fetch('/api/identity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: values.username }),
+      });
+      
+      const idResp = await response.json();
+      console.log('ID Response:')
+      console.log(idResp)
 
-    if (idResp?.error) {
-      setError(idResp.error)
-    } else {
-      setIdentity(idResp)
-      completeRegistration(idResp)
-      handleNext()
+      if (idResp?.error) {
+        setError(idResp.error)
+      } else {
+        setIdentity(idResp)
+        completeRegistration(idResp)
+        handleNext()
+      }
+    } catch (error) {
+      console.error('Error calling identity API:', error);
+      setError({ message: error.message || 'Failed to connect to server' })
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
   const handleModalClose = () => {
     setError(null)
