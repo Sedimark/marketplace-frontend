@@ -1,11 +1,9 @@
-'use client'
-
 import '../styles/globals.css'
 import NavBar from '@/components/nav/NavBar'
 import Footer from '@/components/footer/Footer'
-import { MetaMaskProvider } from '@metamask/sdk-react'
+import { RegistrationProvider } from '@/context/RegistrationContext'
 
-export default function RootLayout ({ children }) {
+export default async function RootLayout ({ children }) {
   return (
     <html>
       <head>
@@ -18,22 +16,13 @@ export default function RootLayout ({ children }) {
         />
       </head>
       <body>
-        <MetaMaskProvider
-          debug={false}
-          sdkOptions={{
-            dappMetadata: {
-              name: 'SEDIMARK Marketplace',
-              url: process.env.LOGOUT_REDIRECT_URL
-            },
-            checkInstallationImmediately: false
-          }}
-        >
+        <RegistrationProvider>
           <NavBar />
           <div>
             {children}
           </div>
-          <Footer />
-        </MetaMaskProvider>
+        </RegistrationProvider>
+        <Footer />
       </body>
     </html>
   )

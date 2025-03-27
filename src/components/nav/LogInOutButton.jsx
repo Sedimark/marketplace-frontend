@@ -1,45 +1,83 @@
-import { Button } from 'flowbite-react'
+import { Avatar, Button, Tooltip } from 'flowbite-react'
 import Link from 'next/link'
-import { useSDK } from '@metamask/sdk-react'
+import { getIdentity } from '@/utils/dlt'
+import { useState, useEffect } from 'react'
+import { useRegistration } from '@/context/RegistrationContext'
 
 /**
  * Component that will return logIn or logOut buttons depending on the user session.
  * @returns {JSX} JSX depending on the user session.
  */
-export default function LogInButton () {
-  const { sdk, connecting, account } = useSDK()
-  const connect = async () => {
-    try {
-      await sdk?.connect()
-    } catch (err) {
-      console.warn('No accounts found', err)
+export default function LogInOutButton () {
+  const [identity, setIdentity] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const { registrationComplete, registeredIdentity } = useRegistration()
+
+  useEffect(() => {
+    async function fetchIdentity () {
+      if (registrationComplete && registeredIdentity) {
+        setIdentity(registeredIdentity)
+        setError(null)
+        setLoading(false)
+        return
+      }
+
+      const idResp = await getIdentity()
+      console.dir(idResp)
+      if (idResp?.error?.code === 'HTTP_404') {
+        // Expected error when no identity is found, user can register
+        console.log('No VC found: user registration required')
+        setIdentity(null)
+        setError(null)
+      } else if (idResp?.error) {
+        // Unexpected errors
+        setError(idResp.error)
+        console.error('Error fetching identity:', idResp.error)
+      } else {
+        setIdentity(idResp)
+        setError(null)
+      }
+      setLoading(false)
     }
+
+    fetchIdentity()
+  }, [registrationComplete, registeredIdentity])
+
+  if (loading) {
+    return (
+      <div className='flex gap-4 w-25 h-25'>
+        <span>Loading...</span>
+      </div>
+    )
   }
-  const disconnect = () => {
-    if (sdk) {
-      sdk.terminate()
-    }
+
+  if (identity?.data) {
+    return (
+      <div className='flex gap-4 w-25 h-25 items-center'>
+        <Avatar size='md' rounded />
+        <p>{identity.data.vc.credentialSubject['schema:alternateName']}</p>
+      </div>
+    )
   }
 
   return (
     <div className='flex gap-4 w-25 h-25'>
       <Link href='/onboarding'>
-        <Button color='gray' className=''>
-          Register
-        </Button>
+        {error
+          ? (
+            <Tooltip content={`Error fetching identity: ${error.message}`}>
+              <Button color='gray' disabled>
+                Register
+              </Button>
+            </Tooltip>
+            )
+          : (
+            <Button color='gray'>
+              Register
+            </Button>
+            )}
       </Link>
-      {account // Used account because the useSDK hook 'connected' wasn't working correctly...
-        ? (
-          <Button color='failure' onClick={disconnect}>Disconnect Wallet</Button>)
-        : (
-          <Button disabled={connecting} onClick={connect} className='flex flex-wrap gap-2'>
-            <svg className='text-white' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor' viewBox='0 0 24 24'>
-              <path fillRule='evenodd' d='M12 14a3 3 0 0 1 3-3h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a3 3 0 0 1-3-3Zm3-1a1 1 0 1 0 0 2h4v-2h-4Z' clipRule='evenodd' />
-              <path fillRule='evenodd' d='M12.293 3.293a1 1 0 0 1 1.414 0L16.414 6h-2.828l-1.293-1.293a1 1 0 0 1 0-1.414ZM12.414 6 9.707 3.293a1 1 0 0 0-1.414 0L5.586 6h6.828ZM4.586 7l-.056.055A2 2 0 0 0 3 9v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2h-4a5 5 0 0 1 0-10h4a2 2 0 0 0-1.53-1.945L17.414 7H4.586Z' clipRule='evenodd' />
-            </svg>
-            Connect Wallet
-          </Button>
-          )}
     </div>
   )
 }
