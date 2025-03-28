@@ -85,7 +85,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
       >
         {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
           <Form className={`${style.tagInput} ${style.test}`}>
-            <Accordion className='bg-white mt-4'>
+            <Accordion className='bg-white'>
               <Accordion.Panel>
                 <Accordion.Title className='bg-white mb-2 text-2xl font-bold tracking-tight text-gray-900'>
                   Asset definition
@@ -444,7 +444,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
-            <div className='flow-root'>
+            <div className='flow-root py-2'>
               <Button className='float-right' type='submit'>Submit</Button>
             </div>
           </Form>

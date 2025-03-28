@@ -109,6 +109,7 @@ next-env.d.ts
 .vscode/
 
 # Env files
+.env.production
 .env.local
 .env
 

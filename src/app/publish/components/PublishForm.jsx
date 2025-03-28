@@ -84,7 +84,7 @@ export default function PublishForm (brokerAssets) {
 
   console.log(existingAssets)
   return (
-    <div className='flex flex-col items-center justify-center mt-4'>
+    <div className='flex flex-grow flex-col items-center justify-center bg-gray-50'>
       <Card className=' flex items-center w-1/2 mt-8'>
         <p>Do you wish to reuse an existing asset ?</p>
         <div className='flex flex-row'>
@@ -105,13 +105,13 @@ export default function PublishForm (brokerAssets) {
         </div>
       </Card>
       {!currentAsset &&
-        <div className='items-center w-1/2 mt-8' key={currentAsset}>
-          <Card className='border-2 border-dashed flex items-center mt-8 h-[500px]'>
+        <div className='items-center w-1/2 my-4' key={currentAsset}>
+          <Card className='border-2 border-dashed flex items-center h-[500px]'>
             <p className='text-2xl font-extrablod text-gray-600/50'>Create a new Asset or use one existing as a template</p>
           </Card>
         </div>}
       {currentAsset &&
-        <div className='items-center w-1/2 mt-8' key={currentAsset}>
+        <div className='items-center w-1/2 mt-4' key={currentAsset}>
           {AssetForm(initialValues, setInitialValues, openModal, setOpenModal)}
         </div>}
 

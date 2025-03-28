@@ -1,8 +1,11 @@
 import formatError from '@/utils/errors/errorFormatter'
 
 export async function fetchData (url, options = {}) {
+  console.log(`Fetching data from ${url}`)
   try {
     const response = await fetch(url, options)
+    console.log(`Response status: ${response.status}`)
+    console.log(`Response status text: ${response.statusText}`)
     if (!response.ok) {
       throw response
     }

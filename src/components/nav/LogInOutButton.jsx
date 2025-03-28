@@ -1,6 +1,5 @@
 import { Avatar, Button, Tooltip } from 'flowbite-react'
 import Link from 'next/link'
-import { getIdentity } from '@/utils/dlt'
 import { useState, useEffect } from 'react'
 import { useRegistration } from '@/context/RegistrationContext'
 
@@ -23,22 +22,31 @@ export default function LogInOutButton () {
         return
       }
 
-      const idResp = await getIdentity()
-      console.dir(idResp)
-      if (idResp?.error?.code === 'HTTP_404') {
-        // Expected error when no identity is found, user can register
-        console.log('No VC found: user registration required')
-        setIdentity(null)
-        setError(null)
-      } else if (idResp?.error) {
-        // Unexpected errors
-        setError(idResp.error)
-        console.error('Error fetching identity:', idResp.error)
-      } else {
-        setIdentity(idResp)
-        setError(null)
+      try {
+        const response = await fetch('/api/identity')
+        const idResp = await response.json()
+
+        console.dir(idResp)
+
+        if (response.status === 404 || idResp?.error?.code === 'HTTP_404') {
+          // Expected error when no identity is found, user can register
+          console.log('No VC found: user registration required')
+          setIdentity(null)
+          setError(null)
+        } else if (idResp?.error) {
+          // Unexpected errors
+          setError(idResp.error)
+          console.error('Error fetching identity:', idResp.error)
+        } else {
+          setIdentity(idResp)
+          setError(null)
+        }
+      } catch (error) {
+        console.error('Error calling identity API:', error)
+        setError({ message: error.message || 'Failed to connect to server' })
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     }
 
     fetchIdentity()
