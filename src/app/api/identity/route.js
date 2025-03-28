@@ -1,8 +1,9 @@
 import { createIdentity, getIdentity } from '@/utils/dlt'
 import { NextResponse } from 'next/server'
+import { handleApiRequest } from '@/utils/helpers/handleApiRequest'
 
 export async function POST(request) {
-  try {
+  return handleApiRequest(async () => {
     const { username } = await request.json()
     
     if (!username) {
@@ -22,23 +23,17 @@ export async function POST(request) {
     }
     
     return NextResponse.json(response)
-  } catch (error) {
-    console.error('API error in identity creation:', error)
-    return NextResponse.json(
-      { error: { message: error.message || 'Unknown error occurred' } },
-      { status: 500 }
-    )
-  }
+  }, 'identity creation')
 }
 
 export async function GET() {
-  try {
+  return handleApiRequest(async () => {
     const response = await getIdentity()
     
     // If it's a 404 (no identity found), return it as a valid response with status 404
     if (response?.error?.code === 'HTTP_404') {
       return NextResponse.json(
-        { error: { code: 'HTTP_404', message: 'No identity found' } },
+        { error: { code: 'HTTP_404', message: 'No identity found, registration required.' } },
         { status: 404 }
       )
     }
@@ -53,11 +48,5 @@ export async function GET() {
     
     // If successful, return the identity data
     return NextResponse.json(response)
-  } catch (error) {
-    console.error('API error in fetching identity:', error)
-    return NextResponse.json(
-      { error: { message: error.message || 'Unknown error occurred' } },
-      { status: 500 }
-    )
-  }
+  }, 'fetching identity')
 }
