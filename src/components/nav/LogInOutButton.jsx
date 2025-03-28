@@ -25,9 +25,9 @@ export default function LogInOutButton () {
       try {
         const response = await fetch('/api/identity')
         const idResp = await response.json()
-        
+
         console.dir(idResp)
-        
+
         if (response.status === 404 || idResp?.error?.code === 'HTTP_404') {
           // Expected error when no identity is found, user can register
           console.log('No VC found: user registration required')
@@ -47,7 +47,6 @@ export default function LogInOutButton () {
       } finally {
         setLoading(false)
       }
-
     }
 
     fetchIdentity()

@@ -54,17 +54,17 @@ export default function FormSteps () {
   const submitID = async (values) => {
     console.log('Requesting ID to DLT Booth...')
     setLoading(true)
-    
+
     try {
       const response = await fetch('/api/identity', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username: values.username }),
-      });
-      
-      const idResp = await response.json();
+        body: JSON.stringify({ username: values.username })
+      })
+
+      const idResp = await response.json()
       console.log('ID Response:')
       console.log(idResp)
 
@@ -76,7 +76,7 @@ export default function FormSteps () {
         handleNext()
       }
     } catch (error) {
-      console.error('Error calling identity API:', error);
+      console.error('Error calling identity API:', error)
       setError({ message: error.message || 'Failed to connect to server' })
     } finally {
       setLoading(false)

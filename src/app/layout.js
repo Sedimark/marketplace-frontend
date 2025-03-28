@@ -5,7 +5,7 @@ import { RegistrationProvider } from '@/context/RegistrationContext'
 
 export default async function RootLayout ({ children }) {
   return (
-    <html className="h-full">
+    <html className='h-full'>
       <head>
         <title> Sedimark Marketplace </title>
         <meta content='width=device-width, initial-scale=1' name='viewport' />
@@ -15,7 +15,7 @@ export default async function RootLayout ({ children }) {
           sizes='32x32'
         />
       </head>
-      <body className="flex flex-col min-h-full justify-between">
+      <body className='flex flex-col min-h-full justify-between'>
         <RegistrationProvider>
           <NavBar />
           {children}
