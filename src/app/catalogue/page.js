@@ -1,7 +1,5 @@
-import { Suspense } from 'react'
 import SearchBar from '@/components/home/SearchBar'
 import Catalogue from './components/Catalogue'
-import LoadingCard from './components/LoadingCard'
 
 /**
  * Catalogue browsing page, consisting of a search bar and a filterable/sortable list of results.
@@ -18,12 +16,7 @@ export default function Page ({ searchParams }) {
   return (
     <div className='bg-sedimark-dark-deep-blue'>
       <SearchBar />
-      <Suspense
-        key={query + currentPage} // Ensures the Catalogue component is re-rendered when the search parameters change
-        fallback={<LoadingCard />}
-      >
-        <Catalogue query={query} currentPage={currentPage} />
-      </Suspense>
+      <Catalogue query={query} currentPage={currentPage} />
     </div>
   )
 }

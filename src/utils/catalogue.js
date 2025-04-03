@@ -84,6 +84,24 @@ function getSparQLOfferingsCountQueryString () {
   return encodeURI(baseString)
 }
 
+function getSparQLOfferingsCountQueryStringFiltered (query) {
+  const baseString = `
+    ${prefixes}
+
+    SELECT DISTINCT (COUNT(?offering) as ?count)
+    WHERE {
+      ${getOfferingQueryFilter(query)}
+    }
+  `
+  return encodeURI(baseString)
+}
+
+export async function fetchOfferingsCountFiltered (query) {
+  const sparQLQuery = getSparQLOfferingsCountQueryStringFiltered(query)
+  const data = await fetchFromCatalogue(sparQLQuery)
+  return data[0]?.count.value
+}
+
 export async function fetchOfferingsCount () {
   const sparQLQuery = getSparQLOfferingsCountQueryString()
   const data = await fetchFromCatalogue(sparQLQuery)

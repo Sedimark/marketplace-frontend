@@ -2,8 +2,10 @@ import Link from 'next/link'
 import RecommenderItem from './RecommenderItem'
 import { Alert } from 'flowbite-react'
 import { TbAlertSquareFilled } from 'react-icons/tb'
+import { fetchQueryRecommendations } from '@/utils/recommender'
 
-function Recommender ({ recommendations }) {
+async function Recommender ({ query }) {
+  const recommendations = await fetchQueryRecommendations(query, 5)
   return (
     <>
       {!recommendations?.error &&
