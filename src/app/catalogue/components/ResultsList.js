@@ -32,7 +32,7 @@ export default async function ResultsList ({ query, currentPage }) {
         </div>
       )}
       {query &&
-      // Damm gonna need to make this lil thing a client component to just reset the query cuz the onClick?
+      // Damm gonna need to make this lil thing a client component to just reset the query cuz the onClick + it should show keywords too, so next PR!
       //   <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray' onClick={() => setQuery('')}>
         <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray'>
           <span className='flex items-center '>
