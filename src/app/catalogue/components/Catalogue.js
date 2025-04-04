@@ -1,7 +1,4 @@
-import { Suspense } from 'react'
 import ResultsPane from './ResultsPane'
-import { fetchOfferings, fetchProviders, fetchKeywords } from '@/utils/catalogue'
-import { fetchQueryRecommendations } from '@/utils/recommender'
 import Recommender from '../[offeringId]/components/Recommender'
 
 /**
@@ -13,20 +10,14 @@ import Recommender from '../[offeringId]/components/Recommender'
  *
  * @returns {JSX.Element} The Catalogue component.
  */
-export default async function Catalogue ({ query, currentPage }) {
-  const providers = await fetchProviders(query)
-  const keywords = await fetchKeywords(query)
-  const data = await fetchOfferings(query, currentPage)
-  const recommendations = await fetchQueryRecommendations(query, 5)
-
+export default function Catalogue ({ query, currentPage }) {
   return (
-    <Suspense>
+    <>
       <ResultsPane
-        providers={providers}
-        keywords={keywords}
-        data={data}
+        query={query}
+        currentPage={currentPage}
       />
-      <Recommender recommendations={recommendations} />
-    </Suspense>
+      <Recommender query={query} />
+    </>
   )
 }
