@@ -73,7 +73,7 @@ export async function fetchOfferings (query, currentPage) {
 }
 
 function getSparQLOfferingsCountQueryString (query) {
-  if (query !== undefined){
+  if (query !== undefined) {
     const baseString = `
     ${prefixes}
 
@@ -82,9 +82,9 @@ function getSparQLOfferingsCountQueryString (query) {
       ${getOfferingQueryFilter(query)}
     }
   `
-  return encodeURI(baseString)
+    return encodeURI(baseString)
   } else {
-  const baseString = `
+    const baseString = `
     ${prefixes}
 
     SELECT DISTINCT (COUNT(?offering) as ?count)
@@ -92,9 +92,8 @@ function getSparQLOfferingsCountQueryString (query) {
       ?offering a sedi:Offering .
     }
   `
-  return encodeURI(baseString)
+    return encodeURI(baseString)
   }
-
 }
 
 export async function fetchOfferingsCount (query) {
