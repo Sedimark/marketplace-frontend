@@ -5,7 +5,7 @@ import LoadingCard from '@/app/catalogue/components/LoadingCard'
 import ResultsList from './ResultsList'
 import settings from '@/utils/settings'
 import { calculateTotalPages } from '../utils/paginationHelpers'
-import { fetchOfferingsCountFiltered } from '@/utils/catalogue'
+import { fetchOfferingsCount } from '@/utils/catalogue'
 
 /**
  * Component responsible for rendering a pane to display catalogue query results.
@@ -16,7 +16,7 @@ import { fetchOfferingsCountFiltered } from '@/utils/catalogue'
  * @returns {JSX.Element} A JSX element representing the rendered pane of results.
  */
 export default async function ResultsPane ({ query, currentPage }) {
-  const dataCount = await fetchOfferingsCountFiltered(query)
+  const dataCount = await fetchOfferingsCount(query)
   const totalPages = calculateTotalPages(dataCount, settings.batchSize)
 
   return (
