@@ -18,7 +18,6 @@ import { fetchOfferingsCountFiltered } from '@/utils/catalogue'
 export default async function ResultsPane ({ query, currentPage }) {
   const dataCount = await fetchOfferingsCountFiltered(query)
   const totalPages = calculateTotalPages(dataCount, settings.batchSize)
-  const totalPagesToDisplay = totalPages
 
   return (
     <div className='flex flex-row bg-gray-50'>
@@ -36,7 +35,7 @@ export default async function ResultsPane ({ query, currentPage }) {
           <Suspense fallback={<LoadingCard />} key={query + currentPage}>
             <ResultsList query={query} currentPage={currentPage} dataCount={dataCount} totalPages={totalPages} />
           </Suspense>
-          <CustomPagination totalPages={totalPagesToDisplay === 0 ? 1 : totalPagesToDisplay} currentPage={currentPage} />
+          <CustomPagination totalPages={totalPages} currentPage={currentPage} />
         </div>
       </div>
     </div>
