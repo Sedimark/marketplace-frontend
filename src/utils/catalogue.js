@@ -72,28 +72,15 @@ export async function fetchOfferings (query, currentPage) {
   return fetchFromCatalogue(sparQLQuery)
 }
 
-function getSparQLOfferingsCountQueryString (query) {
-  if (query !== undefined) {
-    const baseString = `
-    ${prefixes}
-
-    SELECT DISTINCT (COUNT(?offering) as ?count)
-    WHERE {
-      ${getOfferingQueryFilter(query)}
-    }
-  `
-    return encodeURI(baseString)
-  } else {
-    const baseString = `
-    ${prefixes}
-
-    SELECT DISTINCT (COUNT(?offering) as ?count)
-    WHERE {
-      ?offering a sedi:Offering .
-    }
-  `
-    return encodeURI(baseString)
+function getSparQLOfferingsCountQueryString (query = '') {
+  const baseString = `
+  ${prefixes}
+  SELECT DISTINCT (COUNT(?offering) as ?count)
+  WHERE {
+    ${getOfferingQueryFilter(query)}
   }
+  `
+  return encodeURI(baseString)
 }
 
 export async function fetchOfferingsCount (query) {
