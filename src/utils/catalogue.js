@@ -72,20 +72,19 @@ export async function fetchOfferings (query, currentPage) {
   return fetchFromCatalogue(sparQLQuery)
 }
 
-function getSparQLOfferingsCountQueryString () {
+function getSparQLOfferingsCountQueryString (query = '') {
   const baseString = `
-    ${prefixes}
-
-    SELECT DISTINCT (COUNT(?offering) as ?count)
-    WHERE {
-      ?offering a sedi:Offering .
-    }
+  ${prefixes}
+  SELECT DISTINCT (COUNT(?offering) as ?count)
+  WHERE {
+    ${getOfferingQueryFilter(query)}
+  }
   `
   return encodeURI(baseString)
 }
 
-export async function fetchOfferingsCount () {
-  const sparQLQuery = getSparQLOfferingsCountQueryString()
+export async function fetchOfferingsCount (query) {
+  const sparQLQuery = getSparQLOfferingsCountQueryString(query)
   const data = await fetchFromCatalogue(sparQLQuery)
   return data[0]?.count.value
 }
