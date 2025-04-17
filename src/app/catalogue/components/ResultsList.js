@@ -13,8 +13,8 @@ import { TbAlertSquareFilled } from 'react-icons/tb'
  *
  * @returns {JSX.Element} A JSX element representing the rendered list of VCs.
  */
-export default async function ResultsList ({ query, currentPage }) {
-  const data = await fetchOfferings(query, currentPage)
+export default async function ResultsList ({ query, keywords, providers, currentPage }) {
+  const data = await fetchOfferings(query, keywords, providers, currentPage)
   return (
     <>
       {!data && ( // Error during fetch (potentially Catalogue unavailable)

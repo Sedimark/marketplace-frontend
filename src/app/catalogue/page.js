@@ -11,12 +11,14 @@ import Catalogue from './components/Catalogue'
  */
 export default function Page ({ searchParams }) {
   const query = searchParams?.query || ''
+  const keywords = searchParams?.keywords || []
+  const providers = searchParams?.providers || ''
   const currentPage = Number(searchParams?.page) || 1
 
   return (
     <div className='bg-sedimark-dark-deep-blue'>
       <SearchBar />
-      <Catalogue query={query} currentPage={currentPage} />
+      <Catalogue query={query} keywords={keywords} providers={providers} currentPage={currentPage} />
     </div>
   )
 }
