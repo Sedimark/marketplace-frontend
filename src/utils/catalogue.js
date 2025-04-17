@@ -71,8 +71,7 @@ function getSparQLOfferingQueryString (query, keywords, providers, currentPage, 
 
 function checkKeywordsToFilter (keywords) {
   let getKeywordFilter = ''
-  // I really don't like this check, but the param is returned from the searchParams on the Cataloue page as array or string value (one vs multpile)
-  if (keywords !== '' && keywords.length > 0) {
+  if (keywords !== '') {
     getKeywordFilter = `
       ?asset dcat:keyword ?kw
       FILTER(?kw IN (${getSparQLKeywordFilter(keywords)}))`

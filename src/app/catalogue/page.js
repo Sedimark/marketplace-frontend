@@ -11,7 +11,7 @@ import Catalogue from './components/Catalogue'
  */
 export default function Page ({ searchParams }) {
   const query = searchParams?.query || ''
-  const keywords = searchParams?.keywords || []
+  const keywords = searchParams?.keywords || ''
   const providers = searchParams?.providers || ''
   const currentPage = Number(searchParams?.page) || 1
 
