@@ -21,9 +21,10 @@ export default function CatalogueSideBar ({
 }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
   const router = useRouter()
-  const [selectedKeywords, setSelectedKeywords] = useState([])
-  const [selectedProviders, setSelectedProviders] = useState([])
+  const [selectedKeywords, setSelectedKeywords] = useState(params.getAll('keywords'))
+  const [selectedProviders, setSelectedProviders] = useState(params.getAll('providers'))
 
   const handleProviderChange = (provider) => {
     const index = selectedProviders.indexOf(provider)
@@ -44,7 +45,6 @@ export default function CatalogueSideBar ({
   }
 
   const createPageURL = (keywords, providers) => {
-    const params = new URLSearchParams(searchParams)
     // Reset page & clear
     params.set('page', '1')
     params.delete('keywords')
