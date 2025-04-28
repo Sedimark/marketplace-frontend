@@ -75,8 +75,6 @@ export default function CatalogueSideBar ({
         >Apply Filters
         </Button>
         <div className='text-lg font-semibold'>Providers</div>
-
-        {selectedProviders.length > 0 && (
           <Button
             size='xs'
             className='px-5 py-1 mb-2 text-sm text-gray-900 bg-gray-100 border border-gray-200 rounded-lg me-2 focus:outline-none enabled:hover:bg-gray-200 hover:text-gray focus:z-10 focus:ring-4 focus:ring-gray-100'
@@ -86,7 +84,6 @@ export default function CatalogueSideBar ({
           >
             Clear all Providers
           </Button>
-        )}
         <ListGroup className='w-48 h-80 overflow-auto '>
           {!providersList?.error &&
             <>
@@ -112,7 +109,6 @@ export default function CatalogueSideBar ({
             </>}
         </ListGroup>
         <div className='text-lg font-semibold'>Keywords</div>
-        {selectedKeywords.length > 0 && (
           <Button
             size='xs'
             className='px-5 py-1 mb-2 text-sm text-gray-900 bg-gray-100 border border-gray-200 rounded-lg me-2 focus:outline-none enabled:hover:bg-gray-200 hover:text-gray focus:z-10 focus:ring-4 focus:ring-gray-100'
@@ -122,8 +118,6 @@ export default function CatalogueSideBar ({
           >
             Clear all keywords
           </Button>
-        )}
-
         <div>
           <ListGroup className='w-48 h-64 overflow-auto'>
             {!keywordsList?.error &&
