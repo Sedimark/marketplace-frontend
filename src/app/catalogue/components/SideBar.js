@@ -1,6 +1,7 @@
 'use client'
 import { Button, Checkbox, Label, ListGroup } from 'flowbite-react'
-
+import { useState } from 'react'
+import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 /**
  * Component responsible for rendering a sidebar with filtering options for the catalogue results.
  * It also allows the user to filter the catalogue by providers and keywords.
@@ -15,13 +16,16 @@ import { Button, Checkbox, Label, ListGroup } from 'flowbite-react'
  * @returns {JSX.Element} A JSX element representing the rendered sidebar.
  */
 export default function CatalogueSideBar ({
-  providers,
-  keywords,
-  selectedProviders,
-  setSelectedProviders,
-  selectedKeywords,
-  setSelectedKeywords
+  providersList,
+  keywordsList
 }) {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
+  const router = useRouter()
+  const [selectedKeywords, setSelectedKeywords] = useState(params.getAll('keywords'))
+  const [selectedProviders, setSelectedProviders] = useState(params.getAll('providers'))
+
   const handleProviderChange = (provider) => {
     const index = selectedProviders.indexOf(provider)
     if (index > -1) {
@@ -39,26 +43,51 @@ export default function CatalogueSideBar ({
       setSelectedKeywords([...selectedKeywords, keyword])
     }
   }
+
+  const createPageURL = (keywords, providers) => {
+    // Reset page & clear
+    params.set('page', '1')
+    params.delete('keywords')
+    params.delete('providers')
+    keywords.forEach(element => {
+      params.append('keywords', element.toString())
+    })
+    providers.forEach(element => {
+      params.append('providers', element.toString())
+    })
+    return `${pathname}?${params.toString()}`
+  }
+
+  const applyFilter = (keywords, providers) => {
+    router.push(createPageURL(keywords, providers))
+  }
+
   return (
     <div className='flex flex-col gap-4 p-2 bg-gray-50'>
       <div className='flex flex-col gap-2 p-3'>
         <div className='text-2xl font-semibold'>Filters</div>
+        <Button
+          size='xs'
+          className='px-5 py-1 mb-2 text-sm'
+          onClick={() => {
+            applyFilter(selectedKeywords, selectedProviders)
+          }}
+        >Apply Filters
+        </Button>
         <div className='text-lg font-semibold'>Providers</div>
-        {selectedProviders.length > 0 && (
-          <Button
-            size='xs'
-            className='px-5 py-1 mb-2 text-sm text-gray-900 bg-gray-100 border border-gray-200 rounded-lg me-2 focus:outline-none enabled:hover:bg-gray-200 hover:text-gray focus:z-10 focus:ring-4 focus:ring-gray-100'
-            onClick={() => {
-              setSelectedProviders([])
-            }}
-          >
-            Clear all Providers
-          </Button>
-        )}
+        <Button
+          size='xs'
+          className='px-5 py-1 mb-2 text-sm text-gray-900 bg-gray-100 border border-gray-200 rounded-lg me-2 focus:outline-none enabled:hover:bg-gray-200 hover:text-gray focus:z-10 focus:ring-4 focus:ring-gray-100'
+          onClick={() => {
+            setSelectedProviders([])
+          }}
+        >
+          Clear all Providers
+        </Button>
         <ListGroup className='w-48 h-80 overflow-auto '>
-          {!providers?.error &&
+          {!providersList?.error &&
             <>
-              {providers.map((provider) => (
+              {providersList.map((provider) => (
                 <ListGroup.Item
                   key={`provider-${provider}-filter`}
                   className='flex items-center text-left cursor-pointer last:border-b-0'
@@ -80,23 +109,20 @@ export default function CatalogueSideBar ({
             </>}
         </ListGroup>
         <div className='text-lg font-semibold'>Keywords</div>
-        {selectedKeywords.length > 0 && (
-          <Button
-            size='xs'
-            className='px-5 py-1 mb-2 text-sm text-gray-900 bg-gray-100 border border-gray-200 rounded-lg me-2 focus:outline-none enabled:hover:bg-gray-200 hover:text-gray focus:z-10 focus:ring-4 focus:ring-gray-100'
-            onClick={() => {
-              setSelectedKeywords([])
-            }}
-          >
-            Clear all keywords
-          </Button>
-        )}
-
+        <Button
+          size='xs'
+          className='px-5 py-1 mb-2 text-sm text-gray-900 bg-gray-100 border border-gray-200 rounded-lg me-2 focus:outline-none enabled:hover:bg-gray-200 hover:text-gray focus:z-10 focus:ring-4 focus:ring-gray-100'
+          onClick={() => {
+            setSelectedKeywords([])
+          }}
+        >
+          Clear all keywords
+        </Button>
         <div>
           <ListGroup className='w-48 h-64 overflow-auto'>
-            {!keywords?.error &&
+            {!keywordsList?.error &&
               <>
-                {keywords.map((keyword, index) => (
+                {keywordsList.map((keyword, index) => (
                   <ListGroup.Item
                     key={`keyword-${keyword}-filter` + index}
                     className='flex items-center cursor-pointer last:border-b-0'

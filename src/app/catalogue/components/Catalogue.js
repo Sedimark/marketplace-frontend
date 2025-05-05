@@ -10,11 +10,13 @@ import Recommender from '../[offeringId]/components/Recommender'
  *
  * @returns {JSX.Element} The Catalogue component.
  */
-export default function Catalogue ({ query, currentPage }) {
+export default function Catalogue ({ query, keywords, providers, currentPage }) {
   return (
     <>
       <ResultsPane
         query={query}
+        keywords={keywords}
+        providers={providers}
         currentPage={currentPage}
       />
       <Recommender query={query} />

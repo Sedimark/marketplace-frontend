@@ -51,7 +51,7 @@ async function fetchFromCatalogue (sparQLQuery) {
   }
 }
 
-function getSparQLOfferingQueryString (query, currentPage, batchSize = settings.batchSize) {
+function getSparQLOfferingQueryString (query, keywords, providers, currentPage, batchSize = settings.batchSize) {
   const offset = (currentPage - 1) * batchSize
   const baseString = `
     ${prefixes}
@@ -59,6 +59,8 @@ function getSparQLOfferingQueryString (query, currentPage, batchSize = settings.
     SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created
     WHERE {
       ${getOfferingQueryFilter(query)}
+      ${checkKeywordsToFilter(keywords)}
+      ${checkProvidersToFilter(providers)}
     }
     ORDER BY ?created
     LIMIT ${batchSize}
@@ -67,24 +69,69 @@ function getSparQLOfferingQueryString (query, currentPage, batchSize = settings.
   return encodeURI(baseString)
 }
 
-export async function fetchOfferings (query, currentPage) {
-  const sparQLQuery = getSparQLOfferingQueryString(query, currentPage)
+function checkKeywordsToFilter (keywords) {
+  let getKeywordFilter = ''
+  if (keywords !== '') {
+    getKeywordFilter = `
+      ?asset dcat:keyword ?kw
+      FILTER(?kw IN (${getSparQLKeywordFilter(keywords)}))`
+  }
+  return getKeywordFilter
+}
+
+function checkProvidersToFilter (providers) {
+  let getProviderFilter = ''
+  if (providers !== '') {
+    getProviderFilter = `
+    FILTER(str(?publisher) IN (${getSparQLProviderFilter(providers)}))`
+  }
+  return getProviderFilter
+}
+
+function getSparQLKeywordFilter (keywords) {
+  if (Array.isArray(keywords)) {
+    const arrayLanguageTagged = []
+    keywords.forEach(element => {
+      arrayLanguageTagged.push('"' + element + '"' + '@en')
+    })
+    return arrayLanguageTagged
+  } else {
+    return '"' + keywords + '"' + '@en'
+  }
+}
+
+function getSparQLProviderFilter (providers) {
+  if (Array.isArray(providers)) {
+    const arrayFormatted = []
+    providers.forEach(element => {
+      arrayFormatted.push('"' + element + '"')
+    })
+    return arrayFormatted
+  } else {
+    return '"' + providers + '"'
+  }
+}
+
+export async function fetchOfferings (query, keywords, providers, currentPage) {
+  const sparQLQuery = getSparQLOfferingQueryString(query, keywords, providers, currentPage)
   return fetchFromCatalogue(sparQLQuery)
 }
 
-function getSparQLOfferingsCountQueryString (query = '') {
+function getSparQLOfferingsCountQueryString (query = '', keywords, providers) {
   const baseString = `
   ${prefixes}
   SELECT DISTINCT (COUNT(?offering) as ?count)
   WHERE {
     ${getOfferingQueryFilter(query)}
+    ${checkKeywordsToFilter(keywords)}
+    ${checkProvidersToFilter(providers)}
   }
   `
   return encodeURI(baseString)
 }
 
-export async function fetchOfferingsCount (query) {
-  const sparQLQuery = getSparQLOfferingsCountQueryString(query)
+export async function fetchOfferingsCount (query, keywords, providers) {
+  const sparQLQuery = getSparQLOfferingsCountQueryString(query, keywords, providers)
   const data = await fetchFromCatalogue(sparQLQuery)
   return data[0]?.count.value
 }
