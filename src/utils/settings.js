@@ -18,7 +18,8 @@ const settings = {
   dltBoothUrl: process.env.DLT_BOOTH_URL,
   keywordsSeparator: ';',
   numRecommendations: process.env.NUM_RECOMMENDATIONS ?? 5,
-  contractsPageSize: process.env.CONTRACTS_PAGE_SIZE ?? 5
+  contractsPageSize: process.env.CONTRACTS_PAGE_SIZE ?? 5,
+  connectorUrl: process.env.CONNECTOR_URL
 }
 Object.freeze(settings)
 
