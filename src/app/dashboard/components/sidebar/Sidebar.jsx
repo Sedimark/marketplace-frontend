@@ -1,3 +1,6 @@
+'use client'
+
+// As this needs a rework on interactivity, and now parent is SS, gonna left this for later.
 import { useState } from 'react'
 import { Label, ListGroup, Sidebar, Radio } from 'flowbite-react'
 import { HiSwitchVertical, HiFilter, HiChartPie, HiShoppingBag } from 'react-icons/hi'
