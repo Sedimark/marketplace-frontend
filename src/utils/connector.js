@@ -5,11 +5,11 @@ function getContractsQueryBody (contractAgreementIdFilter) {
   const body = {
     '@context': { '@vocab': 'https://w3id.org/edc/v0.0.1/ns/' },
     '@type': 'QuerySpec',
-    'filterExpression': [
+    filterExpression: [
       {
-        'operandLeft': 'id',
-        'operator': '=',
-        'operandRight': contractAgreementIdFilter
+        operandLeft: 'id',
+        operator: '=',
+        operandRight: contractAgreementIdFilter
       }
     ]
   }
@@ -26,10 +26,10 @@ function getNegotiationsQueryBody (currentPage, batchSize = settings.batchSize) 
     sortOrder: 'DESC',
     sortField: 'createdAt',
     filterExpression: [{
-			'operandLeft': 'state',
-			'operator': '=',
-			'operandRight': 1200
-   	}]
+      operandLeft: 'state',
+      operator: '=',
+      operandRight: 1200
+    }]
   }
   return body
 }
@@ -54,7 +54,7 @@ function getTransferProcessQueryBody (contractAgreementIdFilter) {
   return body
 }
 /**
- * Fetch call to obtain a set of contracts. 
+ * Fetch call to obtain a set of contracts.
  * @async
  * @param {string} contractAgreementIdFilter - Can be used to filter by Contract ID.
  * @returns An Array of JSON obj representing the contracts
@@ -102,7 +102,7 @@ export async function fetchTransferProcess (contractAgreementIdFilter) {
   }
 }
 /**
- * Fetch call to obtain a set of negotiations. WIP to support filtering, order by... 
+ * Fetch call to obtain a set of negotiations. WIP to support filtering, order by...
  * @async
  * @param {string} currentPage - Used for pagination
  * @returns An Array of JSON obj representing the Negotiations

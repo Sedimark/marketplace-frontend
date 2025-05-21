@@ -1,7 +1,7 @@
 // import Image from 'next/image'
-import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableBody, TableCell, TableHeadCell, TableRow, TableHead, Button } from 'flowbite-react'
-import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser, HiDotsHorizontal, HiCheck, HiExclamationCircle, HiPlay } from 'react-icons/hi'
-import { fetchContracts} from '@/utils/connector'
+import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead, Button } from 'flowbite-react'
+import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser, HiPlay } from 'react-icons/hi'
+import { fetchContracts } from '@/utils/connector'
 
 export default async function ContractItem ({ contract }) {
   const contractAgreementId = contract.contractAgreementId
@@ -12,7 +12,7 @@ export default async function ContractItem ({ contract }) {
   const provider = contractAgreement[0].providerId
   const assetId = contractAgreement[0].assetId
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
-  
+
   return (
     <Accordion collapseAll className=' min-w-fit overflow-auto mx-4 mb-4 shadow-md rounded-md'>
       <AccordionPanel>
@@ -21,8 +21,8 @@ export default async function ContractItem ({ contract }) {
             <div className=''>
               <div className=' flex text-lg font-semibold'>
                 <div className='flex flex-row'>
-                    <HiDatabase size={28} className='mr-3'/>
-                    <p>{contractAgreementId}</p>
+                  <HiDatabase size={28} className='mr-3' />
+                  <p>{contractAgreementId}</p>
                 </div>
               </div>
               <div className='flex flex-col mt-4 w-96 min-w-40 max-w-96'>
@@ -44,9 +44,9 @@ export default async function ContractItem ({ contract }) {
             <div className='col-start-3 w-1/2 mx-auto flex'>
               {/* <Image width={64} height={64} src={provider.picture} alt={provider.name} className='max-h-16 max-w-16 rounded-lg shadow-lg ml-2' /> */}
               <div className='flex flex-row'>
-                    <HiUser size={20}/>
-                    <p className='pr-2 ml-2 text-sm font-semibold'>{provider}</p>
-                </div>
+                <HiUser size={20} />
+                <p className='pr-2 ml-2 text-sm font-semibold'>{provider}</p>
+              </div>
             </div>
           </div>
         </AccordionTitle>
