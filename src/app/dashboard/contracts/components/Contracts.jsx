@@ -1,10 +1,10 @@
 // import SidebarDashboard from '../../components/sidebar/Sidebar'
 // import ButtonGroup from './ButtonGroup'
 import ContractItem from './ContractItem'
-import { fetchContracts } from '@/utils/connector'
+import { fetchNegotiations } from '@/utils/connector'
 
 export default async function Contracts ({ currentPage }) {
-  const contracts = await fetchContracts('', currentPage)
+  const contracts = await fetchNegotiations(currentPage)
 
   return (
     <div className='mt-8'>
@@ -12,7 +12,7 @@ export default async function Contracts ({ currentPage }) {
       {contracts.map((contract, index) => {
         return (
           <ContractItem
-            vc={contract}
+            contract={contract}
             price={contract.price}
             key={`${contract.title}-${contract.created_at}-${index + 1}`}
           />
