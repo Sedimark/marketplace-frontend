@@ -78,7 +78,7 @@ export async function fetchContracts (contractAgreementIdFilter) {
   }
 }
 /**
- * WIP, will be used on the future. Porbably used for individual contracts & whole overview page.
+ * WIP, will be used on the future. Probably used for individual contracts & whole overview page.
  * @async
  * @param {string} contractAgreementIdFilter - Can be used to filter by Contract ID.
  * @returns An Array of JSON obj representing the Transfer Process
