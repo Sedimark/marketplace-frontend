@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import SidebarDashboard from '../components/sidebar/Sidebar'
+// import SidebarDashboard from '../components/sidebar/Sidebar'
 import Contracts from './components/Contracts'
 import CustomPagination from './components/CustomPagination'
 
