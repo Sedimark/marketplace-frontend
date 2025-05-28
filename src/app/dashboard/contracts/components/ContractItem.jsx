@@ -1,4 +1,3 @@
-// import Image from 'next/image'
 import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead, Button } from 'flowbite-react'
 import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser, HiPlay } from 'react-icons/hi'
 import { fetchContracts } from '@/utils/connector'
@@ -33,19 +32,15 @@ export default async function ContractItem ({ contract }) {
                     <HiCalendar size={20} />
                     <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
                   </div>
-                  <div className='flex flex-row gap-2 w-36'>
+                  <div className='flex flex-row gap-2 w-36 mt-2'>
                     <HiOutlineCurrencyEuro size={20} />
-                    20
-                    {/* <p className='text-sm'>{validatedPrice} euros</p> */}
+                    <p className='text-sm'>20</p>
+                  </div>
+                  <div className='flex flex-row gap-2 w-36 mt-2'>
+                    <HiUser size={20} />
+                    <p className=' text-sm font-semibold'>{provider}</p>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className='col-start-3 w-1/2 mx-auto flex'>
-              {/* <Image width={64} height={64} src={provider.picture} alt={provider.name} className='max-h-16 max-w-16 rounded-lg shadow-lg ml-2' /> */}
-              <div className='flex flex-row'>
-                <HiUser size={20} />
-                <p className='pr-2 ml-2 text-sm font-semibold'>{provider}</p>
               </div>
             </div>
           </div>

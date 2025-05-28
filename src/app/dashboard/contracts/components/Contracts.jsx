@@ -1,20 +1,23 @@
-// import SidebarDashboard from '../../components/sidebar/Sidebar'
-// import ButtonGroup from './ButtonGroup'
+import ButtonGroup from './ButtonGroup'
 import ContractItem from './ContractItem'
 import { fetchNegotiations } from '@/utils/connector'
 
-export default async function Contracts ({ currentPage }) {
-  const contracts = await fetchNegotiations(currentPage)
+export default async function Contracts ({ currentPage, providerBy }) {
+  console.log(providerBy)
+  console.log(currentPage)
+  const contracts = await fetchNegotiations(currentPage, providerBy)
 
   return (
     <div className='mt-8'>
-      {/* <ButtonGroup setSelected={setSelected} selected={selected} /> */}
+      <div className='m-6'>
+        <ButtonGroup providerBy={providerBy} />
+      </div>
       {contracts.map((contract, index) => {
         return (
           <ContractItem
             contract={contract}
             price={contract.price}
-            key={`${contract.title}-${contract.created_at}-${index + 1}`}
+            key={`${contract.contractAgreementId}-${index + 1}`}
           />
         )
       })}
