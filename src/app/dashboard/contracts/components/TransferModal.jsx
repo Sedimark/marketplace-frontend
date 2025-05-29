@@ -38,7 +38,6 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     } else {
       setMessage('Something went wrong pushing the data.')
     }
-    const result = await response.json()
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
