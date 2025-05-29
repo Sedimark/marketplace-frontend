@@ -16,7 +16,7 @@ export default async function Contracts ({ currentPage, providerBy }) {
         return (
           <ContractItem
             contract={contract}
-            price={contract.price}
+            providerBy={providerBy}
             key={`${contract.contractAgreementId}-${index + 1}`}
           />
         )

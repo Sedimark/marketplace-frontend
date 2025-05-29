@@ -2,7 +2,7 @@ import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, Tab
 import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser, HiPlay } from 'react-icons/hi'
 import { fetchContracts } from '@/utils/connector'
 
-export default async function ContractItem ({ contract }) {
+export default async function ContractItem ({ contract, providerBy }) {
   const contractAgreementId = contract.contractAgreementId
   const contractAgreement = await fetchContracts(contractAgreementId)
 
@@ -47,12 +47,13 @@ export default async function ContractItem ({ contract }) {
         </AccordionTitle>
         <AccordionContent className='bg-white max-h-80 overflow-y-clip'>
           <ul className='divide-y'>
-            <div className='grid grid-cols-3 w-full'>
-              <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
-                <HiPlay size={24} className='mr-2' />
-                Start transfer
-              </Button>
-            </div>
+            {providerBy &&
+              <div className='grid grid-cols-3 w-full'>
+                <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
+                  <HiPlay size={24} className='mr-2' />
+                  Start transfer
+                </Button>
+              </div>}
             <div className='overflow-x-auto mt-2'>
               <Table className='mt-4'>
                 <TableHead>
