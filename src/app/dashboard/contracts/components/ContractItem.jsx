@@ -1,6 +1,7 @@
-import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead, Button } from 'flowbite-react'
-import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser, HiPlay } from 'react-icons/hi'
+import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead } from 'flowbite-react'
+import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser } from 'react-icons/hi'
 import { fetchContracts } from '@/utils/connector'
+import TransferModal from './TransferModal'
 
 export default async function ContractItem ({ contract, providerBy }) {
   const contractAgreementId = contract.contractAgreementId
@@ -10,6 +11,8 @@ export default async function ContractItem ({ contract, providerBy }) {
   const date = new Date(contractAgreement[0].contractSigningDate * 1000)
   const provider = contractAgreement[0].providerId
   const assetId = contractAgreement[0].assetId
+  const counterPartyAddress = contract.counterPartyAddress
+  const consumer = contractAgreement[0].consumerId
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
 
   return (
@@ -49,10 +52,7 @@ export default async function ContractItem ({ contract, providerBy }) {
           <ul className='divide-y'>
             {providerBy &&
               <div className='grid grid-cols-3 w-full'>
-                <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
-                  <HiPlay size={24} className='mr-2' />
-                  Start transfer
-                </Button>
+                <TransferModal contractAgreementId={contractAgreementId} counterPartyAddress={counterPartyAddress} connectorId={consumer} />
               </div>}
             <div className='overflow-x-auto mt-2'>
               <Table className='mt-4'>

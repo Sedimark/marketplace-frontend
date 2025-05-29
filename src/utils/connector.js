@@ -66,6 +66,25 @@ function getTransferProcessQueryBody (contractAgreementIdFilter) {
   }
   return body
 }
+
+function getTransferPushBody (connectorId, counterPartyAddress, contractId, dataDestination) {
+  const body = {
+    '@context': {
+      '@vocab': 'https://w3id.org/edc/v0.0.1/ns/'
+    },
+    '@type': 'TransferRequestDto',
+    'connectorId': connectorId,
+    'counterPartyAddress': counterPartyAddress,
+    'contractId': contractId,
+    'protocol': 'dataspace-protocol-http',
+    'transferType': 'HttpData-PUSH',
+    'dataDestination': {
+      'type': 'HttpData',
+      'baseUrl': dataDestination
+    }
+  }
+  return body
+}
 /**
  * Fetch call to obtain a set of contracts.
  * @async
@@ -134,6 +153,35 @@ export async function fetchNegotiations (currentPage, providerByMe) {
   } catch (error) {
     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
     console.log('Error on fetchNegotiations!')
+    console.log(error)
+    return { error }
+  }
+}
+
+/**
+ * Post call to do a transfer PUSH of data to an external connector
+ * @async
+ * @param {string} connectorId - Used for buidlng the body to POST data
+ * @param {string} counterPartyAddress - Used for buidlng the body to POST data
+ * @param {string} contractId - Used for buidlng the body to POST data
+ * @param {string} dataDestination - Used for buidlng the body to POST data
+ * @returns An Array of JSON obj representing the Negotiations
+ */
+export async function transferPush (connectorId, counterPartyAddress, contractId, dataDestination) {
+  const url = `${settings.connectorUrl}/management/v3/transferprocesses`
+  const bodyTransferPush = getTransferPushBody(connectorId, counterPartyAddress, contractId, dataDestination)
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bodyTransferPush)
+  }
+  console.log(options)
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    return data
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on transferPush!')
     console.log(error)
     return { error }
   }
