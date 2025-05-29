@@ -10,13 +10,13 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState(null)
 
-	// Validation schema
-	const FormSchema = yup.object().shape({
-		baseUrl: yup.string()
-			.url('Must be a valid URL')
-			.matches(/^https:\/\//, 'URL must start with https://')
-			.required('Base URL is required')
-	})
+  // Validation schema
+  const FormSchema = yup.object().shape({
+    baseUrl: yup.string()
+      .url('Must be a valid URL')
+      .matches(/^https:\/\//, 'URL must start with https://')
+      .required('Base URL is required')
+  })
 
   async function pushTransfer (contractAgreementId, counterPartyAddress, connectorId, dataDestination) {
     const response = await fetch('/api/connector/pushData', {
@@ -39,7 +39,6 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
       setMessage('Something went wrong pushing the data.')
     }
     const result = await response.json()
-    console.log(result)
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -90,12 +89,9 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
                   </div>
 
                   <Button type='submit' disabled={!isValid || isSubmitting}>
-										<HiCloudUpload size={24} className='mr-2' />
-                    {isSubmitting ? 
-										'Pushing data...' :
-										 'Push Transfer'}
+                    <HiCloudUpload size={24} className='mr-2' />
+                    {isSubmitting ? 'Pushing data...' : 'Push Transfer'}
                   </Button>
-
                   {message && (
                     <p className='text-sm'>
                       {message}
