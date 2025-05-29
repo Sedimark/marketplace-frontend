@@ -3,8 +3,6 @@ import ContractItem from './ContractItem'
 import { fetchNegotiations } from '@/utils/connector'
 
 export default async function Contracts ({ currentPage, providerBy }) {
-  console.log(providerBy)
-  console.log(currentPage)
   const contracts = await fetchNegotiations(currentPage, providerBy)
 
   return (
