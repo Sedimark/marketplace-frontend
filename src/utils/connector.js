@@ -73,14 +73,14 @@ function getTransferPushBody (connectorId, counterPartyAddress, contractId, data
       '@vocab': 'https://w3id.org/edc/v0.0.1/ns/'
     },
     '@type': 'TransferRequestDto',
-    'connectorId': connectorId,
-    'counterPartyAddress': counterPartyAddress,
-    'contractId': contractId,
-    'protocol': 'dataspace-protocol-http',
-    'transferType': 'HttpData-PUSH',
-    'dataDestination': {
-      'type': 'HttpData',
-      'baseUrl': dataDestination
+    connectorId,
+    counterPartyAddress,
+    contractId,
+    protocol: 'dataspace-protocol-http',
+    transferType: 'HttpData-PUSH',
+    dataDestination: {
+      type: 'HttpData',
+      baseUrl: dataDestination
     }
   }
   return body

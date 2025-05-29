@@ -1,37 +1,60 @@
 'use client'
 
 import { useState } from 'react'
-import { Modal, Button } from 'flowbite-react'
-import { HiPlay } from 'react-icons/hi'
+import { Modal, Button, Label, TextInput } from 'flowbite-react'
+import { HiPlay, HiCloudUpload } from 'react-icons/hi'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import * as yup from 'yup'
 
-export default function TransferModal ({contractAgreementId, counterPartyAddress, connectorId}) {
+export default function TransferModal ({ contractAgreementId, counterPartyAddress, connectorId }) {
   const [open, setOpen] = useState(false)
-	const [message, setMessage] = useState(null)
-	
-	async function pushTransfer(contractAgreementId, counterPartyAddress, connectorId, dataDestination){
-		const response = await fetch('/api/connector/pushData', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(
-				{ contractId: contractAgreementId,
-					counterPartyAddress: counterPartyAddress,
-					connectorId: connectorId,
-					dataDestination: dataDestination
-				}
-			),
-		})
+  const [message, setMessage] = useState(null)
 
-		if (response.ok) {
-			setMessage('Successfully pushed data.');
-		} else {
-			setMessage('Something went wrong pushing the data.');
-		}
+	// Validation schema
+	const FormSchema = yup.object().shape({
+		baseUrl: yup.string()
+			.url('Must be a valid URL')
+			.matches(/^https:\/\//, 'URL must start with https://')
+			.required('Base URL is required')
+	})
 
-		const result = await response.json()
-		console.log(result)
-	}
+  async function pushTransfer (contractAgreementId, counterPartyAddress, connectorId, dataDestination) {
+    const response = await fetch('/api/connector/pushData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          contractId: contractAgreementId,
+          counterPartyAddress,
+          connectorId,
+          dataDestination
+        }
+      )
+    })
+    if (response.ok) {
+      setMessage('Successfully pushed data! Check your data destination.')
+    } else {
+      setMessage('Something went wrong pushing the data.')
+    }
+    const result = await response.json()
+    console.log(result)
+  }
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    setMessage(null)
+    try {
+      pushTransfer(contractAgreementId, counterPartyAddress, connectorId, values.baseUrl)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    setMessage(null)
+  }
 
   return (
     <>
@@ -39,19 +62,52 @@ export default function TransferModal ({contractAgreementId, counterPartyAddress
         <HiPlay size={24} className='mr-2' />
         Start transfer
       </Button>
-      <Modal show={open} onClose={() => setOpen(false)}>
+      <Modal show={open} onClose={handleClose}>
         <Modal.Header>Modal Title</Modal.Header>
         <Modal.Body>
           <div className='space-y-6'>
-            <Button onClick={() => pushTransfer(contractAgreementId, counterPartyAddress, connectorId, '')} className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
-							<HiPlay size={24} className='mr-2' />
-							Push data
-						</Button>
-						<p className='text-l'>{message}</p>
+            <Formik
+              initialValues={{ baseUrl: '' }}
+              validationSchema={FormSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting, isValid }) => (
+                <Form className='space-y-4'>
+                  <div>
+                    <Label htmlFor='baseUrl' value='URL Data Destination' />
+                    <Field
+                      as={TextInput}
+                      id='baseUrl'
+                      name='baseUrl'
+                      placeholder='https://example.com/'
+                      type='url'
+                    />
+                    <ErrorMessage
+                      name='baseUrl'
+                      component='p'
+                      className='text-red-600 text-sm mt-1'
+                    />
+                  </div>
+
+                  <Button type='submit' disabled={!isValid || isSubmitting}>
+										<HiCloudUpload size={24} className='mr-2' />
+                    {isSubmitting ? 
+										'Pushing data...' :
+										 'Push Transfer'}
+                  </Button>
+
+                  {message && (
+                    <p className='text-sm'>
+                      {message}
+                    </p>
+                  )}
+                </Form>
+              )}
+            </Formik>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => setOpen(false)}>Close</Button>
+          <Button onClick={handleClose}>Close</Button>
         </Modal.Footer>
       </Modal>
     </>
