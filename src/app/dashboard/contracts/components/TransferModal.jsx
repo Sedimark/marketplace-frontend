@@ -15,7 +15,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     baseUrl: yup.string()
       .url('Must be a valid URL')
       .matches(/^https:\/\//, 'URL must start with https://')
-      .required('Base URL is required')
+      .required('Data Destination URL is required!')
   })
 
   async function pushTransfer (contractAgreementId, counterPartyAddress, connectorId, dataDestination) {
