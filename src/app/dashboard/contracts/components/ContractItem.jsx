@@ -8,7 +8,7 @@ export default async function ContractItem ({ contract, showConsumed }) {
 
   // Multiply by 1000 because JavaScript expects milliseconds, we're reciving Unix timestamp AFAIK
   const date = new Date(contractAgreement[0].contractSigningDate * 1000)
-  const provider = contractAgreement[0].providerId
+  const counterPartyId = contract.counterPartyId
   const assetId = contractAgreement[0].assetId
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
 
@@ -38,7 +38,7 @@ export default async function ContractItem ({ contract, showConsumed }) {
                   </div>
                   <div className='flex flex-row gap-2 w-36 mt-2'>
                     <HiUser size={20} />
-                    <p className=' text-sm font-semibold'>{provider}</p>
+                    <p className=' text-sm font-semibold'>{counterPartyId}</p>
                   </div>
                 </div>
               </div>
