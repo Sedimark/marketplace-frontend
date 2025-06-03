@@ -5,7 +5,7 @@ import CustomPagination from './components/CustomPagination'
 
 export default function Page ({ searchParams }) {
   const currentPage = Number(searchParams?.page) || 1
-  const showConsumed = searchParams.showConsumed === undefined || searchParams.showConsumed === 'true' 
+  const showConsumed = searchParams.showConsumed === undefined || searchParams.showConsumed === 'true'
 
   return (
     <div className='flex flex-row flex-grow'>
