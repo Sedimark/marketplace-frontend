@@ -1,107 +1,94 @@
-import Image from 'next/image'
-import { Accordion, Table, Button } from 'flowbite-react'
-import { HiOutlineCurrencyEuro, HiCalendar, HiDotsHorizontal, HiCheck, HiExclamationCircle, HiPlay } from 'react-icons/hi'
-import mockContractTransfer from '@/utils/data/mockContractTransfers.json'
+import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead, Button } from 'flowbite-react'
+import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser, HiPlay } from 'react-icons/hi'
+import { fetchContracts } from '@/utils/connector'
 
-function ContractItem ({ vc, price }) {
-  const maxLengthTitle = 70
-  const maxLengthDescription = 120
-  const name = vc.title.length > maxLengthTitle ? vc.title.substring(0, maxLengthTitle) + '...' : vc.title
-  const description = vc.short_description.length > maxLengthDescription ? vc.short_description.substring(0, maxLengthDescription) + '...' : vc.short_description
-  const issuanceDate = vc.created_at ? new Date(vc.created_at) : new Date()
-  const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
-  const provider = vc.provider
-  const providedBy = provider.name ?? 'OTHER'
-  const validatedPrice = price ?? '0'
-  const history = mockContractTransfer.transfer_history
+export default async function ContractItem ({ contract, showConsumed }) {
+  const contractAgreementId = contract.contractAgreementId
+  const contractAgreement = await fetchContracts(contractAgreementId)
+
+  // Multiply by 1000 because JavaScript expects milliseconds, we're reciving Unix timestamp AFAIK
+  const date = new Date(contractAgreement[0].contractSigningDate * 1000)
+  const counterPartyId = contract.counterPartyId
+  const assetId = contractAgreement[0].assetId
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
-  const policyConstrains = vc.policies
 
   return (
     <Accordion collapseAll className=' min-w-fit overflow-auto mx-4 mb-4 shadow-md rounded-md'>
-      <Accordion.Panel>
-        <Accordion.Title className='bg-white'>
+      <AccordionPanel>
+        <AccordionTitle className='bg-white'>
           <div className='grid grid-cols-3'>
             <div className=''>
-              <div className=' flex text-lg font-semibold'>{name}</div>
+              <div className=' flex text-lg font-semibold'>
+                <div className='flex flex-row'>
+                  <HiDatabase size={28} className='mr-3' />
+                  <p>{contractAgreementId}</p>
+                </div>
+              </div>
               <div className='flex flex-col mt-4 w-96 min-w-40 max-w-96'>
-                <div className=' text-sm mr-4'>{description}</div>
+                <div className=' text-sm mr-4'>{assetId}</div>
                 {/* Price and date */}
                 <div className='flex flex-row items-end mt-3'>
                   <div className='flex flex-row gap-2 w-36 mt-2'>
                     <HiCalendar size={20} />
                     <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
                   </div>
-                  <div className='flex flex-row gap-2 w-36'>
+                  <div className='flex flex-row gap-2 w-20 mt-2'>
                     <HiOutlineCurrencyEuro size={20} />
-                    <p className='text-sm'>{validatedPrice} euros</p>
+                    <p className='text-sm'>20</p>
+                  </div>
+                  <div className='flex flex-row gap-2 w-36 mt-2'>
+                    <HiUser size={20} />
+                    <p className=' text-sm font-semibold'>{counterPartyId}</p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className='col-start-3 w-1/2 mx-auto flex'>
-              <Image width={64} height={64} src={provider.picture} alt={provider.name} className='max-h-16 max-w-16 rounded-lg shadow-lg ml-2' />
-              <p className='pr-2 ml-2 text-sm font-semibold'>{providedBy}</p>
-            </div>
           </div>
-        </Accordion.Title>
-        <Accordion.Content className='bg-white max-h-80 overflow-y-clip'>
+        </AccordionTitle>
+        <AccordionContent className='bg-white max-h-80 overflow-y-clip'>
           <ul className='divide-y'>
-            <div className='grid grid-cols-3 w-full'>
-              <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
-                <HiPlay size={24} className='mr-2' />
-                Start transfer
-              </Button>
-            </div>
+            {showConsumed &&
+              <div className='grid grid-cols-3 w-full'>
+                <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
+                  <HiPlay size={24} className='mr-2' />
+                  Start transfer
+                </Button>
+              </div>}
             <div className='overflow-x-auto mt-2'>
               <Table className='mt-4'>
-                <Table.Head>
+                <TableHead>
                   {historyData.map((nameColumn, index) => {
-                    return (<Table.HeadCell className='bg-white p-0 pl-6' key={`${nameColumn}-${index}`}>{nameColumn}</Table.HeadCell>)
+                    return (<TableHeadCell className='bg-white p-0 pl-6' key={`${nameColumn}-${index}`}>{nameColumn}</TableHeadCell>)
                   })}
-                </Table.Head>
-                <Table.Body className='divide-y'>
-                  {history.map((asset, index) => {
+                </TableHead>
+                {/* <TableBody className='divide-y'>
+                  {transferProcessHistoric.map((asset, index) => {
                     return (
-                      <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
-                        {asset.status === 'Completed' &&
-                          <Table.Cell className='max-w-fit'>
+                      <TableRow className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
+                        {asset.status === 'FINALIZED' &&
+                          <TableCell className='max-w-fit'>
                             <HiCheck size={20} />
-                          </Table.Cell>}
-                        {asset.status === 'In progress' &&
-                          <Table.Cell className='max-w-fit'>
+                          </TableCell>}
+                        {asset.status === 'STARTED' &&
+                          <TableCell className='max-w-fit'>
                             <HiDotsHorizontal size={20} />
-                          </Table.Cell>}
+                          </TableCell>}
                         {asset.status === 'Failed' &&
-                          <Table.Cell className='max-w-fit'>
+                          <TableCell className='max-w-fit'>
                             <HiExclamationCircle size={20} />
-                          </Table.Cell>}
-                        <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.status}</Table.Cell>
-                        <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.date}</Table.Cell>
-                        <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.transfer_id}</Table.Cell>
-                      </Table.Row>
+                          </TableCell>}
+                        <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.state}</TableCell>
+                        <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.stateTimestamp}</TableCell>
+                        <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset['@id']}</TableCell>
+                      </TableRow>
                     )
                   })}
-                </Table.Body>
+                </TableBody> */}
               </Table>
             </div>
           </ul>
-        </Accordion.Content>
-        {policyConstrains && policyConstrains.length > 0 && (
-          <Accordion.Content className='bg-white max-h-80 overflow-y-clip'>
-            <div>
-              <h4 className='font-bold'>Policy constraints:</h4>
-              {policyConstrains.map((policy, index) => (
-                <li key={index} className='text-sm mt-2 ml-4 list-disc'>
-                  {policy.policyName}: {policy.period.startDate.split('T')[0]} to {policy.period.endDate.split('T')[0]}
-                </li>
-              ))}
-            </div>
-          </Accordion.Content>
-        )}
-      </Accordion.Panel>
+        </AccordionContent>
+      </AccordionPanel>
     </Accordion>
   )
 }
-
-export default ContractItem
