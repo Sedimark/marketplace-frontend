@@ -16,16 +16,16 @@ function getContractsQueryBody (contractAgreementIdFilter) {
   return body
 }
 
-function getNegotiationsQueryBody (currentPage, providerByMe, batchSize = settings.contractsPageSize) {
+function getNegotiationsQueryBody (currentPage, showConsumed, batchSize = settings.contractsPageSize) {
   const offset = (currentPage - 1) * batchSize
-  let providerConditon = 'CONSUMER'
-  if (!providerByMe) {
-    providerConditon = 'PROVIDER'
+  let offeringType = 'CONSUMER'
+  if (!showConsumed) {
+    offeringType = 'PROVIDER'
   }
 
   // filterExpression here filters by an encoded code on state, where 1200 = "FINALIZED"
-  // Be aware on the future, if calls falls when filtering they may be expecting a code, not string
-  // but this info is unknow to us, as its inside the connectors.
+  // Be aware in the future, if calls fall when filtering, it may be because they expect a code, not a string
+  // but this info is unknown to us, as it comes from the connector.
   const body = {
     '@context': { '@vocab': 'https://w3id.org/edc/v0.0.1/ns/' },
     '@type': 'QuerySpec',
@@ -41,7 +41,7 @@ function getNegotiationsQueryBody (currentPage, providerByMe, batchSize = settin
     {
       operandLeft: 'type',
       operator: '=',
-      operandRight: providerConditon
+      operandRight: offeringType
     }]
   }
   return body
@@ -139,9 +139,9 @@ export async function fetchTransferProcess (contractAgreementIdFilter) {
  * @param {string} currentPage - Used for pagination
  * @returns An Array of JSON obj representing the Negotiations
  */
-export async function fetchNegotiations (currentPage, providerByMe) {
+export async function fetchNegotiations (currentPage, showConsumed) {
   const url = `${settings.connectorUrl}/management/v3/contractnegotiations/request`
-  const bodyContract = getNegotiationsQueryBody(currentPage, providerByMe)
+  const bodyContract = getNegotiationsQueryBody(currentPage, showConsumed)
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

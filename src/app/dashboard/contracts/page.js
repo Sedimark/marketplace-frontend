@@ -5,15 +5,15 @@ import CustomPagination from './components/CustomPagination'
 
 export default function Page ({ searchParams }) {
   const currentPage = Number(searchParams?.page) || 1
-  const providerBy = searchParams?.providerBy === 'true'
+  const showConsumed = searchParams.showConsumed === undefined || searchParams.showConsumed === 'true'
 
   return (
     <div className='flex flex-row flex-grow'>
       {/* <SidebarDashboard /> */}
       {/* TODO: This <Suspense> needs keys & fallback, remember to add when filters/search/page change */}
       <div className='flex flex-col w-full bg-sedimark-light-blue'>
-        <Suspense key={providerBy + currentPage}>
-          <Contracts currentPage={currentPage} providerBy={providerBy} />
+        <Suspense key={showConsumed + currentPage}>
+          <Contracts currentPage={currentPage} showConsumed={showConsumed} />
         </Suspense>
         {/* Unless Connectors can provide us a COUNT of records, totalPages is a hardcore value, not a good solution, but at least makes it functional */}
         {/* We're getting forced to pass this value as is required for render! */}

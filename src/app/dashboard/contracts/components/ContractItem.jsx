@@ -3,14 +3,14 @@ import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser } from 'react-ico
 import { fetchContracts } from '@/utils/connector'
 import TransferModal from './TransferModal'
 
-export default async function ContractItem ({ contract, providerBy }) {
+export default async function ContractItem ({ contract, showConsumed }) {
   const contractAgreementId = contract.contractAgreementId
   const contractAgreement = await fetchContracts(contractAgreementId)
 
   // Multiply by 1000 because JavaScript expects milliseconds, we're reciving Unix timestamp AFAIK
   const date = new Date(contractAgreement[0].contractSigningDate * 1000)
-  const provider = contractAgreement[0].providerId
   const assetId = contractAgreement[0].assetId
+  const counterPartyId = contract.counterPartyId
   const counterPartyAddress = contract.counterPartyAddress
   const consumer = contractAgreement[0].consumerId
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
@@ -35,13 +35,13 @@ export default async function ContractItem ({ contract, providerBy }) {
                     <HiCalendar size={20} />
                     <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
                   </div>
-                  <div className='flex flex-row gap-2 w-36 mt-2'>
+                  <div className='flex flex-row gap-2 w-20 mt-2'>
                     <HiOutlineCurrencyEuro size={20} />
                     <p className='text-sm'>20</p>
                   </div>
                   <div className='flex flex-row gap-2 w-36 mt-2'>
                     <HiUser size={20} />
-                    <p className=' text-sm font-semibold'>{provider}</p>
+                    <p className=' text-sm font-semibold'>{counterPartyId}</p>
                   </div>
                 </div>
               </div>
@@ -50,7 +50,7 @@ export default async function ContractItem ({ contract, providerBy }) {
         </AccordionTitle>
         <AccordionContent className='bg-white max-h-80 overflow-y-clip'>
           <ul className='divide-y'>
-            {providerBy &&
+            {showConsumed &&
               <div className='grid grid-cols-3 w-full'>
                 <TransferModal contractAgreementId={contractAgreementId} counterPartyAddress={counterPartyAddress} connectorId={consumer} />
               </div>}
