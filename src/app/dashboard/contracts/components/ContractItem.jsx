@@ -32,7 +32,7 @@ export default async function ContractItem ({ contract, showConsumed }) {
                     <HiCalendar size={20} />
                     <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
                   </div>
-                  <div className='flex flex-row gap-2 w-36 mt-2'>
+                  <div className='flex flex-row gap-2 w-20 mt-2'>
                     <HiOutlineCurrencyEuro size={20} />
                     <p className='text-sm'>20</p>
                   </div>

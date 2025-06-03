@@ -18,9 +18,9 @@ function getContractsQueryBody (contractAgreementIdFilter) {
 
 function getNegotiationsQueryBody (currentPage, showConsumed, batchSize = settings.contractsPageSize) {
   const offset = (currentPage - 1) * batchSize
-  let providerConditon = 'CONSUMER'
+  let offeringType = 'CONSUMER'
   if (!showConsumed) {
-    providerConditon = 'PROVIDER'
+    offeringType = 'PROVIDER'
   }
 
   // filterExpression here filters by an encoded code on state, where 1200 = "FINALIZED"
@@ -41,7 +41,7 @@ function getNegotiationsQueryBody (currentPage, showConsumed, batchSize = settin
     {
       operandLeft: 'type',
       operator: '=',
-      operandRight: providerConditon
+      operandRight: offeringType
     }]
   }
   return body
