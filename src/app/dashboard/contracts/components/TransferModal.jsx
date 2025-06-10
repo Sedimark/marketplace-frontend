@@ -72,7 +72,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
               {({ isSubmitting, isValid }) => (
                 <Form className='space-y-4'>
                   <div>
-                    <Label htmlFor='dataDestination' value='URL Data Destination' />
+                    <Label htmlFor='dataDestination' value='Where to push the data ?' />
                     <Field
                       as={TextInput}
                       id='dataDestination'
