@@ -12,7 +12,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
 
   // Validation schema
   const FormSchema = yup.object().shape({
-    baseUrl: yup.string()
+    dataDestination: yup.string()
       .url('Must be a valid URL')
       .matches(/^https:\/\//, 'URL must start with https://')
       .required('Data Destination URL is required!')
@@ -43,7 +43,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   const handleSubmit = (values, { setSubmitting }) => {
     setMessage(null)
     try {
-      pushTransfer(contractAgreementId, counterPartyAddress, connectorId, values.baseUrl)
+      pushTransfer(contractAgreementId, counterPartyAddress, connectorId, values.dataDestination)
     } finally {
       setSubmitting(false)
     }
@@ -61,27 +61,27 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
         Start transfer
       </Button>
       <Modal show={open} onClose={handleClose}>
-        <Modal.Header>Modal Title</Modal.Header>
+        <Modal.Header>Transfer options for {contractAgreementId}</Modal.Header>
         <Modal.Body>
           <div className='space-y-6'>
             <Formik
-              initialValues={{ baseUrl: '' }}
+              initialValues={{ dataDestination: '' }}
               validationSchema={FormSchema}
               onSubmit={handleSubmit}
             >
               {({ isSubmitting, isValid }) => (
                 <Form className='space-y-4'>
                   <div>
-                    <Label htmlFor='baseUrl' value='URL Data Destination' />
+                    <Label htmlFor='dataDestination' value='URL Data Destination' />
                     <Field
                       as={TextInput}
-                      id='baseUrl'
-                      name='baseUrl'
+                      id='dataDestination'
+                      name='dataDestination'
                       placeholder='https://example.com/'
                       type='url'
                     />
                     <ErrorMessage
-                      name='baseUrl'
+                      name='dataDestination'
                       component='p'
                       className='text-red-600 text-sm mt-1'
                     />
@@ -102,7 +102,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>Cancel</Button>
         </Modal.Footer>
       </Modal>
     </>

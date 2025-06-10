@@ -12,7 +12,7 @@ export default async function ContractItem ({ contract, showConsumed }) {
   const assetId = contractAgreement[0].assetId
   const counterPartyId = contract.counterPartyId
   const counterPartyAddress = contract.counterPartyAddress
-  const consumer = contractAgreement[0].consumerId
+  const consumerId = contractAgreement[0].consumerId
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
 
   return (
@@ -52,7 +52,7 @@ export default async function ContractItem ({ contract, showConsumed }) {
           <ul className='divide-y'>
             {showConsumed &&
               <div className='grid grid-cols-3 w-full'>
-                <TransferModal contractAgreementId={contractAgreementId} counterPartyAddress={counterPartyAddress} connectorId={consumer} />
+                <TransferModal contractAgreementId={contractAgreementId} counterPartyAddress={counterPartyAddress} connectorId={consumerId} />
               </div>}
             <div className='overflow-x-auto mt-2'>
               <Table className='mt-4'>
