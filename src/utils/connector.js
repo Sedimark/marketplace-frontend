@@ -88,7 +88,7 @@ function getTransferPushBody (connectorId, counterPartyAddress, contractId, data
 /**
  * Fetch call to obtain a set of contracts.
  * @async
- * @param {string} contractAgreementIdFilter - Can be used to filter by Contract ID.
+ * @param {string} contractAgreementIdFilter - Value expected to filter by Contract ID.
  * @returns An Array of JSON obj representing the contracts
  */
 export async function fetchContracts (contractAgreementIdFilter) {
@@ -134,10 +134,11 @@ export async function fetchTransferProcess (contractAgreementIdFilter) {
   }
 }
 /**
- * Fetch call to obtain a set of negotiations. WIP to support filtering, order by...
+ * Fetch call to obtain a set of negotiations. Filters by default the completed ones.
  * @async
- * @param {string} currentPage - Used for pagination
- * @returns An Array of JSON obj representing the Negotiations
+ * @param {string} currentPage - Used for pagination.
+ * @param {boolean} showConsumed - Used for filtering by negotiations that are "type" consuming.
+ * @returns An Array of JSON obj representing the Negotiations.
  */
 export async function fetchNegotiations (currentPage, showConsumed) {
   const url = `${settings.connectorUrl}/management/v3/contractnegotiations/request`
@@ -161,11 +162,11 @@ export async function fetchNegotiations (currentPage, showConsumed) {
 /**
  * Post call to do a transfer PUSH of data to an external connector
  * @async
- * @param {string} connectorId - Used for buidlng the body to POST data
- * @param {string} counterPartyAddress - Used for buidlng the body to POST data
- * @param {string} contractId - Used for buidlng the body to POST data
- * @param {string} dataDestination - Used for buidlng the body to POST data
- * @returns An Array of JSON obj representing the Negotiations
+ * @param {string} connectorId - Connector ID that has the contract.
+ * @param {string} counterPartyAddress - The dataspace protocol URL of the provider connector, usually in the form of <base_url>/protocol or <base_url>/api/dsp.
+ * @param {string} contractId - Specific contract to get the artifact.
+ * @param {string} dataDestination - URL destination where the artifact will be sent.
+ * @returns JSON object with some relevant info, not used on the frontend, expected to be a 200.
  */
 export async function transferPush (connectorId, counterPartyAddress, contractId, dataDestination) {
   const url = `${settings.connectorUrl}/management/v3/transferprocesses`
