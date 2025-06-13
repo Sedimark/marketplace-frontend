@@ -300,9 +300,7 @@ export async function transferGetData (authorizationToken, publicEndpoint) {
 }
 
 export async function transferPullFlow (connectorId, counterPartyAddress, contractId) {
-  console.log('transferPullFlow started')
   const startResponse = await transferStart(connectorId, counterPartyAddress, contractId)
-  console.log(startResponse['@id'])
   const getIDResponse = await transferGetId(startResponse['@id'])
   const getEDRResponse = await transferGetEDR(getIDResponse['@id'])
   return getEDRResponse
