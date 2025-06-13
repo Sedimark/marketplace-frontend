@@ -40,21 +40,31 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     }
   }
 
-  async function pullransfer (contractAgreementId, counterPartyAddress, connectorId) {
-    const response = await fetch('/api/connector/pullData', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(
-        {
+  async function pullTransfer (contractAgreementId, counterPartyAddress, connectorId) {
+    try {
+      const response = await fetch('/api/connector/pullData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           contractId: contractAgreementId,
           counterPartyAddress,
           connectorId
-        }
-      )
-    })
-    console.log(response)
+        })
+      })
+      const { authorization, endpoint } = await response.json()
+      if (!authorization || !endpoint) {
+        console.error('Invalid response: missing authorization or endpoint')
+        return
+      }
+      // The only way to apply Headers (Auth) and open a new window in a client component.
+      // Should work on prod as it is, as the public URL (endpoint) should be accesible from webbrowser
+      const proxyUrl = `/api/proxy?target=${encodeURIComponent(endpoint + '/1')}&auth=${encodeURIComponent(authorization)}`
+      window.open(proxyUrl, '_blank')
+    } catch (error) {
+      console.error('Error in pullTransfer:', error)
+    }
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
@@ -68,7 +78,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
 
   const HandlePull = () => {
     try {
-      pullransfer(contractAgreementId, counterPartyAddress, connectorId)
+      pullTransfer(contractAgreementId, counterPartyAddress, connectorId)
     } catch (e) {
       console.log(e)
     }
