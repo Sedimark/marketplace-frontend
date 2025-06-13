@@ -40,12 +40,37 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     }
   }
 
+  async function pullransfer (contractAgreementId, counterPartyAddress, connectorId) {
+    const response = await fetch('/api/connector/pullData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          contractId: contractAgreementId,
+          counterPartyAddress,
+          connectorId
+        }
+      )
+    })
+    console.log(response)
+  }
+
   const handleSubmit = (values, { setSubmitting }) => {
     setMessage(null)
     try {
       pushTransfer(contractAgreementId, counterPartyAddress, connectorId, values.dataDestination)
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const HandlePull = () => {
+    try {
+      pullransfer(contractAgreementId, counterPartyAddress, connectorId)
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -99,6 +124,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
                 </Form>
               )}
             </Formik>
+            <Button onClick={HandlePull}>PULL test</Button>
           </div>
         </Modal.Body>
         <Modal.Footer>
