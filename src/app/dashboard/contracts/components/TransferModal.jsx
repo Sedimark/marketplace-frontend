@@ -128,9 +128,9 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
                     />
                   </div>
 
-                  <Button type='submit' disabled={!isValid || isSubmitting}>
+                  <Button type='submit' className='w-full' disabled={!isValid || isSubmitting}>
                     <HiCloudUpload size={24} className='mr-2' />
-                    {isSubmitting ? 'Pushing data...' : 'Push Transfer'}
+                    {isSubmitting ? 'Pushing Data...' : 'Push Data'}
                   </Button>
                   {message && (
                     <p className='text-sm'>
