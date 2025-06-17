@@ -1,14 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { Modal, Button, Label, TextInput } from 'flowbite-react'
-import { HiPlay, HiCloudUpload } from 'react-icons/hi'
+import { Modal, Button, Label, TextInput, Spinner } from 'flowbite-react'
+import { HiPlay, HiCloudUpload, HiCloudDownload } from 'react-icons/hi'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 
 export default function TransferModal ({ contractAgreementId, counterPartyAddress, connectorId }) {
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState(null)
+  const [loadingPull, setLoadingPull] = useState(false)
 
   // Validation schema
   const FormSchema = yup.object().shape({
@@ -41,6 +42,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   }
 
   async function pullTransfer (contractAgreementId, counterPartyAddress, connectorId) {
+    setLoadingPull(true)
     try {
       const response = await fetch('/api/connector/pullData', {
         method: 'POST',
@@ -59,11 +61,13 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
         return
       }
       // The only way to apply Headers (Auth) and open a new window in a client component.
-      // Should work on prod as it is, as the public URL (endpoint) should be accesible from webbrowser
+      // Should work on prod as it is, as the public URL (endpoint) should be accesible from ANY webbrowser.
       const proxyUrl = `/api/proxy?target=${encodeURIComponent(endpoint + '/1')}&auth=${encodeURIComponent(authorization)}`
       window.open(proxyUrl, '_blank')
     } catch (error) {
       console.error('Error in pullTransfer:', error)
+    } finally {
+      setLoadingPull(false)
     }
   }
 
@@ -87,6 +91,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   const handleClose = () => {
     setOpen(false)
     setMessage(null)
+    setLoadingPull(false)
   }
 
   return (
@@ -99,6 +104,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
         <Modal.Header>Transfer options for {contractAgreementId}</Modal.Header>
         <Modal.Body>
           <div className='space-y-6'>
+            <h3 className='text-lg font-semibold text-gray-700'>Push Data</h3>
             <Formik
               initialValues={{ dataDestination: '' }}
               validationSchema={FormSchema}
@@ -134,7 +140,23 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
                 </Form>
               )}
             </Formik>
-            <Button onClick={HandlePull}>PULL test</Button>
+            <div className='w-full border-t border-gray-300' />
+            <h3 className='text-lg font-semibold text-gray-700'>Pull Data</h3>
+            <Button onClick={HandlePull} className='w-full' disabled={loadingPull}>
+              {loadingPull
+                ? (
+                  <>
+                    <Spinner size='sm' className='mr-2' />
+                    Downloading the Artifact...
+                  </>
+                  )
+                : (
+                  <>
+                    <HiCloudDownload size={24} className='mr-2' />
+                    Pull Data
+                  </>
+                  )}
+            </Button>
           </div>
         </Modal.Body>
         <Modal.Footer>
