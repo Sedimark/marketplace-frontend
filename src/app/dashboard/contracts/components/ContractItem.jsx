@@ -1,6 +1,7 @@
-import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead, Button } from 'flowbite-react'
-import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser, HiPlay } from 'react-icons/hi'
+import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead } from 'flowbite-react'
+import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser } from 'react-icons/hi'
 import { fetchContracts } from '@/utils/connector'
+import TransferModal from './TransferModal'
 
 export default async function ContractItem ({ contract, showConsumed }) {
   const contractAgreementId = contract.contractAgreementId
@@ -8,8 +9,10 @@ export default async function ContractItem ({ contract, showConsumed }) {
 
   // Multiply by 1000 because JavaScript expects milliseconds, we're reciving Unix timestamp AFAIK
   const date = new Date(contractAgreement[0].contractSigningDate * 1000)
-  const counterPartyId = contract.counterPartyId
   const assetId = contractAgreement[0].assetId
+  const counterPartyId = contract.counterPartyId
+  const counterPartyAddress = contract.counterPartyAddress
+  const consumerId = contractAgreement[0].consumerId
   const historyData = ['', 'Status', 'Date', 'Transfer ID']
 
   return (
@@ -49,10 +52,7 @@ export default async function ContractItem ({ contract, showConsumed }) {
           <ul className='divide-y'>
             {showConsumed &&
               <div className='grid grid-cols-3 w-full'>
-                <Button className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
-                  <HiPlay size={24} className='mr-2' />
-                  Start transfer
-                </Button>
+                <TransferModal contractAgreementId={contractAgreementId} counterPartyAddress={counterPartyAddress} connectorId={consumerId} />
               </div>}
             <div className='overflow-x-auto mt-2'>
               <Table className='mt-4'>
