@@ -1,61 +1,67 @@
-import { Table, Accordion } from 'flowbite-react'
-import { HiDownload, HiUpload, HiDotsHorizontal, HiExclamationCircle } from 'react-icons/hi'
+import { Table, TableBody, TableCell, TableHeadCell, TableHead, TableRow, Accordion, AccordionContent, AccordionTitle, AccordionPanel } from 'flowbite-react'
+import { HiDownload, HiUpload } from 'react-icons/hi'
 
-function TransferHistory ({ history }) {
-  const historyData = ['', 'Asset', 'Counterparty ID', 'Status', 'Date']
+function TransferHistory ({ transferHistory }) {
+  const historyData = ['', 'Asset', 'Status', 'Date']
+
+  function formatTimestamp (timestamp) {
+    if (!timestamp) return 'N/A'
+    // Somehow this timestamp is UNIX in seconds, but the Contacts ones is in ms??
+    const date = new Date(timestamp)
+    // Didint like ISOString here, changed to formatted
+    return new Intl.DateTimeFormat(undefined, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).format(date)
+  }
+
   return (
     <Accordion className='mt-5 mb-5 p-10 pt-0 border-none'>
-      <Accordion.Panel>
-        <Accordion.Title>
+      <AccordionPanel>
+        <AccordionTitle>
           <div className='flex flex-row gap-2'>
             <svg className='w-6 h-6 text-gray-800 dark:text-white' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'>
               <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z' />
-            </svg>Transfer history
+            </svg>Transfer transferHistory
           </div>
-        </Accordion.Title>
-        <Accordion.Content className='bg-white max-h-96 overflow-y-auto'>
+        </AccordionTitle>
+        <AccordionContent className='bg-white max-h-96 overflow-y-auto'>
           <div className='overflow-x-auto'>
             <Table>
-              <Table.Head>
+              <TableHead>
                 {historyData.map((nameColumn, index) => {
-                  return (<Table.HeadCell className='bg-white p-0 pl-6' key={`${nameColumn}-${index}`}>{nameColumn}</Table.HeadCell>)
+                  return (<TableHeadCell className='bg-white p-0 pl-6' key={`${nameColumn}-${index}`}>{nameColumn}</TableHeadCell>)
                 })}
-              </Table.Head>
-              <Table.Body className='divide-y'>
-                {history.map((asset, index) => {
+              </TableHead>
+              <TableBody className='divide-y'>
+                {transferHistory.map((transferProcess, index) => {
                   return (
-                    // Icons
-                    <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${asset.asset}-${index}`}>
-                      {asset.transfer_in &&
-                        <Table.Cell className='max-w-fit'>
-                          <HiDownload size={20} />
-                        </Table.Cell>}
-                      {asset.transfer_out &&
-                        <Table.Cell className='max-w-fit'>
-                          <HiUpload size={20} />
-                        </Table.Cell>}
-                      {!asset.transfer_out && !asset.transfer_in && asset.status === 'Pending' &&
-                        <Table.Cell className='max-w-fit'>
-                          <HiDotsHorizontal size={20} />
-                        </Table.Cell>}
-                      {!asset.transfer_out && !asset.transfer_in && asset.status === 'Failed' &&
-                        <Table.Cell className='max-w-fit'>
-                          <HiExclamationCircle size={20} />
-                        </Table.Cell>}
-                      <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white flex flex-row gap-2 ml-0'>
-                        {asset.asset}
-                      </Table.Cell>
-                      <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.counterpart_id}</Table.Cell>
-                      <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.status}</Table.Cell>
-                      <Table.Cell className='whitespace-nowrap font-normal text-black dark:text-white'>{asset.date}</Table.Cell>
-                    </Table.Row>
+                    <TableRow className='bg-white dark:border-gray-700 dark:bg-gray-800' key={`${transferProcess.assetId}-${index}`}>
+                      <TableCell className='max-w-fit'>
+                        {transferProcess.type === 'CONSUMER' && <HiDownload size={20} />}
+                        {transferProcess.type === 'PROVIDER' && <HiUpload size={20} />}
+                        {/* {transferProcess.state === '???' && <HiDotsHorizontal size={20} />}
+                        {transferProcess.state === 'Failed??' && <HiExclamationCircle size={20} />} */}
+                      </TableCell>
+                      <TableCell className='whitespace-nowrap font-normal text-black dark:text-white flex flex-row gap-2 ml-0'>
+                        {transferProcess.assetId}
+                      </TableCell>
+                      {/* <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>counterParty? </TableCell> */}
+                      <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>{transferProcess.state}</TableCell>
+                      <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>{formatTimestamp(transferProcess.stateTimestamp)}</TableCell>
+                    </TableRow>
                   )
                 })}
-              </Table.Body>
+              </TableBody>
             </Table>
           </div>
-        </Accordion.Content>
-      </Accordion.Panel>
+        </AccordionContent>
+      </AccordionPanel>
     </Accordion>
   )
 }
