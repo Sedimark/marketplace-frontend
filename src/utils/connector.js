@@ -199,7 +199,6 @@ export async function transferPush (connectorId, counterPartyAddress, contractId
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(bodyTransferPush)
   }
-
   try {
     const data = await fetchData(url, options).then(response => response.json())
     return data
