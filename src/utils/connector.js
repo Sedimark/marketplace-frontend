@@ -1,6 +1,11 @@
 import settings from '@/utils/settings'
 import { fetchData } from '@/utils/helpers/fetchData'
 
+// Maybe move this one to a helper? Is just a one liner :/
+function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 function getContractsQueryBody (contractAgreementIdFilter) {
   const body = {
     '@context': { '@vocab': 'https://w3id.org/edc/v0.0.1/ns/' },
@@ -85,6 +90,22 @@ function getTransferPushBody (connectorId, counterPartyAddress, contractId, data
   }
   return body
 }
+
+function getTransferStartBody (connectorId, counterPartyAddress, contractId) {
+  const body = {
+    '@context': {
+      '@vocab': 'https://w3id.org/edc/v0.0.1/ns/'
+    },
+    '@type': 'TransferRequestDto',
+    connectorId,
+    counterPartyAddress,
+    contractId,
+    protocol: 'dataspace-protocol-http',
+    transferType: 'HttpData-PULL'
+  }
+  return body
+}
+
 /**
  * Fetch call to obtain a set of contracts.
  * @async
@@ -109,6 +130,7 @@ export async function fetchContracts (contractAgreementIdFilter) {
     return { error }
   }
 }
+
 /**
  * WIP, will be used on the future. Probably used for individual contracts & whole overview page.
  * @async
@@ -133,6 +155,7 @@ export async function fetchTransferProcess (contractAgreementIdFilter) {
     return { error }
   }
 }
+
 /**
  * Fetch call to obtain a set of negotiations. Filters by default the completed ones.
  * @async
@@ -176,7 +199,6 @@ export async function transferPush (connectorId, counterPartyAddress, contractId
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(bodyTransferPush)
   }
-  console.log(options)
   try {
     const data = await fetchData(url, options).then(response => response.json())
     return data
@@ -186,4 +208,80 @@ export async function transferPush (connectorId, counterPartyAddress, contractId
     console.log(error)
     return { error }
   }
+}
+
+export async function transferStart (connectorId, counterPartyAddress, contractId) {
+  const url = `${settings.connectorUrl}/management/v3/transferprocesses`
+  const bodyTransferStart = getTransferStartBody(connectorId, counterPartyAddress, contractId)
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bodyTransferStart)
+  }
+
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    return data
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on transferStart!')
+    console.log(error)
+    return { error }
+  }
+}
+
+export async function transferGetId (transferIdStart) {
+  const url = `${settings.connectorUrl}/management/v3/transferprocesses/${transferIdStart}`
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': settings.connectorApiKey
+    }
+  }
+
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    return data
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on transferGetId!')
+    console.log(error)
+    return { error }
+  }
+}
+
+export async function transferGetEDR (transferId) {
+  const url = `${settings.connectorUrl}/management/v3/edrs/${transferId}/dataaddress`
+  const options = { method: 'GET' }
+  const maxRetries = settings.maxRetriesGetEDR
+  const retryDelay = 1000
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`Attempt ${attempt} to fetch EDR...`)
+      const data = await fetchData(url, options).then(response => response.json())
+
+      if (data && data.authorization) {
+        return data
+      }
+
+      console.log(`Attempt ${attempt} failed, no 'authorization' in response. Retrying...`)
+    } catch (error) {
+      console.log(`Error on attempt ${attempt} of transferGetId:`, error)
+    }
+
+    if (attempt < maxRetries) {
+      await sleep(retryDelay)
+    } else {
+      throw new Error(`transferGetEDR failed after ${maxRetries} attempts.`)
+    }
+  }
+}
+
+export async function transferPullFlow (connectorId, counterPartyAddress, contractId) {
+  const startResponse = await transferStart(connectorId, counterPartyAddress, contractId)
+  const getIDResponse = await transferGetId(startResponse['@id'])
+  const getEDRResponse = await transferGetEDR(getIDResponse['@id'])
+  return getEDRResponse
 }
