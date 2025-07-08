@@ -237,12 +237,11 @@ export async function transferStart (connectorId, counterPartyAddress, contractI
 
 export async function transferGetId (transferIdStart) {
   const url = `${settings.connectorUrl}/management/v3/transferprocesses/${transferIdStart}`
-  // Need to investigate where this 'x-api-key' comes from...
   const options = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': 'password'
+      'x-api-key': settings.connectorApiKey
     }
   }
 
@@ -260,7 +259,7 @@ export async function transferGetId (transferIdStart) {
 export async function transferGetEDR (transferId) {
   const url = `${settings.connectorUrl}/management/v3/edrs/${transferId}/dataaddress`
   const options = { method: 'GET' }
-  const maxRetries = 5 // Maybe add this to env or settings ?
+  const maxRetries = settings.maxRetriesGetEDR
   const retryDelay = 1000
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -282,24 +281,6 @@ export async function transferGetEDR (transferId) {
     } else {
       throw new Error(`transferGetEDR failed after ${maxRetries} attempts.`)
     }
-  }
-}
-// Probalby wont use this one, will redirect the user to a new tab to the public endpoint.
-export async function transferGetData (authorizationToken, publicEndpoint) {
-  const url = `${publicEndpoint}/1`
-  const options = {
-    method: 'GET',
-    Authorization: authorizationToken
-  }
-
-  try {
-    const data = await fetchData(url, options).then(response => response.json())
-    return data
-  } catch (error) {
-    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
-    console.log('Error on transferGetId!')
-    console.log(error)
-    return { error }
   }
 }
 

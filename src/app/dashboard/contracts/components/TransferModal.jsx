@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Modal, Button, Label, TextInput, Spinner } from 'flowbite-react'
+import { ClipboardWithIcon, Modal, Button, Label, TextInput, Spinner } from 'flowbite-react'
 import { HiPlay, HiCloudUpload, HiCloudDownload } from 'react-icons/hi'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
@@ -10,6 +10,8 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState(null)
   const [loadingPull, setLoadingPull] = useState(false)
+  const [authorization, setAuthorization] = useState('')
+  const [endpoint, setEndpoint] = useState('')
 
   // Validation schema
   const FormSchema = yup.object().shape({
@@ -60,10 +62,8 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
         console.error('Invalid response: missing authorization or endpoint')
         return
       }
-      // The only way to apply Headers (Auth) and open a new window in a client component.
-      // Should work on prod as it is, as the public URL (endpoint) should be accesible from ANY webbrowser.
-      const proxyUrl = `/api/proxy?target=${encodeURIComponent(endpoint + '/1')}&auth=${encodeURIComponent(authorization)}`
-      window.open(proxyUrl, '_blank')
+      setAuthorization(authorization)
+      setEndpoint(endpoint)
     } catch (error) {
       console.error('Error in pullTransfer:', error)
     } finally {
@@ -92,6 +92,8 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     setOpen(false)
     setMessage(null)
     setLoadingPull(false)
+    setAuthorization('')
+    setEndpoint('')
   }
 
   return (
@@ -147,16 +149,60 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
                 ? (
                   <>
                     <Spinner size='sm' className='mr-2' />
-                    Downloading the Artifact...
+                    Requesting Pull data...
                   </>
                   )
                 : (
                   <>
                     <HiCloudDownload size={24} className='mr-2' />
-                    Pull Data
+                    Request Pull Data
                   </>
                   )}
             </Button>
+            {(authorization && endpoint) && (
+              <div className='space-y-4 mt-4'>
+                <div>
+                  <Label htmlFor='endpoint' value='Endpoint URL' />
+                  <div className='w-full'>
+                    <div className='relative'>
+                      <div className='block w-full rounded-lg border border-gray-300 bg-white text-sm text-gray-900 focus-within:ring-2 focus-within:ring-blue-500'>
+                        <input
+                          type='text'
+                          readOnly
+                          id='endpoint'
+                          value={endpoint}
+                          className='bg-transparent border-none focus:ring-0 focus:outline-none px-3 py-2 w-full'
+                        />
+                        <ClipboardWithIcon
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700 bg-white'
+                          valueToCopy={endpoint}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor='authorization' value='Authorization Token' />
+                  <div className='w-full'>
+                    <div className='relative'>
+                      <div className='block w-full rounded-lg border border-gray-300 bg-white text-sm text-gray-900 focus-within:ring-2 focus-within:ring-blue-500'>
+                        <input
+                          type='text'
+                          readOnly
+                          id='authorization'
+                          value={authorization}
+                          className='bg-transparent border-none focus:ring-0 focus:outline-none px-3 py-2 w-full'
+                        />
+                        <ClipboardWithIcon
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700 bg-white'
+                          valueToCopy={authorization}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
