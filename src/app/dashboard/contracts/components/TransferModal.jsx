@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ClipboardWithIcon, Modal, Button, Label, TextInput, Spinner } from 'flowbite-react'
-import { HiPlay, HiCloudUpload, HiCloudDownload, HiClipboardCopy } from 'react-icons/hi'
+import { HiPlay, HiCloudUpload, HiCloudDownload } from 'react-icons/hi'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 
@@ -94,14 +94,6 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     setLoadingPull(false)
     setAuthorization('')
     setEndpoint('')
-  }
-
-  const copyToClipboard = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text)
-    } catch (err) {
-      console.error('Failed to copy!', err)
-    }
   }
 
   return (
