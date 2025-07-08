@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Modal, Button, Label, TextInput, Spinner } from 'flowbite-react'
-import { HiPlay, HiCloudUpload, HiCloudDownload, HiClipboardCopy } from 'react-icons/hi'
+import { ClipboardWithIcon, Modal, Button, Label, TextInput, Spinner } from 'flowbite-react'
+import { HiPlay, HiCloudUpload, HiCloudDownload } from 'react-icons/hi'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 
@@ -96,14 +96,6 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     setEndpoint('')
   }
 
-  const copyToClipboard = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text)
-    } catch (err) {
-      console.error('Failed to copy!', err)
-    }
-  }
-
   return (
     <>
       <Button onClick={() => setOpen(true)} className='col-start-2 bg-sedimark-deep-blue hover:bg-sedimark-light-blue shadow-lg text-white rounded focus:ring-0 mb-4'>
@@ -170,44 +162,43 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
             {(authorization && endpoint) && (
               <div className='space-y-4 mt-4'>
                 <div>
-                  <Label htmlFor='authorization' value='Authorization Token' />
-                  <div className='flex items-center rounded-lg border border-gray-300 bg-white text-sm text-gray-900 focus-within:ring-2 focus-within:ring-blue-500'>
-                    <input
-                      type='text'
-                      readOnly
-                      id='authorization'
-                      value={authorization}
-                      className='flex-1 bg-transparent border-none focus:ring-0 focus:outline-none px-3 py-2'
-                    />
-                    <button
-                      type='button'
-                      onClick={() => copyToClipboard(authorization)}
-                      className='p-2 hover:bg-gray-300 rounded-r-lg border-l border-gray-300'
-                      title='Copy to clipboard'
-                    >
-                      <HiClipboardCopy size={16} className='text-gray-700' />
-                    </button>
+                  <Label htmlFor='endpoint' value='Endpoint URL' />
+                  <div className='w-full'>
+                    <div className='relative'>
+                      <div className='block w-full rounded-lg border border-gray-300 bg-white text-sm text-gray-900 focus-within:ring-2 focus-within:ring-blue-500'>
+                        <input
+                          type='text'
+                          readOnly
+                          id='endpoint'
+                          value={endpoint}
+                          className='bg-transparent border-none focus:ring-0 focus:outline-none px-3 py-2 w-full'
+                        />
+                        <ClipboardWithIcon
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700 bg-white'
+                          valueToCopy={endpoint}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-
                 <div>
-                  <Label htmlFor='endpoint' value='Endpoint URL' />
-                  <div className='flex items-center rounded-lg border border-gray-300 bg-white text-sm text-gray-900 focus-within:ring-2 focus-within:ring-blue-500'>
-                    <input
-                      type='text'
-                      readOnly
-                      id='endpoint'
-                      value={endpoint}
-                      className='flex-1 bg-transparent border-none focus:ring-0 focus:outline-none px-3 py-2'
-                    />
-                    <button
-                      type='button'
-                      onClick={() => copyToClipboard(endpoint)}
-                      className='p-2 hover:bg-gray-300 rounded-r-lg border-l border-gray-300'
-                      title='Copy to clipboard'
-                    >
-                      <HiClipboardCopy size={16} className='text-gray-700' />
-                    </button>
+                  <Label htmlFor='authorization' value='Authorization Token' />
+                  <div className='w-full'>
+                    <div className='relative'>
+                      <div className='block w-full rounded-lg border border-gray-300 bg-white text-sm text-gray-900 focus-within:ring-2 focus-within:ring-blue-500'>
+                        <input
+                          type='text'
+                          readOnly
+                          id='authorization'
+                          value={authorization}
+                          className='bg-transparent border-none focus:ring-0 focus:outline-none px-3 py-2 w-full'
+                        />
+                        <ClipboardWithIcon
+                          className='absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700 bg-white'
+                          valueToCopy={authorization}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
