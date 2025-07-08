@@ -167,7 +167,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
                   </>
                   )}
             </Button>
-            {(authorization || endpoint) && (
+            {(authorization && endpoint) && (
               <div className='space-y-4 mt-4'>
                 <div>
                   <Label htmlFor='authorization' value='Authorization Token' />
