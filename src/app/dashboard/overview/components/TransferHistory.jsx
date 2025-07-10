@@ -9,7 +9,7 @@ function TransferHistory ({ transferHistory }) {
     if (!timestamp) return 'N/A'
     // Somehow this timestamp is UNIX in seconds, but the Contacts ones is in ms??
     const date = new Date(timestamp)
-    // Didint like ISOString here, changed to formatted
+    // Did not like ISOString here, changed to formatted
     return new Intl.DateTimeFormat(undefined, {
       year: 'numeric',
       month: '2-digit',
