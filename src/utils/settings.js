@@ -19,7 +19,8 @@ const settings = {
   keywordsSeparator: ';',
   numRecommendations: process.env.NUM_RECOMMENDATIONS ?? 5,
   contractsPageSize: 5,
-  connectorUrl: process.env.CONNECTOR_URL
+  connectorUrl: process.env.CONNECTOR_URL,
+  offeringManagerUrl: process.env.OFFERING_MANAGER_URL
 }
 Object.freeze(settings)
 

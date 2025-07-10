@@ -1,0 +1,32 @@
+import { Suspense } from 'react'
+import SidebarDashboard from '../components/sidebar/Sidebar'
+import CustomPagination from '@/components/pagination/Pagination'
+import Offerings from './components/Offerings'
+import { fetchOfferingsIDs } from '@/utils/offeringManager'
+import { calculateTotalPages } from '@/app/catalogue/utils/paginationHelpers'
+import settings from '@/utils/settings'
+
+export default async function Page ({ searchParams }) {
+  const currentPage = Number(searchParams?.page) || 1
+  const offeringsIDs = await fetchOfferingsIDs()
+  // check if error is returned, no array to length!
+  // Using same batchSize as other pages, to mantain cohesion.
+  let totalPages
+  if (Array.isArray(offeringsIDs)) {
+    totalPages = calculateTotalPages(offeringsIDs.length, settings.batchSize)
+  } else {
+    totalPages = 1
+  }
+  return (
+    <div className='flex flex-row flex-grow'>
+      <SidebarDashboard />
+      {/* TODO: This <Suspense> needs keys & fallback, remember to add when filters/search/page change */}
+      <div className='flex flex-col w-full bg-sedimark-light-blue'>
+        <Suspense key={currentPage}>
+          <Offerings offeringsIDs={offeringsIDs} currentPage={currentPage} />
+        </Suspense>
+        <CustomPagination totalPages={totalPages} currentPage={currentPage} />
+      </div>
+    </div>
+  )
+}
