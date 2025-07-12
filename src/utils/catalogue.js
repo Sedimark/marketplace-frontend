@@ -16,8 +16,7 @@ const prefixes = `
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 `
 
-function getOfferingQueryFilter (query) {
-  return `
+const offeringsData = `
     ?offering a sedi:Offering .
     ?offering sedi:hasAsset ?asset .
     ?offering dct:title ?title .
@@ -25,6 +24,11 @@ function getOfferingQueryFilter (query) {
     ?offering sedi:isListedBy ?listing .
     ?listing sedi:belongsTo ?publisher .
     ?asset dct:issued ?created .
+`
+
+function getOfferingQueryFilter (query) {
+  return `
+    ${offeringsData}
     FILTER(
       (contains(str(?title), "${query}") || contains(str(?description), "${query}"))
     )
@@ -213,12 +217,7 @@ export async function fetchRecommendedOfferings (offeringIds) {
 
     SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created
     WHERE {
-      ?offering a sedi:Offering .
-      ?offering sedi:hasAsset ?asset .
-      ?offering dct:title ?title .
-      ?offering dct:description ?description .
-      ?offering dct:publisher ?publisher .
-      ?offering dct:created ?created .
+      ${offeringsData}
       FILTER(?offering IN (${idsString}))
     }
   `
@@ -231,13 +230,7 @@ export async function fetchOfferingDetails (offeringId) {
 
     SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?keywords
     WHERE { GRAPH ?g {
-      ?offering a sedi:Offering .
-      ?offering sedi:hasAsset ?asset .
-      ?offering dct:title ?title .
-      ?offering dct:description ?description .
-      ?offering sedi:isListedBy ?listing .
-      ?listing sedi:belongsTo ?publisher .
-      ?asset dct:issued ?created .
+      ${offeringsData}
       FILTER(?offering IN (<${offeringId}>))
       OPTIONAL {
          SELECT ?asset (group_concat(?kw; separator="${settings.keywordsSeparator}") as ?keywords)
