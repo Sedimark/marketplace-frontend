@@ -22,8 +22,9 @@ function getOfferingQueryFilter (query) {
     ?offering sedi:hasAsset ?asset .
     ?offering dct:title ?title .
     ?offering dct:description ?description .
-    ?offering dct:publisher ?publisher .
-    ?offering dct:created ?created .
+    ?offering sedi:isListedBy ?listing .
+    ?listing sedi:belongsTo ?publisher .
+    ?asset dct:issued ?created .
     FILTER(
       (contains(str(?title), "${query}") || contains(str(?description), "${query}"))
     )
@@ -57,11 +58,11 @@ function getSparQLOfferingQueryString (query, keywords, providers, currentPage, 
     ${prefixes}
 
     SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created
-    WHERE {
+    WHERE { GRAPH ?g {
       ${getOfferingQueryFilter(query)}
       ${checkKeywordsToFilter(keywords)}
       ${checkProvidersToFilter(providers)}
-    }
+    }}
     ORDER BY ?created
     LIMIT ${batchSize}
     OFFSET ${offset}
@@ -92,11 +93,13 @@ function getSparQLKeywordFilter (keywords) {
   if (Array.isArray(keywords)) {
     const arrayLanguageTagged = []
     keywords.forEach(element => {
-      arrayLanguageTagged.push('"' + element + '"' + '@en')
+      // arrayLanguageTagged.push('"' + element + '"' + '@en')
+      arrayLanguageTagged.push('"' + element + '"')
     })
     return arrayLanguageTagged
   } else {
-    return '"' + keywords + '"' + '@en'
+    // return '"' + keywords + '"' + '@en'
+    return '"' + keywords + '"'
   }
 }
 
@@ -121,11 +124,11 @@ function getSparQLOfferingsCountQueryString (query = '', keywords, providers) {
   const baseString = `
   ${prefixes}
   SELECT DISTINCT (COUNT(?offering) as ?count)
-  WHERE {
+  WHERE { GRAPH ?g {
     ${getOfferingQueryFilter(query)}
     ${checkKeywordsToFilter(keywords)}
     ${checkProvidersToFilter(providers)}
-  }
+  }}
   `
   return encodeURI(baseString)
 }
@@ -141,10 +144,10 @@ function getSparQLProvidersQueryString (query) {
     ${prefixes}
 
     SELECT DISTINCT ?publisher
-    WHERE {
+    WHERE { GRAPH ?g {
       ?publisher a sedi:Participant .
       ${getOfferingQueryFilter(query)}
-    }
+    }}
     ORDER BY ?publisher
   `
   return encodeURI(baseString)
@@ -165,9 +168,9 @@ function getSparQLParticipantsCountQueryString () {
     ${prefixes}
 
     SELECT DISTINCT (COUNT(?participant) as ?count)
-    WHERE {
+    WHERE { GRAPH ?g {
       ?participant a sedi:Participant .
-    }
+    }}
   `
   return encodeURI(baseString)
 }
@@ -183,11 +186,11 @@ function getSparQLKeywordsQueryString (query) {
     ${prefixes}
 
     SELECT DISTINCT ?keyword
-    WHERE {
-      ?asset a vocab:DataAsset .
+    WHERE { GRAPH ?g {
+      ?asset a sedi:Asset .
       ?asset dcat:keyword ?keyword .
       ${getOfferingQueryFilter(query)}
-    }
+    }}
     ORDER BY ?keyword
   `
   return encodeURI(baseString)
@@ -227,13 +230,14 @@ export async function fetchOfferingDetails (offeringId) {
     ${prefixes}
 
     SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?keywords
-    WHERE {
+    WHERE { GRAPH ?g {
       ?offering a sedi:Offering .
       ?offering sedi:hasAsset ?asset .
       ?offering dct:title ?title .
       ?offering dct:description ?description .
-      ?offering dct:publisher ?publisher .
-      ?offering dct:created ?created .
+      ?offering sedi:isListedBy ?listing .
+      ?listing sedi:belongsTo ?publisher .
+      ?asset dct:issued ?created .
       FILTER(?offering IN (<${offeringId}>))
       OPTIONAL {
          SELECT ?asset (group_concat(?kw; separator="${settings.keywordsSeparator}") as ?keywords)
@@ -242,7 +246,7 @@ export async function fetchOfferingDetails (offeringId) {
         }
         GROUP BY ?asset
       }
-    }
+    }}
   `
   const offering = await fetchFromCatalogue(sparQLQuery)
   return offering[0]
@@ -253,7 +257,7 @@ export async function fetchProvider (providerId) {
     ${prefixes}
 
     SELECT DISTINCT ?participant ?familyName ?givenName ?alternateName ?email ?accountId ?memberOf ?homepage ?image
-    WHERE {
+    WHERE { GRAPH ?g {
       ?participant a sedi:Participant .
       OPTIONAL { ?participant schema:givenName ?givenName . } .
       OPTIONAL { ?participant schema:familyName ?familyName . } .
@@ -264,7 +268,7 @@ export async function fetchProvider (providerId) {
       OPTIONAL { ?participant schema:image ?image . } .
       OPTIONAL { ?participant foaf:homepage ?homepage . } .
       FILTER(?participant IN (<${providerId}>))
-    }
+    }}
   `
   const provider = await fetchFromCatalogue(sparQLQuery)
   return provider[0]
