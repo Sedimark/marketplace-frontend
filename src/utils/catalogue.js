@@ -27,10 +27,12 @@ const offeringsData = `
 `
 
 function getOfferingQueryFilter (query) {
+  const lquery = query.toLowerCase()
   return `
     ${offeringsData}
     FILTER(
-      (contains(str(?title), "${query}") || contains(str(?description), "${query}"))
+      CONTAINS(LCASE(?title), "${lquery}") ||
+      CONTAINS(LCASE(?description), "${lquery}")
     )
   `
 }
