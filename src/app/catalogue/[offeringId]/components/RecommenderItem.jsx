@@ -18,10 +18,11 @@ function RecommenderItem ({ vc, providerName, color }) {
             <HiCalendar size={20} />
             <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
           </div>
-          {vc.license && <div className='flex flex-row items-center gap-2 w-36'>
-            <HiOutlineScale size={20} />
-            <p>{vc.license.value}</p>
-          </div>}
+          {vc.license &&
+            <div className='flex flex-row items-center gap-2 w-36'>
+              <HiOutlineScale size={20} />
+              <p>{vc.license.value}</p>
+            </div>}
         </span>
       </div>
       <div className='flex justify-between'>

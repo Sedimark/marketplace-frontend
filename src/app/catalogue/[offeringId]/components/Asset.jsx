@@ -33,10 +33,11 @@ function Asset ({ offering }) {
             <HiOutlineRefresh />
             <p>Updated {updatedAt.toISOString().split('T')[0]}</p>
           </div>
-          {offering.license && <div className='flex flex-row items-center gap-2'>
-            <HiOutlineScale />
-            <p>{offering.license.value}</p>
-          </div>}
+          {offering.license &&
+            <div className='flex flex-row items-center gap-2'>
+              <HiOutlineScale />
+              <p>{offering.license.value}</p>
+            </div>}
         </div>
       </div>
       {/* Descriptions */}

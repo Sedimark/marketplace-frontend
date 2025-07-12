@@ -22,10 +22,11 @@ function OfferingItem ({ offering, color }) {
             <p className='pr-2'>{offering.publisher.value}</p>
           </div>
         </div>
-        {offering.license && <div className='flex flex-row items-center gap-2 w-36'>
-          <HiOutlineScale size={20} />
-          <p>{offering.license.value}</p>
-        </div>}
+        {offering.license &&
+          <div className='flex flex-row items-center gap-2 w-36'>
+            <HiOutlineScale size={20} />
+            <p>{offering.license.value}</p>
+          </div>}
       </div>
     </div>
   )
