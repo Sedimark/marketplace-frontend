@@ -21,6 +21,7 @@ const offeringsData = `
     ?offering sedi:hasAsset ?asset .
     ?offering dct:title ?title .
     ?offering dct:description ?description .
+    ?offering dct:license ?license .
     ?offering sedi:isListedBy ?listing .
     ?listing sedi:belongsTo ?publisher .
     ?asset dct:issued ?created .
@@ -63,7 +64,7 @@ function getSparQLOfferingQueryString (query, keywords, providers, currentPage, 
   const baseString = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?license
     WHERE { GRAPH ?g {
       ${getOfferingQueryFilter(query)}
       ${checkKeywordsToFilter(keywords)}
@@ -217,7 +218,7 @@ export async function fetchRecommendedOfferings (offeringIds) {
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?license
     WHERE {
       ${offeringsData}
       FILTER(?offering IN (${idsString}))
@@ -230,7 +231,7 @@ export async function fetchOfferingDetails (offeringId) {
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?keywords
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?keywords ?license
     WHERE { GRAPH ?g {
       ${offeringsData}
       FILTER(?offering IN (<${offeringId}>))
