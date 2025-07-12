@@ -76,7 +76,7 @@ function getSparQLOfferingQueryString (query, keywords, providers, currentPage, 
 
 function checkKeywordsToFilter (keywords) {
   let getKeywordFilter = ''
-  if (keywords !== '') {
+  if (keywords !== '' && keywords !== undefined) {
     getKeywordFilter = `
       ?asset dcat:keyword ?kw
       FILTER(?kw IN (${getSparQLKeywordFilter(keywords)}))`
@@ -86,7 +86,7 @@ function checkKeywordsToFilter (keywords) {
 
 function checkProvidersToFilter (providers) {
   let getProviderFilter = ''
-  if (providers !== '') {
+  if (providers !== '' && providers !== undefined) {
     getProviderFilter = `
     FILTER(str(?publisher) IN (${getSparQLProviderFilter(providers)}))`
   }
