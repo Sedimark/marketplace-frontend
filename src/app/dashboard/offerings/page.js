@@ -6,6 +6,10 @@ import { fetchOfferingsIDs } from '@/utils/offeringManager'
 import { calculateTotalPages } from '@/app/catalogue/utils/paginationHelpers'
 import settings from '@/utils/settings'
 
+// This disables the caching on the WHOLE PAGE!! I could do this on the offeringManager.js fetch helper, but seeing that you will be able to
+// delete and edit offerings on the fly, you want to see these changes INSTANTLY.
+export const revalidate = 0
+
 export default async function Page ({ searchParams }) {
   const currentPage = Number(searchParams?.page) || 1
   const offeringsIDs = await fetchOfferingsIDs()

@@ -46,6 +46,28 @@ export async function fetchOffering (offeringId) {
 }
 
 /**
+ * Fetch call to delete one offering by its ID.
+ * @async
+ * @param {string} offeringId - URL + ID offer to delete.
+ * @returns An Array of JSON obj representing the Offering.
+ */
+export async function deleteOffering (offeringId) {
+  const url = `${offeringId}`
+  const options = {
+    method: 'DELETE'
+  }
+  try {
+    const data = await fetchData(url, options)
+    return data
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on deleteOffering!')
+    console.log(error)
+    return { error }
+  }
+}
+
+/**
  * Multiple fetch call to obtain a set of Offerings, while maintaining a "pagination" structure.
  * Will simulate the pagination on their side, but it is done here!
  * @async

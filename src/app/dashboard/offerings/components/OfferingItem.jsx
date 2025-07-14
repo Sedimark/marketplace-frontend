@@ -1,7 +1,8 @@
 import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Badge } from 'flowbite-react'
 import { HiIdentification, HiTag, HiCalendar, HiLink, HiBadgeCheck } from 'react-icons/hi'
+import OfferingActions from './OfferingActions'
 
-export default async function OfferingItem ({ offering }) {
+export default async function OfferingItem ({ offering, offeringUrl }) {
   // For now only checking & defaulting keywords, but others could be optional fields...
   const offerId = offering['@id']
   const title = offering['dct:title']['@value']
@@ -46,7 +47,7 @@ export default async function OfferingItem ({ offering }) {
             </div>
           </div>
         </AccordionTitle>
-        <AccordionContent className='bg-white max-h-80 overflow-y-clip'>
+        <AccordionContent className='bg-white max-h-120 overflow-y-clip'>
           <div className='flex flex-col'>
             <p className='text-gray-700'>
               {description}
@@ -60,13 +61,18 @@ export default async function OfferingItem ({ offering }) {
                   )
                 })}
               </div>}
-            <p className='mt-8 text-gray-700 italic'>
-              <div className='flex flex-row'>
+            <div className='flex flex-row justify-between items-start mt-8'>
+              <div className='flex flex-row text-gray-700 italic flex-grow'>
                 <HiBadgeCheck size={20} className='mr-1' />
                 <p>{license}</p>
               </div>
-            </p>
+              <div className='shrink-0 ml-4'>
+                <OfferingActions offeringUrl={offeringUrl} />
+              </div>
+            </div>
+
           </div>
+
         </AccordionContent>
       </AccordionPanel>
     </Accordion>

@@ -8,7 +8,7 @@ export default async function Offerings ({ offeringsIDs, currentPage }) {
       {offerings.map((offering, index) => {
         return (
           <OfferingItem
-            offering={offering}
+            offering={offering} offeringUrl={offeringsIDs[index]}
             key={`${offering['@id']}-${index + 1}`}
           />
         )
