@@ -77,11 +77,11 @@ export async function deleteOffering (offeringId) {
  */
 export async function fetchOfferingsCustom (offeringIds, currentPage) {
   // Pagination custom
-  const pageSize = 5
-  const start = (currentPage - 1) * pageSize
-  const end = start + pageSize
-  const paginatedIds = offeringIds.slice(start, end)
   try {
+    const pageSize = 5
+    const start = (currentPage - 1) * pageSize
+    const end = start + pageSize
+    const paginatedIds = offeringIds.slice(start, end)
     const data = await Promise.all(
       paginatedIds.map((id) =>
         fetchOffering(id)
