@@ -2,8 +2,6 @@
 import TransferHistory from './TransferHistory'
 import SidebarDashboard from '../../components/sidebar/Sidebar'
 import { fetchTransferProcess } from '@/utils/connector'
-// import mockTransferHistory from '@/utils/data/mockTransfershistory.json'
-// import mockOverview from '@/utils/data/mockOverview.json'
 
 const transferHistory = await fetchTransferProcess()
 

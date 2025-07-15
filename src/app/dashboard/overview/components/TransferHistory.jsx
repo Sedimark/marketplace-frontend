@@ -62,13 +62,10 @@ function TransferHistory ({ transferHistory }) {
                           <TableCell className='max-w-fit'>
                             {transferProcess.type === 'CONSUMER' && <HiDownload size={20} />}
                             {transferProcess.type === 'PROVIDER' && <HiUpload size={20} />}
-                            {/* {transferProcess.state === '???' && <HiDotsHorizontal size={20} />}
-                        {transferProcess.state === 'Failed??' && <HiExclamationCircle size={20} />} */}
                           </TableCell>
                           <TableCell className='whitespace-nowrap font-normal text-black dark:text-white flex flex-row gap-2 ml-0'>
                             {transferProcess.assetId}
                           </TableCell>
-                          {/* <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>counterParty? </TableCell> */}
                           <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>{transferProcess.state}</TableCell>
                           <TableCell className='whitespace-nowrap font-normal text-black dark:text-white'>{formatTimestamp(transferProcess.stateTimestamp)}</TableCell>
                         </TableRow>
