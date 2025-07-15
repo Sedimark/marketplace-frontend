@@ -8,7 +8,7 @@ export default async function Offerings ({ offeringsIDs, currentPage }) {
   return (
     <div className='mt-8'>
       {offerings?.error && (
-        <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
+        <div className='flex flex-col w-full gap-4 p-4'>
           <Alert color='failure' icon={TbAlertSquareFilled}>
             <span className='font-bold text-xl'>Offering Manger is not responding. Please, try again.</span>
           </Alert>
