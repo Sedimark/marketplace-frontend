@@ -1,3 +1,7 @@
+export function GET() {
+  return new Response('Not implemented', { status: 501 })
+}
+
 // Disabled! This proxy route is to handle the PULL data when creating a new tab to the user with the URL + Aut headers, as there is no other
 // way as this one to open a new tab with Auth headers on it.
 // BE AWARE!! THIS NEEDS A GOOD LOOK ON SECURITY REWORK! As they could try to access outside url while using the sedimark marketplace as origin!
