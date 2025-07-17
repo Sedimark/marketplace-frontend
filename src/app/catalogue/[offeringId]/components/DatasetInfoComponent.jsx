@@ -1,6 +1,6 @@
 import Asset from './Asset'
 import ProviderCard from './ProviderCard'
-import PriceCard from './PriceCard'
+import NegotiateCard from './NegotiateCard'
 
 function DatasetInfoComponent ({ offering, provider }) {
   return (
@@ -11,7 +11,7 @@ function DatasetInfoComponent ({ offering, provider }) {
           <ProviderCard provider={provider} />
         </div>
         <div className='pt-2'>
-          <PriceCard price={offering?.price ?? 0} />
+          <NegotiateCard />
         </div>
       </div>
     </>

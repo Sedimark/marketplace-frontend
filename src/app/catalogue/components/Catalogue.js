@@ -4,9 +4,7 @@ import Recommender from '../[offeringId]/components/Recommender'
 /**
  * Renders the Catalogue component.
  *
- * This function fetches mock providers and keywords, and then renders the ResultsPane component
- * with the fetched data. The ResultsPane component is wrapped in a Suspense component to handle
- * asynchronous loading.
+ * This function renders the ResultsPane component and recommended offerings.
  *
  * @returns {JSX.Element} The Catalogue component.
  */

@@ -1,19 +1,18 @@
-import { HiOutlineCurrencyEuro, HiCalendar, HiUser } from 'react-icons/hi'
+import { HiOutlineScale, HiCalendar, HiUser } from 'react-icons/hi'
 
 function OfferingItem ({ offering, color }) {
   const name = offering.title.value
   const description = offering.description.value
   const issuanceDate = offering.created.value ? new Date(offering.created.value) : new Date()
   const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
-  const price = offering?.price?.value ?? 0
   return (
     <div className={`flex flex-col p-4 rounded-lg shadow-lg ${color} hover:bg-gray-100`}>
       <div className='text-lg font-semibold'>{name}</div>
       <div className='flex items-center justify-between w-full'>
         <div>{description.length > 120 ? description.substring(0, 120) + '...' : description}</div>
         <div className='flex flex-row items-center gap-2 w-36'>
-          <HiOutlineCurrencyEuro size={20} />
-          <p>{price} euros</p>
+          <HiCalendar size={20} />
+          <p>{date.toISOString().split('T')[0]}</p>
         </div>
       </div>
       <div className='flex justify-between'>
@@ -23,10 +22,11 @@ function OfferingItem ({ offering, color }) {
             <p className='pr-2'>{offering.publisher.value}</p>
           </div>
         </div>
-        <div className='flex flex-row items-center gap-2 w-36'>
-          <HiCalendar size={20} />
-          <p>{date.toISOString().split('T')[0]}</p>
-        </div>
+        {offering.license &&
+          <div className='flex flex-row items-center gap-2 w-36'>
+            <HiOutlineScale size={20} />
+            <p>{offering.license.value}</p>
+          </div>}
       </div>
     </div>
   )
