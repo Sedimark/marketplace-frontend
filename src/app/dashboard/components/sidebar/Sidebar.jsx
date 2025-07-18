@@ -1,24 +1,23 @@
 'use client'
 
 // As this needs a rework on interactivity, and now parent is SS, gonna left this for later.
-import { useState } from 'react'
-import { Label, ListGroup, Sidebar, Radio } from 'flowbite-react'
-import { HiSwitchVertical, HiFilter, HiChartPie, HiShoppingBag } from 'react-icons/hi'
+import { HiChartPie, HiShoppingBag } from 'react-icons/hi'
 import { usePathname } from 'next/navigation'
-import FilterDatepicker from './FilterDatePicker'
+// import FilterDatepicker from './FilterDatePicker'
+import { Sidebar } from 'flowbite-react'
 import customTheme from './style'
 
 function SidebarDashboard () {
   const pathname = usePathname()
 
-  const [selectedCategory, setSelectedCategory] = useState(null)
+  // const [selectedCategory, setSelectedCategory] = useState(null)
 
-  const handleCheckbox = (category) => {
-    setSelectedCategory(category === selectedCategory ? null : category)
-    console.log('Filtering contracts by:', category)
-  }
+  // const handleCheckbox = (category) => {
+  //   setSelectedCategory(category === selectedCategory ? null : category)
+  //   console.log('Filtering contracts by:', category)
+  // }
 
-  const sort = ['Creation date', 'Name']
+  // const sort = ['Creation date', 'Name']
 
   return (
     <div>
@@ -38,7 +37,7 @@ function SidebarDashboard () {
               </div>
             </Sidebar.Item>
           </Sidebar.ItemGroup>
-          {pathname === '/dashboard/contracts' &&
+          {/* {pathname === '/dashboard/contracts' &&
             <Sidebar.ItemGroup className='w-60'>
               <Sidebar.Collapse icon={HiSwitchVertical} label='Sort' open>
                 <div>
@@ -64,7 +63,7 @@ function SidebarDashboard () {
                 <h4 className='text-sm ml-2'>Creation date</h4>
                 <FilterDatepicker />
               </Sidebar.Collapse>
-            </Sidebar.ItemGroup>}
+            </Sidebar.ItemGroup>} */}
         </Sidebar.Items>
       </Sidebar>
     </div>

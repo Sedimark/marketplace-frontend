@@ -62,8 +62,10 @@ function getTransferProcessQueryBody (contractAgreementIdFilter) {
     // Hard limit, should we limit differently? For now, showing last 10
     limit: 10,
     sortOrder: 'DESC',
-    sortField: 'stateTimestamp',
-    filterExpression: [{
+    sortField: 'stateTimestamp'
+  }
+  if (contractAgreementIdFilter) {
+    body.filterExpression = [{
       operandLeft: 'contractId',
       operator: '=',
       operandRight: contractAgreementIdFilter
@@ -132,12 +134,15 @@ export async function fetchContracts (contractAgreementIdFilter) {
 }
 
 /**
- * WIP, will be used on the future. Probably used for individual contracts & whole overview page.
+ * Fetches a list of transfer processes from the EDC connector. If no filter is provided,
+ * all transfer processes (but not really, as by default the call has offset + limit, this may change!!) are returned.
+ *
  * @async
- * @param {string} contractAgreementIdFilter - Can be used to filter by Contract ID.
- * @returns An Array of JSON obj representing the Transfer Process
+ * @function
+ * @param {string|null} [contractAgreementIdFilter=null] - Optional. Filters the results to match by contract agreement ID.
+ * @returns An Array of JSON obj representing the Transfer Process.
  */
-export async function fetchTransferProcess (contractAgreementIdFilter) {
+export async function fetchTransferProcess (contractAgreementIdFilter = null) {
   const url = `${settings.connectorUrl}/management/v3/transferprocesses/request`
   const bodyContract = getTransferProcessQueryBody(contractAgreementIdFilter)
   const options = {
