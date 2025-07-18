@@ -17,7 +17,7 @@ function SidebarDashboard () {
   //   console.log('Filtering contracts by:', category)
   // }
 
-  // const sort = ['Creation date', 'Name', 'Price']
+  const sort = ['Creation date', 'Name']
 
   return (
     <div>

@@ -18,7 +18,6 @@ async function Recommender ({ query }) {
                   <RecommenderItem
                     vc={recommendation}
                     providerName={recommendation.publisher.value}
-                    price={recommendation?.price ?? 0}
                     color='bg-sedimark-light-blue bg-red'
                   />
                 </Link>
