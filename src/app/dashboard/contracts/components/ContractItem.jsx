@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Table, TableHeadCell, TableHead } from 'flowbite-react'
-import { HiOutlineCurrencyEuro, HiCalendar, HiDatabase, HiUser } from 'react-icons/hi'
+import { HiCalendar, HiDatabase, HiUser } from 'react-icons/hi'
 import { fetchContracts } from '@/utils/connector'
 import TransferModal from './TransferModal'
 
@@ -29,15 +29,10 @@ export default async function ContractItem ({ contract, showConsumed }) {
               </div>
               <div className='flex flex-col mt-4 w-96 min-w-40 max-w-96'>
                 <div className=' text-sm mr-4'>{assetId}</div>
-                {/* Price and date */}
                 <div className='flex flex-row items-end mt-3'>
                   <div className='flex flex-row gap-2 w-36 mt-2'>
                     <HiCalendar size={20} />
                     <p className='text-sm'>{date.toISOString().split('T')[0]}</p>
-                  </div>
-                  <div className='flex flex-row gap-2 w-20 mt-2'>
-                    <HiOutlineCurrencyEuro size={20} />
-                    <p className='text-sm'>20</p>
                   </div>
                   <div className='flex flex-row gap-2 w-36 mt-2'>
                     <HiUser size={20} />

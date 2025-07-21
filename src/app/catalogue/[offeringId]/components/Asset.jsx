@@ -1,6 +1,6 @@
 import { Badge } from 'flowbite-react'
 import Image from 'next/image'
-import { HiLocationMarker, HiCalendar, HiOutlineRefresh } from 'react-icons/hi'
+import { HiOutlineScale, HiLocationMarker, HiCalendar, HiOutlineRefresh } from 'react-icons/hi'
 import Credentials from './Credentials'
 import settings from '@/utils/settings'
 
@@ -33,6 +33,11 @@ function Asset ({ offering }) {
             <HiOutlineRefresh />
             <p>Updated {updatedAt.toISOString().split('T')[0]}</p>
           </div>
+          {offering.license &&
+            <div className='flex flex-row items-center gap-2'>
+              <HiOutlineScale />
+              <p>{offering.license.value}</p>
+            </div>}
         </div>
       </div>
       {/* Descriptions */}

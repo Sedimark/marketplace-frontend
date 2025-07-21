@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import OfferingItem from './OfferingItem'
 import { fetchOfferings } from '@/utils/catalogue'
-import { Button, Alert } from 'flowbite-react'
-import { HiOutlineX } from 'react-icons/hi'
+import { Alert } from 'flowbite-react'
 import { TbAlertSquareFilled } from 'react-icons/tb'
 
 /**
@@ -31,15 +30,8 @@ export default async function ResultsList ({ query, keywords, providers, current
           </Alert>
         </div>
       )}
-      {query &&
-      // Damm gonna need to make this lil thing a client component to just reset the query cuz the onClick + it should show keywords too, so next PR!
-      //   <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray' onClick={() => setQuery('')}>
-        <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray'>
-          <span className='flex items-center '>
-            {query}
-            <HiOutlineX className='ml-2' />
-          </span>
-        </Button>}
+      {/* Damm gonna need to make this lil thing a client component to just reset the query cuz the onClick + it should show keywords too, so next PR!
+      {query && <Button className='pl-4 m-4 mb-0 w-fit ' outline pill size='xs' color='gray' onClick={() => setQuery('')}>} */}
       {!data.length && data && !data?.error && (
         <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
           <div className='w-full gap-4 p-6 text-center bg-white border border-gray-200 rounded-lg shadow'>
