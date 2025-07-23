@@ -38,7 +38,7 @@ function getCreateOfferingBody (offeringData) {
     'dct:creator': { '@id': 'https://uc.sedimark.eu/' }, // DID ?
     'dcat:themeTaxonomy': { '@id': 'https://w3id.org/sedimark/vocab/sdm' },
     'dct:license': { // seems its our "License" + "Terms" concated
-      '@value': offeringData.terms_and_conditions,
+      '@value': offeringData.terms_and_condition,
       '@type': 'rdfs:Literal'
     },
     'sedi:hasAsset': [{
