@@ -81,6 +81,23 @@ export default function PublishForm (brokerAssets) {
     setInitialValues(initialValuesEmpty)
     setCurrentAsset(`Empty + ${Date.now()}`)
   }
+  const handleCreateAsset = (offeringData) => {
+    publishOffering(offeringData)
+  }
+  async function publishOffering (offeringData) {
+    const response = await fetch('/api/offeringManager/publish', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(offeringData)
+    })
+    if (response.ok) {
+      //
+    } else {
+      //
+    }
+  }
 
   console.log(existingAssets)
   return (
@@ -125,19 +142,7 @@ export default function PublishForm (brokerAssets) {
               </pre>
             </Modal.Body>
             <Modal.Footer>
-
-              <Popover
-                aria-labelledby='default-popover'
-                content={
-                  <div className='w-64 text-sm text-gray-500 dark:text-gray-400'>
-                    <div className='px-3 py-2'>
-                      <p>To close use the X</p>
-                    </div>
-                  </div>
-                }
-              >
-                <Button>I accept</Button>
-              </Popover>
+              <Button onClick={() => handleCreateAsset(initialValues)}>I accept</Button>
               <Popover
                 aria-labelledby='default-popover'
                 content={
