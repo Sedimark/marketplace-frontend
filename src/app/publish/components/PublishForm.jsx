@@ -170,7 +170,7 @@ export default function PublishForm (brokerAssets) {
                         'I accept'
                       )}
                 </Button>
-                <Button color='gray'>
+                <Button onClick={() => setOpenModal(false)} color='gray'>
                   Decline
                 </Button>
               </div>
