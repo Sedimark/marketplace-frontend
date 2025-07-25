@@ -14,10 +14,9 @@ export default async function Page ({ searchParams }) {
   const currentPage = Number(searchParams?.page) || 1
   const offeringsIDs = await fetchOfferingsIDs()
   // check if error is returned, no array to length!
-  // Using same batchSize as other pages, to mantain cohesion.
   let totalPages
   if (Array.isArray(offeringsIDs)) {
-    totalPages = calculateTotalPages(offeringsIDs.length, settings.batchSize)
+    totalPages = calculateTotalPages(offeringsIDs.length, settings.offeringsPageSize)
   } else {
     totalPages = 1
   }

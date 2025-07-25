@@ -22,7 +22,8 @@ const settings = {
   connectorUrl: process.env.CONNECTOR_URL,
   offeringManagerUrl: process.env.OFFERING_MANAGER_URL,
   connectorApiKey: process.env.CONNECTOR_API_KEY,
-  maxRetriesGetEDR: process.env.MAX_RETRIES_GET_EDR ?? 5
+  maxRetriesGetEDR: process.env.MAX_RETRIES_GET_EDR ?? 5,
+  offeringsPageSize: process.env.OFFERING_PAGE_SIZE ?? 5
 }
 Object.freeze(settings)
 

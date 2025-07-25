@@ -2,7 +2,7 @@ import settings from '@/utils/settings'
 import { fetchData } from '@/utils/helpers/fetchData'
 
 /**
- * Fetch call to obtain ALL the IDs stored on the .
+ * Fetch call to obtain ALL the IDs stored on the Offering Manager.
  * @async
  * @param {string} contractAgreementIdFilter - Value expected to filter by Contract ID.
  * @returns An Array of Strings representing the IDs of ALL the offerings on the offering-manager
@@ -30,7 +30,7 @@ export async function fetchOfferingsIDs () {
  * @returns An Array of JSON obj representing the Offering.
  */
 export async function fetchOffering (offeringId) {
-  const url = `${offeringId}`
+  const url = `${offeringId}` // This is a URL + ID, as it is returned by the Offering Manager this way!
   const options = {
     method: 'GET'
   }
@@ -78,7 +78,7 @@ export async function deleteOffering (offeringId) {
 export async function fetchOfferingsCustom (offeringIds, currentPage) {
   // Pagination custom
   try {
-    const pageSize = 5
+    const pageSize = settings.offeringsPageSize
     const start = (currentPage - 1) * pageSize
     const end = start + pageSize
     const paginatedIds = offeringIds.slice(start, end)

@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Badge } from 'flowbite-react'
-import { HiIdentification, HiTag, HiCalendar, HiLink, HiBadgeCheck } from 'react-icons/hi'
+import { HiIdentification, HiCalendar, HiLink, HiOutlineScale } from 'react-icons/hi'
 import OfferingActions from './OfferingActions'
 
 export default async function OfferingItem ({ offering, offeringUrl }) {
@@ -22,7 +22,6 @@ export default async function OfferingItem ({ offering, offeringUrl }) {
             <div className=''>
               <div className=' flex text-lg font-semibold'>
                 <div className='flex flex-row'>
-                  <HiTag size={28} className='mr-3' />
                   <p>{title}</p>
                 </div>
               </div>
@@ -54,7 +53,6 @@ export default async function OfferingItem ({ offering, offeringUrl }) {
             </p>
             {keywords.length > 0 &&
               <div className='flex items-center flex-wrap'>
-                <h4 className='text-lg font-bold text-center m-3 ml-0'>Keywords:</h4>
                 {keywords.map((keyword, index) => {
                   return (
                     <Badge key={`${keyword}-${index}`} className='text-sedimark-deep-blue bg-sedimark-clear-blue m-3 ml-0 mb-2'>{keyword}</Badge>
@@ -63,7 +61,7 @@ export default async function OfferingItem ({ offering, offeringUrl }) {
               </div>}
             <div className='flex flex-row justify-between items-start mt-8'>
               <div className='flex flex-row text-gray-700 italic flex-grow'>
-                <HiBadgeCheck size={20} className='mr-1' />
+                <HiOutlineScale size={20} className='mr-1' />
                 <p>{license}</p>
               </div>
               <div className='shrink-0 ml-4'>

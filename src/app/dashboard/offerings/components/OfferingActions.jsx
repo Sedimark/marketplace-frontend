@@ -9,6 +9,8 @@ export default function OfferingActions ({ offeringUrl }) {
   const [openModal, setOpenModal] = useState(false)
   const [mounted, setMounted] = useState(false)
 
+  // This is the only way to handle the situation of this component, as its the only client component, that is being called on a server one while being
+  // nested on the accordion. Without this, the Modal from flow-bite wouldn't render correctly!
   useEffect(() => {
     setMounted(true)
   }, [])
