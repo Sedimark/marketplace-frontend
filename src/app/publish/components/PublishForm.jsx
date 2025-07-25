@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button, Card, Dropdown, Modal, Popover } from 'flowbite-react'
+import { Button, Card, Dropdown, Modal, Spinner } from 'flowbite-react'
 import AssetForm from './assetDefinition/AssetForm'
 
 /**
@@ -45,6 +45,8 @@ export default function PublishForm (brokerAssets) {
   const [initialValues, setInitialValues] = useState(initialValuesEmpty)
   const [currentAsset, setCurrentAsset] = useState(null)
   const existingAssets = brokerAssets
+  const [loadingPublish, setLoadingPublish] = useState(false)
+  const [message, setMessage] = useState({ text: null, type: null })
 
   const handleSelectExisting = (asset) => {
     const setAssetSelected = {
@@ -81,8 +83,22 @@ export default function PublishForm (brokerAssets) {
     setInitialValues(initialValuesEmpty)
     setCurrentAsset(`Empty + ${Date.now()}`)
   }
-  const handleCreateAsset = (offeringData) => {
-    publishOffering(offeringData)
+  const handleCreateAsset = async (offeringData) => {
+    setLoadingPublish(true)
+    setMessage({ text: null, type: null })
+    try {
+      const success = await publishOffering(offeringData)
+      if (success) {
+        setMessage({ text: 'Asset successfully published!', type: 'success' })
+      } else {
+        setMessage({ text: 'Something went wrong while publishing the asset.', type: 'error' })
+      }
+    } catch (error) {
+      console.error('Publishing failed:', error)
+      setMessage({ text: 'An unexpected error occurred while publishing.', type: 'error' })
+    } finally {
+      setLoadingPublish(false)
+    }
   }
   async function publishOffering (offeringData) {
     const response = await fetch('/api/offeringManager/publish', {
@@ -92,11 +108,7 @@ export default function PublishForm (brokerAssets) {
       },
       body: JSON.stringify(offeringData)
     })
-    if (response.ok) {
-      //
-    } else {
-      //
-    }
+    return response.ok
   }
 
   console.log(existingAssets)
@@ -141,23 +153,34 @@ export default function PublishForm (brokerAssets) {
                 {JSON.stringify(initialValues, null, 2)}
               </pre>
             </Modal.Body>
-            <Modal.Footer>
-              <Button onClick={() => handleCreateAsset(initialValues)}>I accept</Button>
-              <Popover
-                aria-labelledby='default-popover'
-                content={
-                  <div className='w-64 text-sm text-gray-500 dark:text-gray-400'>
-                    <div className='px-3 py-2'>
-                      <p>This is not implemented, what is the next step after submit?</p>
-                    </div>
-                  </div>
-                }
-              >
+            <Modal.Footer className='flex flex-col items-start w-full space-y-2'>
+              <div className='flex flex-row space-x-2 w-full'>
+                <Button
+                  onClick={() => handleCreateAsset(initialValues)}
+                  disabled={loadingPublish}
+                >
+                  {loadingPublish
+                    ? (
+                      <>
+                        <Spinner size='sm' className='mr-2' />
+                        Publishing...
+                      </>
+                      )
+                    : (
+                        'I accept'
+                      )}
+                </Button>
                 <Button color='gray'>
                   Decline
                 </Button>
-              </Popover>
+              </div>
+              {message.text && (
+                <p className={`text-sm w-full mt-1 ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                  {message.text}
+                </p>
+              )}
             </Modal.Footer>
+
           </Modal>
         </div>}
     </div>
