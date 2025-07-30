@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Button, Card, Dropdown, Modal, Spinner } from 'flowbite-react'
 import AssetForm from './assetDefinition/AssetForm'
+import Link from 'next/link'
 
 /**
  * PublishForm component for creating or reusing assets.
@@ -47,6 +48,7 @@ export default function PublishForm (brokerAssets) {
   const existingAssets = brokerAssets
   const [loadingPublish, setLoadingPublish] = useState(false)
   const [message, setMessage] = useState({ text: null, type: null })
+  const [responseBody, setResponseBody] = useState(null)
 
   const handleSelectExisting = (asset) => {
     const setAssetSelected = {
@@ -90,6 +92,8 @@ export default function PublishForm (brokerAssets) {
       const success = await publishOffering(offeringData)
       if (success) {
         setMessage({ text: 'Asset successfully published!', type: 'success' })
+        setCurrentAsset(null)
+        setInitialValues(initialValuesEmpty)
       } else {
         setMessage({ text: 'Something went wrong while publishing the asset.', type: 'error' })
       }
@@ -108,7 +112,14 @@ export default function PublishForm (brokerAssets) {
       },
       body: JSON.stringify(offeringData)
     })
-    return response.ok
+
+    if (response.ok) {
+      const data = await response.json()
+      setResponseBody(data)
+      return true
+    }
+
+    return false
   }
 
   console.log(existingAssets)
@@ -144,45 +155,78 @@ export default function PublishForm (brokerAssets) {
           {AssetForm(initialValues, setInitialValues, openModal, setOpenModal)}
         </div>}
 
-      {openModal &&
+      {openModal && (
         <div className='flow-root'>
           <Modal show={openModal} onClose={() => setOpenModal(false)}>
-            <Modal.Header>Review Asset information:</Modal.Header>
-            <Modal.Body>
-              <pre>
-                {JSON.stringify(initialValues, null, 2)}
-              </pre>
-            </Modal.Body>
-            <Modal.Footer className='flex flex-col items-start w-full space-y-2'>
-              <div className='flex flex-row space-x-2 w-full'>
-                <Button
-                  onClick={() => handleCreateAsset(initialValues)}
-                  disabled={loadingPublish}
-                >
-                  {loadingPublish
-                    ? (
-                      <>
-                        <Spinner size='sm' className='mr-2' />
-                        Publishing...
-                      </>
-                      )
-                    : (
-                        'I accept'
-                      )}
-                </Button>
-                <Button onClick={() => setOpenModal(false)} color='gray'>
-                  Decline
-                </Button>
-              </div>
-              {message.text && (
-                <p className={`text-sm w-full mt-1 ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
-                  {message.text}
-                </p>
-              )}
-            </Modal.Footer>
-
+            {responseBody
+              ? (
+                <>
+                  <Modal.Header>Offer Published Successfully!</Modal.Header>
+                  <Modal.Body>
+                    <pre className='text-sm bg-gray-100 p-4 rounded'>
+                      {JSON.stringify(responseBody, null, 2)}
+                    </pre>
+                  </Modal.Body>
+                  <Modal.Footer className='flex flex-col items-start w-full space-y-2'>
+                    <div className='flex flex-row space-x-2 w-full'>
+                      <Button
+                        onClick={() => {
+                          setOpenModal(false)
+                          setResponseBody(null)
+                          setCurrentAsset(null)
+                          setInitialValues(initialValuesEmpty)
+                          setMessage(null)
+                        }}
+                      >
+                        Create New Offer
+                      </Button>
+                      <Link href='/dashboard/offerings'>
+                        <Button
+                          color='gray' // Maybe other color?
+                        >
+                          See your Offerings
+                        </Button>
+                      </Link>
+                    </div>
+                  </Modal.Footer>
+                </>
+                )
+              : (
+                <>
+                  <Modal.Header>Review Asset information:</Modal.Header>
+                  <Modal.Body>
+                    <pre>{JSON.stringify(initialValues, null, 2)}</pre>
+                  </Modal.Body>
+                  <Modal.Footer className='flex flex-col items-start w-full space-y-2'>
+                    <div className='flex flex-row space-x-2 w-full'>
+                      <Button onClick={() => handleCreateAsset(initialValues)} disabled={loadingPublish}>
+                        {loadingPublish
+                          ? (
+                            <>
+                              <Spinner size='sm' className='mr-2' />
+                              Publishing...
+                            </>
+                            )
+                          : (
+                              'I accept'
+                            )}
+                      </Button>
+                      <Button onClick={() => setOpenModal(false)} color='gray'>
+                        Decline
+                      </Button>
+                    </div>
+                    {message.text && (
+                      <p className={`text-sm w-full mt-1 ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                        {message.text}
+                      </p>
+                    )}
+                  </Modal.Footer>
+                </>
+                )}
           </Modal>
-        </div>}
+        </div>
+      )}
+
     </div>
   )
 }
