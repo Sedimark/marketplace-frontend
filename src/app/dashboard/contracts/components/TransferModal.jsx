@@ -12,6 +12,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   const [loadingPull, setLoadingPull] = useState(false)
   const [authorization, setAuthorization] = useState('')
   const [endpoint, setEndpoint] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   // Validation schema
   const FormSchema = yup.object().shape({
@@ -38,8 +39,9 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
     })
     if (response.ok) {
       setMessage('Successfully pushed data! Check your data destination.')
+      setErrorMessage(null)
     } else {
-      setMessage('Something went wrong pushing the data.')
+      setErrorMessage('Failed to push data. Please try again.')
     }
   }
 
@@ -60,18 +62,21 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
       const { authorization, endpoint } = await response.json()
       if (!authorization || !endpoint) {
         console.error('Invalid response: missing authorization or endpoint')
+        setErrorMessage('Pull failed: Missing authorization or endpoint.')
         return
       }
       setAuthorization(authorization)
       setEndpoint(endpoint)
     } catch (error) {
       console.error('Error in pullTransfer:', error)
+      setErrorMessage('An error occurred during the pull operation.')
     } finally {
       setLoadingPull(false)
     }
   }
 
   const handleSubmit = (values, { setSubmitting }) => {
+    setErrorMessage(null)
     setMessage(null)
     try {
       pushTransfer(contractAgreementId, counterPartyAddress, connectorId, values.dataDestination)
@@ -81,6 +86,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   }
 
   const HandlePull = () => {
+    setErrorMessage(null)
     try {
       pullTransfer(contractAgreementId, counterPartyAddress, connectorId)
     } catch (e) {
@@ -91,6 +97,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
   const handleClose = () => {
     setOpen(false)
     setMessage(null)
+    setErrorMessage(null)
     setLoadingPull(false)
     setAuthorization('')
     setEndpoint('')
@@ -205,7 +212,12 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
             )}
           </div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className='flex flex-col items-start space-y-2'>
+          {errorMessage && (
+            <p className='text-red-600 font-semibold text-sm'>
+              {errorMessage}
+            </p>
+          )}
           <Button onClick={handleClose}>Cancel</Button>
         </Modal.Footer>
       </Modal>
