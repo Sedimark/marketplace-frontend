@@ -10,7 +10,7 @@ export default async function OfferingItem ({ offering, offeringUrl }) {
     ? offering.hasAsset['dcat:keyword'].map(k => k['@value'])
     : []
   const assetUrl = offering.hasAsset?.isProvidedBy?.['dcat:accessURL']?.['@id']
-  const description = offering['dct:description']?.['@value']
+  const description = offering.hasAsset?.isProvidedBy?.['dct:description']?.['@value']
   const license = offering['dct:license']?.['@value']
   const issueDate = offering['dct:issued']?.['@value']
 
