@@ -52,7 +52,10 @@ export async function fetchOffering (offeringId) {
  * @returns An Array of JSON obj representing the Offering.
  */
 export async function deleteOffering (offeringId) {
-  const url = `${offeringId}`
+  console.log(offeringId)
+  const extractedId = offeringId.split('/').pop()
+  const url = `${settings.offeringManagerUrl}/offerings/${extractedId}`
+  console.log(url)
   const options = {
     method: 'DELETE'
   }
@@ -78,7 +81,7 @@ export async function deleteOffering (offeringId) {
 export async function fetchOfferingsCustom (offeringIds, currentPage) {
   // Pagination custom
   try {
-    const pageSize = settings.offeringsPageSize
+    const pageSize = parseInt(settings.offeringsPageSize)
     const start = (currentPage - 1) * pageSize
     const end = start + pageSize
     const paginatedIds = offeringIds.slice(start, end)

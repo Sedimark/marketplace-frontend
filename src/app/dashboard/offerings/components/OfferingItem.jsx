@@ -2,7 +2,7 @@ import { Accordion, AccordionContent, AccordionTitle, AccordionPanel, Badge } fr
 import { HiIdentification, HiCalendar, HiLink, HiOutlineScale } from 'react-icons/hi'
 import OfferingActions from './OfferingActions'
 
-export default async function OfferingItem ({ offering, offeringUrl }) {
+export default async function OfferingItem ({ offering }) {
   // For now only checking & defaulting keywords, but others could be optional fields...
   const offerId = offering['@id']
   const title = offering['dct:title']['@value']
@@ -65,7 +65,7 @@ export default async function OfferingItem ({ offering, offeringUrl }) {
                 <p>{license}</p>
               </div>
               <div className='shrink-0 ml-4'>
-                <OfferingActions offeringUrl={offeringUrl} />
+                <OfferingActions offeringUrl={offerId} />
               </div>
             </div>
 

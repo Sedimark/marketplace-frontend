@@ -19,7 +19,7 @@ export default async function Offerings ({ offeringsIDs, currentPage }) {
           {offerings.map((offering, index) => {
             return (
               <OfferingItem
-                offering={offering} offeringUrl={offeringsIDs[index]}
+                offering={offering}
                 key={`${offering['@id']}-${index + 1}`}
               />
             )

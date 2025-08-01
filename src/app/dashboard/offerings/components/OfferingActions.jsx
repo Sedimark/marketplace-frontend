@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { HiTrash } from 'react-icons/hi'
-import { deleteOffering } from '@/utils/offeringManager'
 
 export default function OfferingActions ({ offeringUrl }) {
   const [openModal, setOpenModal] = useState(false)
@@ -19,9 +18,17 @@ export default function OfferingActions ({ offeringUrl }) {
   // Only reload in case that the call goes correctly
   const handleDelete = async () => {
     try {
-      setDeleteError(null) // Clear previous errors
-      const result = await deleteOffering(offeringUrl)
-      if (result && !result.error) {
+      setDeleteError(null)
+      const response = await fetch('/api/offeringManager', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ offeringId: offeringUrl })
+      })
+      const result = await response.json()
+
+      if (response.ok && !result.error) {
         setOpenModal(false)
         window.location.reload()
       } else {
