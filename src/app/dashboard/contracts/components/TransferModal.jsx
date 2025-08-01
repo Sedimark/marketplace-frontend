@@ -41,7 +41,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
       setMessage('Successfully pushed data! Check your data destination.')
       setErrorMessage(null)
     } else {
-      setErrorMessage('Failed to push data. Please try again.')
+      setErrorMessage('Failed to push data. The provider\'s connector, or yours, might be offline. Please check your connector or try again later.')
     }
   }
 
@@ -62,7 +62,7 @@ export default function TransferModal ({ contractAgreementId, counterPartyAddres
       const { authorization, endpoint } = await response.json()
       if (!authorization || !endpoint) {
         console.error('Invalid response: missing authorization or endpoint')
-        setErrorMessage('Pull failed: Missing authorization or endpoint.')
+        setErrorMessage('Failed to get endpoint and token to pull data. The provider\'s connector, or yours, might be offline. Please check your connector or try again later.')
         return
       }
       setAuthorization(authorization)
