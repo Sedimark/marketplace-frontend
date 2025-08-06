@@ -7,13 +7,11 @@ on:
       - '**'
       - '!main'
 
-permissions:
-  packages: write
-
 jobs:
   build-and-push:
     runs-on: self-hosted
     permissions:
+      contents: read
       packages: write
 
     steps:
@@ -51,6 +49,6 @@ jobs:
           tag: development
           path: .
           debug: true
-          registry: ghcr.io
+          registry: containers.HOSTNAME
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
