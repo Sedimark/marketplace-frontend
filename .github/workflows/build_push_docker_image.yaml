@@ -49,6 +49,6 @@ jobs:
           tag: development
           path: .
           debug: true
-          registry: containers.HOSTNAME
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
