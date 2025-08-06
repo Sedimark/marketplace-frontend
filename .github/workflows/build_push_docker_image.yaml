@@ -36,6 +36,10 @@ jobs:
           echo "CATALOGUE_URL=${{ secrets.CATALOGUE_URL }}" > .env.production
           echo "RECOMMENDER_URL=${{ secrets.RECOMMENDER_URL }}" >> .env.production
           echo "BROKER_URL=${{ secrets.BROKER_URL }}" >> .env.production
+          echo "DLT_BOOTH_URL=${{ secrets.DLT_BOOTH_URL }}" >> .env.production
+          echo "CONNECTOR_URL=${{ secrets.CONNECTOR_URL }}" >> .env.production
+          echo "CONNECTOR_API_KEY=${{ secrets.CONNECTOR_API_KEY }}" >> .env.production
+          echo "OFFERING_MANAGER_URL=${{ secrets.OFFERING_MANAGER_URL }}" >> .env.production
 
       - name: Kaniko build & push
         uses: aevea/action-kaniko@master
