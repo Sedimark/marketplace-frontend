@@ -45,6 +45,8 @@ jobs:
       - name: Kaniko build & push
         uses: aevea/action-kaniko@master
         with:
+          # image name is empty because of Github namespace, which prefixes the image name with
+          # `sedimark/marketplace-frontend`. See https://github.com/aevea/action-kaniko?tab=readme-ov-file#ghcrio
           image: ""
           tag: development
           path: .
