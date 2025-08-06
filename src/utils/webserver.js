@@ -16,7 +16,7 @@ import { fetchData } from '@/utils/helpers/fetchData'
 export async function submitUserData (userData) {
   const url = `${settings.webserverUrl}/protected`
   const options = {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + settings.webserverToken // Added as ENV, change if necessary.
