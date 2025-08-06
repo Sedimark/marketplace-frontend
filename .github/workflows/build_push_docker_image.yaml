@@ -44,7 +44,7 @@ jobs:
       - name: Kaniko build & push
         uses: aevea/action-kaniko@master
         with:
-          image: sedimark/marketplace-frontend
+          image: ""
           tag: development
           path: .
           debug: true
