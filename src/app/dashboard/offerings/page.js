@@ -24,7 +24,6 @@ export default async function Page ({ searchParams }) {
   return (
     <div className='flex flex-row flex-grow'>
       <SidebarDashboard />
-      {/* TODO: This <Suspense> needs keys & fallback, remember to add when filters/search/page change */}
       <div className='flex flex-col w-full bg-sedimark-light-blue'>
         <Suspense fallback={<LoadingCard />} key={currentPage}>
           <Offerings offeringsIDs={offeringsIDs} currentPage={currentPage} />
