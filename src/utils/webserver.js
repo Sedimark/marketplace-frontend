@@ -6,6 +6,7 @@ import { fetchData } from '@/utils/helpers/fetchData'
  *
  * @async
  * @param {Object} userData - The user data to submit.
+ * @param {string} userData.alternate_name - Username(alt name).
  * @param {string} userData.first_name - First name of the user.
  * @param {string} userData.last_name - Last name of the user.
  * @param {string} userData.company_name - Company name.

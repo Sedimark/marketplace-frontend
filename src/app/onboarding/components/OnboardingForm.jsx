@@ -65,6 +65,7 @@ export default function FormSteps () {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          alternate_name:values.username,
           first_name: values.first_name,
           last_name: values.last_name,
           company_name: values.company,
