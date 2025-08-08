@@ -108,6 +108,25 @@ function getTransferStartBody (connectorId, counterPartyAddress, contractId) {
   return body
 }
 
+function getContractNegotiationBody (policyID, counterPartyAddress) {
+  const body = {
+  '@context': {
+    '@vocab': "https://w3id.org/edc/v0.0.1/ns/"
+  },
+  '@type': 'ContractRequest',
+  counterPartyAddress,
+  'protocol': 'dataspace-protocol-http',
+  'policy': {
+    '@context': 'http://www.w3.org/ns/odrl.jsonld',
+    '@id': policyID,
+    '@type': 'Offer',
+    'assigner': 'provider',
+    'target': 'assetId'
+  }
+}
+  return body
+}
+
 /**
  * Fetch call to obtain a set of contracts.
  * @async
@@ -289,4 +308,30 @@ export async function transferPullFlow (connectorId, counterPartyAddress, contra
   const getIDResponse = await transferGetId(startResponse['@id'])
   const getEDRResponse = await transferGetEDR(getIDResponse['@id'])
   return getEDRResponse
+}
+
+/**
+ * Post call to do a contract negotiation
+ * @async
+ * @param {string} policyID - Connector ID that has the contract.
+ * @param {string} counterPartyAddress - The dataspace protocol URL of the provider connector, usually in the form of <base_url>/protocol or <base_url>/api/dsp.
+ * @returns empty Response, expected to be a 200.
+ */
+export async function contractNegotiation (policyID, counterPartyAddress) {
+  const url = `${settings.connectorUrl}/v3/contractnegotiations`
+  const bodyContractNegotiation = getContractNegotiationBody(policyID, counterPartyAddress)
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bodyContractNegotiation)
+  }
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    return data
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on contractNegotiation!')
+    console.log(error)
+    return { error }
+  }
 }
