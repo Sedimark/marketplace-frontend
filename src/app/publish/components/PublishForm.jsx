@@ -40,7 +40,7 @@ export default function PublishForm (brokerAssets) {
     consent_withdrawal_contact_point: '',
     switchQuery: false,
     switchPII: false,
-    policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
+    policy: { period: { startDate: '', endDate: '' }, policyName: '' }
   }
   const [openModal, setOpenModal] = useState(false)
   const [initialValues, setInitialValues] = useState(initialValuesEmpty)
@@ -76,7 +76,7 @@ export default function PublishForm (brokerAssets) {
       consent_withdrawal_contact_point: '',
       switchQuery: false,
       switchPII: false,
-      policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
+      policy: { period: { startDate: '', endDate: '' }, policyName: '' }
     }
     setInitialValues(setAssetSelected)
     setCurrentAsset(asset.id)
@@ -118,11 +118,8 @@ export default function PublishForm (brokerAssets) {
       setResponseBody(data)
       return true
     }
-
     return false
   }
-
-  console.log(existingAssets)
   return (
     <div className='flex flex-grow flex-col items-center justify-center bg-gray-50'>
       <Card className=' flex items-center w-1/2 mt-8'>

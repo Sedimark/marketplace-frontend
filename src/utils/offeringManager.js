@@ -3,16 +3,29 @@ import { fetchData } from '@/utils/helpers/fetchData'
 
 function getCreateOfferingBody (offeringData) {
   console.log('--------------OF DATA-------------')
-  console.log(offeringData)
+  console.log(JSON.stringify(offeringData, null, 2))
   console.log('------------OF DATA END-----------')
   const keywordArrayFormatted = []
   offeringData.keywords.forEach(keyword => {
-    keywordArrayFormatted.push({ '@value': keyword, '@type': 'rdfs:Literal' })
+    keywordArrayFormatted.push({ '@value': keyword, '@type': 'xsd:string' })
+  })
+  const headersArrayFormatted = []
+  offeringData.headers.forEach(header => {
+    headersArrayFormatted.push({
+      'sedimark:headerName': {
+        '@value': header.key,
+        '@type': 'xsd:string'
+      },
+      'sedimark:headerValue': {
+        '@value': header.value,
+        '@type': 'xsd:string'
+      }
+    })
   })
   const body = {
     '@context': {
-      '@vocab': 'https://w3id.org/sedimark/ontology#',
-      sedi: 'https://w3id.org/sedimark/ontology#',
+      '@vocab': 'https://w3id.org/sedimark/vocab/',
+      sedimark: 'https://w3id.org/sedimark/ontology#',
       dct: 'http://purl.org/dc/terms/',
       odrl: 'http://www.w3.org/ns/odrl/2/',
       owl: 'http://www.w3.org/2002/07/owl#',
@@ -20,61 +33,185 @@ function getCreateOfferingBody (offeringData) {
       xml: 'http://www.w3.org/XML/1998/namespace',
       xsd: 'http://www.w3.org/2001/XMLSchema#',
       rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
-      dcat: 'http://www.w3.org/ns/dcat#'
+      dcat: 'http://www.w3.org/ns/dcat#',
+      schema: 'https://schema.org/'
     },
-    '@type': 'sedi:Offering',
-    'sedi:isListedBy': { '@id': 'https://uc.sedimark.eu/offerings' }, // connector?
-    'sedi:hasOfferingContract': { // ???
-      '@id': '30a032c2-ff2d-49ac-9ab0-a04cbb586b0f',
-      '@type': 'sedi:OfferingContract',
-      'odrl:permission': [],
+    '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id', // Overwritten by OM
+    '@type': 'sedimark:Offering',
+    'sedimark:isListedBy': {
+      '@id': 'https://uc.sedimark.eu/offerings',
+      '@type': 'sedimark:Self-Listing',
+      'sedimark:belongsTo': {
+        '@id': 'https://uc.sedimark.eu/participant-URI',
+        '@type': 'sedimark:Participant',
+        'schema:alternateName': {
+          '@value': 'juanrasantana', // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
+          '@type': 'xsd:string'
+        },
+        'schema:accountId': {
+          '@value': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a', // ?? DID --> DLT
+          '@type': 'xsd:string'
+        }
+      }
+    },
+    'sedimark:hasOfferingContract': {
+      '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id/offeringContract/dummy-offeringContract-id', // Overwritten by OM
+      '@type': 'sedimark:OfferingContract',
+      'odrl:profile': 'https://sedimark.eu/odrl/sedi-profile', // Overwritten by OM
+      'odrl:uid': 'https://uc.sedimark.eu/offerings/dummy-offering-id/offeringContract/dummy-offeringContract-id',
+      'odrl:permission': [{
+        'odrl:target': 'https://uc.sedimark.eu/offerings/dummy-offering-id',
+        'odrl:assigner': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a',
+        'odrl:action': 'odrl:use',
+        'odrl:constraint': [
+          {
+            'odrl:leftOperand': 'odrl:dateTime',
+            'odrl:operator': {
+              '@id': 'odrl:lteq'
+            },
+            'odrl:rightOperand': { '@value': offeringData.policy.period.startDate, '@type': 'xsd:dateTime' } // Filled by us, optional, empty if not filled
+          },
+          {
+            'odrl:leftOperand': 'odrl:dateTime',
+            'odrl:operator': {
+              '@id': 'odrl:gteq'
+            },
+            'odrl:rightOperand': { '@value': offeringData.policy.period.endDate, '@type': 'xsd:dateTime' } // Filled by us, optional, empty if not filled
+          },
+          {
+            'odrl:leftOperand': 'sedi:claimMemberOf',
+            'odrl:operator': {
+              '@id': 'odrl:eq'
+            },
+            'odrl:rightOperand': 'SEDIMARK marketplace' // Constant
+          },
+          {
+            'odrl:leftOperand': 'sedi:dataTokenOwnership',
+            'odrl:operator': {
+              '@id': 'odrl:eq'
+            },
+            'odrl:rightOperand': 'true'
+          }
+        ],
+        'odrl:duty': [ // Whole OBJ is constant
+          {
+            'odrl:action': [
+              {
+                'odrl:action': 'sedi:purchaseDataToken',
+                'odrl:refinement': [
+                  {
+                    'odrl:leftOperand': 'odrl:payAmount',
+                    'odrl:operator': {
+                      '@id': 'odrl:eq'
+                    },
+                    'odrl:rightOperand': { '@value': '1', '@type': 'xsd:decimal' },
+                    'odrl:unit': 'sedi:nativeToken'
+                  }
+                ]
+              }
+            ],
+            'odrl:constraint': [
+              {
+                'odrl:leftOperand': 'odrl:event',
+                'odrl:operator': {
+                  '@id': 'odrl:lt'
+                },
+                'odrl:rightOperand': 'sedi:dspContractAgreementFinalized'
+              }
+            ]
+          }
+        ]
+      }],
       'odrl:prohibition': [],
       'odrl:obligation': []
     },
-    'dct:issued': { '@value': '2024-01-02', '@type': 'rdfs:Literal' }, // Literal by us?
-    'dct:language': { '@value': 'English', '@type': 'rdfs:Literal' },
-    'dct:title': { '@value': offeringData.title, '@type': 'rdfs:Literal' }, // title will be same as asset title if only 1 asset x offering
-    'dct:publisher': { '@id': 'https://uc.sedimark.eu/' }, // DID ?
-    'dct:creator': { '@id': 'https://uc.sedimark.eu/' }, // DID ?
-    'dcat:themeTaxonomy': { '@id': 'https://w3id.org/sedimark/vocab/sdm' },
-    'dct:license': { // seems its our "License" + "Terms" concated
-      '@value': offeringData.terms_and_condition,
-      '@type': 'rdfs:Literal'
+    'dct:issued': { // Literal by us?
+      '@value': '2025-12-31T00:00:00Z',
+      '@type': 'xsd:dateTime'
     },
-    'sedi:hasAsset': [{
-      // '@id': '387fe731-3ddf-4356-b59f-21202cb3a778',
-      '@type': 'sedi:Asset',
+    'dct:language': {
+      '@value': 'English',
+      '@type': 'xsd:string'
+    },
+    'dct:title': {
+      '@value': offeringData.title, // title will be same as asset title if only 1 asset x offering
+      '@type': 'xsd:string'
+    },
+    'dct:description': {
+      '@value': offeringData.description,
+      '@type': 'xsd:string'
+    },
+    'dct:publisher': {
+      '@id': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a'
+    },
+    'dct:creator': {
+      '@value': 'Bike Company XXX', // New field? Optional, as Profile can be a Company.
+      '@type': 'xsd:string'
+    },
+    'dcat:themeTaxonomy': {
+      '@id': 'https://w3id.org/sedimark/vocab/sdm'
+    },
+    'dct:license': {
+      '@value': offeringData.terms_and_condition,
+      '@type': 'xsd:string'
+    },
+    'sedimark:hasAsset': [{
+      '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id/assets/dummy-asset-id', // Overwritten by OW
+      '@type': 'sedimark:Asset',
       'dct:title': {
         '@value': offeringData.title, // Our title field
-        '@type': 'rdfs:Literal'
+        '@type': 'xsd:string'
       },
-      'dct:description': { '@value': offeringData.description, '@type': 'rdfs:Literal' }, // our description field
-      'dct:issued': { '@value': '2024-01-02', '@type': 'rdfs:Literal' },
-      'dct:creator': { '@id': 'https://uc.sedimark.eu/' },
-      'dcat:theme': { '@id': 'https://w3id.org/sedimark/vocab/sdm/entity/vehicle' },
+      'sedimark:offeredBy': {
+        '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id'
+      },
+      'dct:description': {
+        '@value': offeringData.description, // Our descr field
+        '@type': 'xsd:string'
+      },
+      'dct:issued': {
+        '@value': '2025-12-31T00:00:00Z', // ???
+        '@type': 'xsd:dateTime'
+      },
+      'dct:creator': {
+        '@value': 'Bike Company XXX', // New field? or setted up by Query the DLT Altername?
+        '@type': 'xsd:string'
+      },
+      'dcat:theme': {
+        '@id': 'https://w3id.org/sedimark/vocab/sdm/entity/vehicle'
+      },
       'dcat:keyword': keywordArrayFormatted,
-      'dct:spatial': { // Where is this obtainded?
+      'dct:spatial': {
         '@id': 'http://www.wikidata.org/entity/Q12233',
         '@type': 'dct:Location'
       },
-      'sedi:isProvidedBy': { // This whole section... where is obtained?
-        '@id': 'https://uc.sedimark.eu/v3/assets/387fe731-3ddf-4356-b59f-21202c23a778',
-        '@type': 'sedi:AssetProvision',
-        'dct:title': { '@value': offeringData.title, '@type': 'rdfs:Literal' },
-        'dct:format': { '@id': 'HttpData' },
+      'sedimark:isProvidedBy': {
+        '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id/assetProvision/dummy-assetProvision-id',
+        '@type': 'sedimark:AssetProvision',
+        'dct:title': {
+          '@value': offeringData.title,
+          '@type': 'xsd:string'
+        },
+        'dct:format': {
+          '@id': 'HttpData'
+        },
         'dct:description': {
           '@value': offeringData.description,
-          '@type': 'rdfs:Literal'
+          '@type': 'xsd:string'
         },
         'dct:issued': {
-          '@value': '2024-01-02', // Again, literal by us? or obtained from somewhere??
-          '@type': 'rdfs:Literal'
+          '@value': '2025-12-31T00:00:00Z', // ???
+          '@type': 'xsd:dateTime'
         },
-        'dcat:accessURL': { '@id': 'http://provider-connector-data-endpoint' } // Access type field?
+        'dcat:accessURL': {
+          '@id': offeringData.url // Access Type
+        },
+        'sedimark:headers': headersArrayFormatted// Filled by US, sent empy in case not in form
       }
-    }]
-
+    }
+    ]
   }
+  console.log(JSON.stringify(body, null, 2))
   return body
 }
 
@@ -192,7 +329,7 @@ export async function createOffering (offeringData) {
     return data
   } catch (error) {
     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
-    console.log('Error on fetchOffering!')
+    console.log('Error on createOffering!')
     console.log(error)
     return { error }
   }

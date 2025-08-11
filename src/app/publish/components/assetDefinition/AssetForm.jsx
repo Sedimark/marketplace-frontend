@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { TagsInput } from 'react-tag-input-component'
 import { Field, FieldArray, Form, Formik } from 'formik'
-import { Accordion, Label, Textarea, Button, Card, Checkbox, ToggleSwitch, Select } from 'flowbite-react'
+import { Accordion, Label, Textarea, Button, Card, ToggleSwitch, Select } from 'flowbite-react'
 import CustomTextInput from '../CustomTextInput'
 import CustomDatepicker from '../CustomDatePicker'
 import style from './tag.module.css'
@@ -47,13 +47,13 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
     purpose: values.switchPII ? yup.string().required('Purpose required') : yup.string(),
     data_protection_contract_point: values.switchPII ? yup.string().required('Data Protection Contact Point required') : yup.string(),
     consent_withdrawal_contact_point: values.switchPII ? yup.string().required('Consent Withdrawal Contact Point required') : yup.string(),
-    policies: yup.array().of(yup.object().shape({
+    policy: yup.object().shape({
       period: yup.object().shape({
         startDate: yup.string().required('A start date is required for the policy'),
         endDate: yup.string()
       }),
       policyName: yup.string().required('A name is required for the policy')
-    }))
+    })
   }))
 
 /**
@@ -116,7 +116,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     placeholder='A URL for a picture'
                   />
                   <div className='block mb-2'>
-                    <Label htmlFor='keywords' value='Keywords here' />
+                    <Label htmlFor='keywords' value='Keywords here (separated by new Line/Enter)' />
                   </div>
                   <TagsInput
                     name='keywords'
@@ -221,7 +221,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                       )}
                     />
                   </Card>
-                  <Card className='mt-6'>
+                  {/* <Card className='mt-6'>
                     <div className='block mb-2'>
                       <ToggleSwitch
                         checked={values.switchQuery}
@@ -313,7 +313,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                         </div>
                       )}
                     />
-                  </Card>
+                  </Card> */}
 
                   <h5 className='mt-6 mb-4 text-2xl font-bold tracking-tight text-gray-900'>Rights & Usage</h5>
                   <CustomTextInput
@@ -381,66 +381,26 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
             <Accordion className='bg-white mt-4'>
               <Accordion.Panel>
                 <Accordion.Title className='bg-white mb-2 text-2xl font-bold tracking-tight text-gray-900'>
-                  Pricing & Policy
+                  Policy
                 </Accordion.Title>
                 <Accordion.Content>
-                  <div className='block mb-2'>
-                    <h5 className='mb-2 text-xl font-bold tracking-tight text-gray-900'>Policies</h5>
-                  </div>
-                  <FieldArray
-                    name='policies'
-                    render={arrayHelpers => (
-                      <div>
-                        {values.policies.map((_header, index) => (
-                          <Card className='mb-6' key={index}>
-                            <div className='mb-6' key={index}>
-                              <div className='mb-4'>
-                                <CustomTextInput
-                                  label='Policy name'
-                                  name={`policies.${index}.policyName`}
-                                  placeholder=''
-                                />
-                              </div>
-                              <div>
-                                <CustomDatepicker
-                                  name={`policies.${index}.period`}
-                                  label='Date range'
-                                />
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
-                        <div className='flex justify-end space-x-2'>
-                          <div>
-                            <Button
-                              size='xs'
-                              outline
-                              onClick={() => arrayHelpers.push(initialValues.policies[0])}
-                            >
-                              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-5 h-5 mr-2'>
-                                <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
-                              </svg>
-                              Add policy
-                            </Button>
-                          </div>
-                          <div>
-                            <Button
-                              size='xs'
-                              outline
-                              color='failure'
-                              onClick={() => arrayHelpers.remove()} // insert an empty string at a position
-                              disabled={values.policies.length < 2}
-                            >
-                              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-5 h-5 mr-2'>
-                                <path strokeLinecap='round' strokeLinejoin='round' d='M5 12h14' />
-                              </svg>
-                              Remove policy
-                            </Button>
-                          </div>
-                        </div>
+                  <Card className='mb-6'>
+                    <div className='mb-6'>
+                      <div className='mb-4'>
+                        <CustomTextInput
+                          label='Policy name'
+                          name='policy.policyName'
+                          placeholder=''
+                        />
                       </div>
-                    )}
-                  />
+                      <div>
+                        <CustomDatepicker
+                          name='policy.period'
+                          label='Date range'
+                        />
+                      </div>
+                    </div>
+                  </Card>
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
