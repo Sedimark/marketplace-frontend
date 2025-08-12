@@ -14,7 +14,9 @@ export async function fetchOfferingsIDs () {
   }
   try {
     const data = await fetchData(url, options).then(response => response.json())
-    return data
+    const offeringIds = (data['sedi:hasOffering'] || []).map(offering => offering['@id'])
+
+    return offeringIds
   } catch (error) {
     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
     console.log('Error on fetchOfferingsIDs!')
