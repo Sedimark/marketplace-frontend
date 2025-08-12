@@ -232,18 +232,13 @@ export async function fetchOfferingDetails (offeringId) {
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?issued ?keywords ?license
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?issued ?license (group_concat(?kw; separator=";") as ?keywords)
     WHERE { GRAPH ?g {
       ${offeringsData}
+      OPTIONAL { ?asset dcat:keyword ?kw }
       FILTER(?offering IN (<${offeringId}>))
-      OPTIONAL {
-         SELECT ?asset (group_concat(?kw; separator="${settings.keywordsSeparator}") as ?keywords)
-         WHERE {
-           ?asset dcat:keyword ?kw
-        }
-        GROUP BY ?asset
-      }
     }}
+    GROUP BY ?offering ?asset ?title ?description ?publisher ?alternateName ?creator ?issued ?license
   `
   const offering = await fetchFromCatalogue(sparQLQuery)
   return offering[0]
