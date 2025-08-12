@@ -1,7 +1,7 @@
 import BackToSearchButton from './components/BackToSearchButton'
 import DatasetInfoComponent from './components/DatasetInfoComponent'
 import Recommender from './components/Recommender'
-import { fetchOfferingDetails, fetchProvider } from '@/utils/catalogue'
+import { fetchOfferingDetails } from '@/utils/catalogue'
 import { fetchSimilarRecommendations } from '@/utils/recommender'
 import { getProviderData } from '@/utils/selectedOffering'
 

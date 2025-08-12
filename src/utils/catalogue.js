@@ -248,25 +248,3 @@ export async function fetchOfferingDetails (offeringId) {
   const offering = await fetchFromCatalogue(sparQLQuery)
   return offering[0]
 }
-
-export async function fetchProvider (providerId) {
-  const sparQLQuery = `
-    ${prefixes}
-
-    SELECT DISTINCT ?participant ?familyName ?givenName ?alternateName ?email ?accountId ?memberOf ?homepage ?image
-    WHERE { GRAPH ?g {
-      ?participant a sedi:Participant .
-      OPTIONAL { ?participant schema:givenName ?givenName . } .
-      OPTIONAL { ?participant schema:familyName ?familyName . } .
-      OPTIONAL { ?participant schema:alternateName ?alternateName . } .
-      OPTIONAL { ?participant schema:email ?email . } .
-      OPTIONAL { ?participant schema:accountId ?accountId . } .
-      OPTIONAL { ?participant schema:memberOf ?memberOf . } .
-      OPTIONAL { ?participant schema:image ?image . } .
-      OPTIONAL { ?participant foaf:homepage ?homepage . } .
-      FILTER(?participant IN (<${providerId}>))
-    }}
-  `
-  const provider = await fetchFromCatalogue(sparQLQuery)
-  return provider[0]
-}
