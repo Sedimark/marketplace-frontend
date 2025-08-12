@@ -2,9 +2,6 @@ import settings from '@/utils/settings'
 import { fetchData } from '@/utils/helpers/fetchData'
 
 function getCreateOfferingBody (offeringData) {
-  console.log('--------------OF DATA-------------')
-  console.log(JSON.stringify(offeringData, null, 2))
-  console.log('------------OF DATA END-----------')
   const keywordArrayFormatted = []
   offeringData.keywords.forEach(keyword => {
     keywordArrayFormatted.push({ '@value': keyword, '@type': 'xsd:string' })
@@ -22,6 +19,45 @@ function getCreateOfferingBody (offeringData) {
       }
     })
   })
+
+  const constraints = []
+
+  // Add date constraints if present on the form
+  if (offeringData.policy?.period?.startDate && offeringData.policy?.period?.endDate) {
+    constraints.push(
+      {
+        'odrl:leftOperand': 'odrl:dateTime',
+        'odrl:operator': { '@id': 'odrl:lteq' },
+        'odrl:rightOperand': {
+          '@value': offeringData.policy.period.startDate,
+          '@type': 'xsd:dateTime'
+        }
+      },
+      {
+        'odrl:leftOperand': 'odrl:dateTime',
+        'odrl:operator': { '@id': 'odrl:gteq' },
+        'odrl:rightOperand': {
+          '@value': offeringData.policy.period.endDate,
+          '@type': 'xsd:dateTime'
+        }
+      }
+    )
+  }
+
+  // Add required constant constraints
+  constraints.push(
+    {
+      'odrl:leftOperand': 'sedi:claimMemberOf',
+      'odrl:operator': { '@id': 'odrl:eq' },
+      'odrl:rightOperand': 'SEDIMARK marketplace'
+    },
+    {
+      'odrl:leftOperand': 'sedi:dataTokenOwnership',
+      'odrl:operator': { '@id': 'odrl:eq' },
+      'odrl:rightOperand': 'true'
+    }
+  )
+
   const body = {
     '@context': {
       '@vocab': 'https://w3id.org/sedimark/vocab/',
@@ -63,36 +99,7 @@ function getCreateOfferingBody (offeringData) {
         'odrl:target': 'https://uc.sedimark.eu/offerings/dummy-offering-id',
         'odrl:assigner': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a',
         'odrl:action': 'odrl:use',
-        'odrl:constraint': [
-          {
-            'odrl:leftOperand': 'odrl:dateTime',
-            'odrl:operator': {
-              '@id': 'odrl:lteq'
-            },
-            'odrl:rightOperand': { '@value': offeringData.policy.period.startDate, '@type': 'xsd:dateTime' } // Filled by us, optional, empty if not filled
-          },
-          {
-            'odrl:leftOperand': 'odrl:dateTime',
-            'odrl:operator': {
-              '@id': 'odrl:gteq'
-            },
-            'odrl:rightOperand': { '@value': offeringData.policy.period.endDate, '@type': 'xsd:dateTime' } // Filled by us, optional, empty if not filled
-          },
-          {
-            'odrl:leftOperand': 'sedi:claimMemberOf',
-            'odrl:operator': {
-              '@id': 'odrl:eq'
-            },
-            'odrl:rightOperand': 'SEDIMARK marketplace' // Constant
-          },
-          {
-            'odrl:leftOperand': 'sedi:dataTokenOwnership',
-            'odrl:operator': {
-              '@id': 'odrl:eq'
-            },
-            'odrl:rightOperand': 'true'
-          }
-        ],
+        'odrl:constraint': constraints,
         'odrl:duty': [ // Whole OBJ is constant
           {
             'odrl:action': [
@@ -145,7 +152,7 @@ function getCreateOfferingBody (offeringData) {
       '@id': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a'
     },
     'dct:creator': {
-      '@value': 'Bike Company XXX', // New field? Optional, as Profile can be a Company.
+      '@value': offeringData.creator, // New field? Optional, as Profile can be a Company.
       '@type': 'xsd:string'
     },
     'dcat:themeTaxonomy': {
@@ -174,7 +181,7 @@ function getCreateOfferingBody (offeringData) {
         '@type': 'xsd:dateTime'
       },
       'dct:creator': {
-        '@value': 'Bike Company XXX', // New field? or setted up by Query the DLT Altername?
+        '@value': offeringData.creator, // New field? or setted up by Query the DLT Altername?
         '@type': 'xsd:string'
       },
       'dcat:theme': {
@@ -211,7 +218,6 @@ function getCreateOfferingBody (offeringData) {
     }
     ]
   }
-  console.log(JSON.stringify(body, null, 2))
   return body
 }
 

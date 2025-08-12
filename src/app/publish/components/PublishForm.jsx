@@ -17,6 +17,7 @@ import Link from 'next/link'
 export default function PublishForm (brokerAssets) {
   const initialValuesEmpty = {
     title: '',
+    creator: '',
     description: '',
     image: '',
     keywords: [],
@@ -53,6 +54,7 @@ export default function PublishForm (brokerAssets) {
   const handleSelectExisting = (asset) => {
     const setAssetSelected = {
       title: asset.title,
+      creator: asset.creator,
       description: asset.description,
       image: asset.image,
       keywords: asset.keyword || [],

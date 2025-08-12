@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { TagsInput } from 'react-tag-input-component'
 import { Field, FieldArray, Form, Formik } from 'formik'
-import { Accordion, Label, Textarea, Button, Card, ToggleSwitch, Select } from 'flowbite-react'
+import { Accordion, Label, Textarea, Button, Card, Select } from 'flowbite-react'
 import CustomTextInput from '../CustomTextInput'
 import CustomDatepicker from '../CustomDatePicker'
 import style from './tag.module.css'
@@ -46,14 +46,14 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
     legal_basis: values.switchPII ? yup.string().required('Legal Basis required') : yup.string(),
     purpose: values.switchPII ? yup.string().required('Purpose required') : yup.string(),
     data_protection_contract_point: values.switchPII ? yup.string().required('Data Protection Contact Point required') : yup.string(),
-    consent_withdrawal_contact_point: values.switchPII ? yup.string().required('Consent Withdrawal Contact Point required') : yup.string(),
-    policy: yup.object().shape({
-      period: yup.object().shape({
-        startDate: yup.string().required('A start date is required for the policy'),
-        endDate: yup.string()
-      }),
-      policyName: yup.string().required('A name is required for the policy')
-    })
+    consent_withdrawal_contact_point: values.switchPII ? yup.string().required('Consent Withdrawal Contact Point required') : yup.string()
+    // policy: yup.object().shape({
+    //   period: yup.object().shape({
+    //     startDate: yup.string().required('A start date is required for the policy'),
+    //     endDate: yup.string()
+    //   }),
+    //   policyName: yup.string().required('A name is required for the policy')
+    // })
   }))
 
 /**
@@ -95,6 +95,11 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     label='Title'
                     name='title'
                     placeholder='Title goes here'
+                  />
+                  <CustomTextInput
+                    label='Creator'
+                    name='creator'
+                    placeholder='Who made this asset?'
                   />
                   <div className='block mb-2'>
                     <Label htmlFor='description' value='Description' />
@@ -326,7 +331,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     name='terms_and_condition'
                     placeholder='http://example.url.com/terms.json'
                   />
-                  <div className='block mt-4 mb-4'>
+                  {/* <div className='block mt-4 mb-4'>
                     <ToggleSwitch
                       checked={values.switchPII}
                       label='The dataset contains personal identifiable information'
@@ -374,7 +379,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                         </div>
                       </div>
                     </Card>
-                  </div>
+                  </div> */}
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
