@@ -7,11 +7,9 @@ import settings from '@/utils/settings'
 function Asset ({ offering }) {
   const title = offering.title.value
   const imageUrl = offering?.picture?.value
-  const shortDescription = offering.description.value
   const keywords = offering?.keywords?.value ? offering.keywords.value.split(settings.keywordsSeparator) : []
-  const createdAt = new Date(offering.created.value)
-  const updatedAt = new Date(offering?.updated?.value ?? offering.created.value)
-  const location = offering?.location?.value ?? 'London'
+  const createdAt = new Date(offering.issued.value)
+  const location = offering?.location?.value
   const description = offering.description.value
   return (
     <div className='flex flex-col bg-sedimark-light-blue'>
@@ -22,17 +20,14 @@ function Asset ({ offering }) {
       <div className='flex justify-between m-6 ml-0'>
         <div className='flex flex-row flex-wrap gap-4'>
           <div className='flex flex-row items-center gap-2'>
-            <HiLocationMarker />
-            <p>{location}</p>
-          </div>
-          <div className='flex flex-row items-center gap-2'>
             <HiCalendar />
             <p>Published {createdAt.toISOString().split('T')[0]}</p>
           </div>
-          <div className='flex flex-row items-center gap-2'>
-            <HiOutlineRefresh />
-            <p>Updated {updatedAt.toISOString().split('T')[0]}</p>
-          </div>
+          {location &&
+            <div className='flex flex-row items-center gap-2'>
+              <HiLocationMarker />
+              <p>{location}</p>
+            </div>}
           {offering.license &&
             <div className='flex flex-row items-center gap-2'>
               <HiOutlineScale />
@@ -47,9 +42,6 @@ function Asset ({ offering }) {
         <h5 className='text-xl tracking-tight text-black dark:text-white mb-2'>
           {title}
         </h5>
-        <p className='font-normal text-gray-700 dark:text-gray-400'>
-          {shortDescription}
-        </p>
         <p className='font-normal text-gray-700 dark:text-gray-400'>
           {description}
         </p>

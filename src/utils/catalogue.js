@@ -22,9 +22,12 @@ const offeringsData = `
     ?offering dct:title ?title .
     ?offering dct:description ?description .
     ?offering dct:license ?license .
+    ?offering dct:creator ?creator .
     ?offering sedi:isListedBy ?listing .
-    ?listing sedi:belongsTo ?publisher .
-    ?asset dct:issued ?created .
+    ?listing sedi:belongsTo ?participant .
+    ?participant schema:accountId ?publisher .
+    ?participant schema:alternateName ?alternateName .
+    ?asset dct:issued ?issued .
 `
 
 function getOfferingQueryFilter (query) {
@@ -64,13 +67,13 @@ function getSparQLOfferingQueryString (query, keywords, providers, currentPage, 
   const baseString = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?license
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?creator ?issued ?license
     WHERE { GRAPH ?g {
       ${getOfferingQueryFilter(query)}
       ${checkKeywordsToFilter(keywords)}
       ${checkProvidersToFilter(providers)}
     }}
-    ORDER BY ?created
+    ORDER BY ?issued
     LIMIT ${batchSize}
     OFFSET ${offset}
   `
@@ -150,9 +153,8 @@ function getSparQLProvidersQueryString (query) {
   const baseString = `
     ${prefixes}
 
-    SELECT DISTINCT ?publisher
+    SELECT DISTINCT ?publisher ?alternateName
     WHERE { GRAPH ?g {
-      ?publisher a sedi:Participant .
       ${getOfferingQueryFilter(query)}
     }}
     ORDER BY ?publisher
@@ -164,7 +166,7 @@ export async function fetchProviders (query) {
   const sparQLQuery = getSparQLProvidersQueryString(query)
   const data = await fetchFromCatalogue(sparQLQuery)
   if (!data.error) {
-    const providers = data.map(prov => prov.publisher.value)
+    const providers = data.map(prov => prov.alternateName.value)
     return providers
   }
   return data
@@ -174,7 +176,7 @@ function getSparQLParticipantsCountQueryString () {
   const baseString = `
     ${prefixes}
 
-    SELECT DISTINCT (COUNT(?participant) as ?count)
+    SELECT (COUNT(DISTINCT ?participant) as ?count)
     WHERE { GRAPH ?g {
       ?participant a sedi:Participant .
     }}
@@ -194,9 +196,8 @@ function getSparQLKeywordsQueryString (query) {
 
     SELECT DISTINCT ?keyword
     WHERE { GRAPH ?g {
-      ?asset a sedi:Asset .
-      ?asset dcat:keyword ?keyword .
       ${getOfferingQueryFilter(query)}
+      ?asset dcat:keyword ?keyword .
     }}
     ORDER BY ?keyword
   `
@@ -218,7 +219,7 @@ export async function fetchRecommendedOfferings (offeringIds) {
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?license
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?issued ?license
     WHERE {
       ${offeringsData}
       FILTER(?offering IN (${idsString}))
@@ -231,7 +232,7 @@ export async function fetchOfferingDetails (offeringId) {
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?created ?keywords ?license
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?issued ?keywords ?license
     WHERE { GRAPH ?g {
       ${offeringsData}
       FILTER(?offering IN (<${offeringId}>))

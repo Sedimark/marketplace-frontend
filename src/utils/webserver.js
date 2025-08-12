@@ -34,3 +34,28 @@ export async function submitUserData (userData) {
     return { error }
   }
 }
+
+/**
+ * Gets the profile data of a user, given its server URL.
+ *
+ * @async
+ * @param {string} profileUrl - URL of the endpoint to get profile data from.
+ * @returns {Object} - The response JSON or an error object.
+ */
+export async function getUserData (profileUrl = `${settings.webserverUrl}/profile`) {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+
+  try {
+    const response = await fetchData(profileUrl, options).then(res => res.json())
+    return response
+  } catch (error) {
+    console.log('Error on getUserData!')
+    console.log(error)
+    return { error }
+  }
+}

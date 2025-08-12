@@ -3,7 +3,7 @@ import { HiOutlineScale, HiCalendar, HiUser } from 'react-icons/hi'
 function OfferingItem ({ offering, color }) {
   const name = offering.title.value
   const description = offering.description.value
-  const issuanceDate = offering.created.value ? new Date(offering.created.value) : new Date()
+  const issuanceDate = offering.issued.value ? new Date(offering.issued.value) : new Date()
   const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
   return (
     <div className={`flex flex-col p-4 rounded-lg shadow-lg ${color} hover:bg-gray-100`}>
@@ -19,14 +19,9 @@ function OfferingItem ({ offering, color }) {
         <div className='flex flex-row gap-4'>
           <div className='flex flex-row items-center gap-2'>
             <HiUser size={20} />
-            <p className='pr-2'>{offering.publisher.value}</p>
+            <p className='pr-2'>{`${offering.alternateName.value} (${offering.publisher.value})`}</p>
           </div>
         </div>
-        {offering.license &&
-          <div className='flex flex-row items-center gap-2 w-36'>
-            <HiOutlineScale size={20} />
-            <p>{offering.license.value}</p>
-          </div>}
       </div>
     </div>
   )
