@@ -4,7 +4,8 @@ function RecommenderItem ({ offering, color }) {
   const maxLengthTitle = 42
   const maxLengthDescription = 60
   const name = offering.title.value.length > maxLengthTitle ? offering.title.value.substring(0, maxLengthTitle) + '...' : offering.title.value
-  const description = offering.description.value.length > maxLengthDescription ? offering.description.value.substring(0, maxLengthDescription) + '...' : offering.description.value
+  const offeringDescription = offering?.description?.value || ''
+  const description = offeringDescription.length > maxLengthDescription ? offeringDescription.substring(0, maxLengthDescription) + '...' : offeringDescription
   const issuanceDate = offering.issued.value ? new Date(offering.issued.value) : new Date()
   const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
   return (
