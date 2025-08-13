@@ -20,14 +20,12 @@ const offeringsData = `
     ?offering a sedi:Offering .
     ?offering sedi:hasAsset ?asset .
     ?offering dct:title ?title .
-    ?offering dct:description ?description .
-    ?offering dct:license ?license .
-    ?offering dct:creator ?creator .
+    OPTIONAL { ?offering dct:description ?description . }
     ?offering sedi:isListedBy ?listing .
     ?listing sedi:belongsTo ?participant .
     ?participant schema:accountId ?publisher .
     ?participant schema:alternateName ?alternateName .
-    ?asset dct:issued ?issued .
+    OPTIONAL { ?asset dct:issued ?issued . }
 `
 
 function getOfferingQueryFilter (query) {
@@ -67,7 +65,7 @@ function getSparQLOfferingQueryString (query, keywords, providers, currentPage, 
   const baseString = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?creator ?issued ?license
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?issued
     WHERE { GRAPH ?g {
       ${getOfferingQueryFilter(query)}
       ${checkKeywordsToFilter(keywords)}
@@ -232,9 +230,11 @@ export async function fetchOfferingDetails (offeringId) {
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?issued ?license (group_concat(?kw; separator=";") as ?keywords)
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?creator ?issued ?license (group_concat(?kw; separator=";") as ?keywords)
     WHERE { GRAPH ?g {
       ${offeringsData}
+      OPTIONAL { ?offering dct:license ?license . }
+      OPTIONAL { ?offering dct:creator ?creator . }
       OPTIONAL { ?asset dcat:keyword ?kw }
       FILTER(?offering IN (<${offeringId}>))
     }}
