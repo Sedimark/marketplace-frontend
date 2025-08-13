@@ -92,7 +92,7 @@ function checkProvidersToFilter (providers) {
   let getProviderFilter = ''
   if (providers !== '' && providers !== undefined) {
     getProviderFilter = `
-    FILTER(str(?publisher) IN (${getSparQLProviderFilter(providers)}))`
+    FILTER(str(?alternateName) IN (${getSparQLProviderFilter(providers)}))`
   }
   return getProviderFilter
 }
