@@ -213,7 +213,6 @@ export async function fetchKeywords (query) {
 }
 
 export async function fetchRecommendedOfferings (offeringIds) {
-  console.log('fetchRecommendedOfferings called with:', offeringIds)
   const idsString = offeringIds.map(id => `<${id}>`).join(', ')
   const sparQLQuery = `
     ${prefixes}
