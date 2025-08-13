@@ -213,15 +213,16 @@ export async function fetchKeywords (query) {
 }
 
 export async function fetchRecommendedOfferings (offeringIds) {
+  console.log('fetchRecommendedOfferings called with:', offeringIds)
   const idsString = offeringIds.map(id => `<${id}>`).join(', ')
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?issued ?license
-    WHERE {
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?issued ?license
+    WHERE { GRAPH ?g {
       ${offeringsData}
       FILTER(?offering IN (${idsString}))
-    }
+    }}
   `
   return fetchFromCatalogue(sparQLQuery)
 }
