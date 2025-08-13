@@ -45,7 +45,7 @@ export default async function ResultsList ({ query, keywords, providers, current
           <div className='flex flex-col w-full gap-4 p-4 bg-gray-50'>
             {data.map((offering, index) => {
               return (
-                <Link key={`${offering.offering.value}-${offering.created.value}-${index + 1}`} href={`catalogue/${btoa(offering.offering.value)}`}>
+                <Link key={`${offering.offering.value}-${offering.issued.value}-${index + 1}`} href={`catalogue/${btoa(offering.offering.value)}`}>
                   <OfferingItem
                     offering={offering}
                     color='bg-gray-50'
