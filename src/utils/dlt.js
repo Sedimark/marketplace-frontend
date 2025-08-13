@@ -81,7 +81,7 @@ export async function resolveDID (did) {
     }
   }
 
-  const params = new URLSearchParams({did: did})
+  const params = new URLSearchParams({ did })
   const url = `${settings.dltBoothUrl}/api/dids?${params.toString()}`
 
   try {

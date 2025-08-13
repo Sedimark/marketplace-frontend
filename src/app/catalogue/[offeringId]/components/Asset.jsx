@@ -1,7 +1,6 @@
 import { Badge } from 'flowbite-react'
 import Image from 'next/image'
 import { HiLocationMarker, HiCalendar, HiUser } from 'react-icons/hi'
-import Credentials from './Credentials'
 import settings from '@/utils/settings'
 
 function Asset ({ offering }) {

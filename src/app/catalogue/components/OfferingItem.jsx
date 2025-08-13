@@ -1,4 +1,4 @@
-import { HiOutlineScale, HiCalendar, HiUser } from 'react-icons/hi'
+import { HiCalendar, HiUser } from 'react-icons/hi'
 
 function OfferingItem ({ offering, color }) {
   const name = offering.title.value

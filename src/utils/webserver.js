@@ -46,8 +46,8 @@ export async function getUserData (profileUrl = `${settings.webserverUrl}/profil
   const options = {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   }
 
   try {
