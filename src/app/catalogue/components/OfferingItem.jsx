@@ -2,7 +2,7 @@ import { HiCalendar, HiUser } from 'react-icons/hi'
 
 function OfferingItem ({ offering, color }) {
   const name = offering.title.value
-  const description = offering.description.value
+  const description = offering?.description?.value || ''
   const issuanceDate = offering.issued.value ? new Date(offering.issued.value) : new Date()
   const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
   return (

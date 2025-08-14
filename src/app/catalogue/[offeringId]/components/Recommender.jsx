@@ -16,8 +16,7 @@ async function Recommender ({ query }) {
               return (
                 <Link key={`${recommendation.title.value}-${recommendation.issued.value}-${index + 1}`} href={`/catalogue/${btoa(recommendation.offering.value)}`}>
                   <RecommenderItem
-                    vc={recommendation}
-                    providerName={recommendation.publisher.value}
+                    offering={recommendation}
                     color='bg-sedimark-light-blue bg-red'
                   />
                 </Link>
