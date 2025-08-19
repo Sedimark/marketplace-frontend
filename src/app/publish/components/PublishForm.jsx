@@ -214,7 +214,7 @@ export default function PublishForm (brokerAssets) {
                         Decline
                       </Button>
                     </div>
-                    {message.text && (
+                    {message?.text && (
                       <p className={`text-sm w-full mt-1 ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
                         {message.text}
                       </p>

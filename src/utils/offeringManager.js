@@ -1,7 +1,8 @@
 import settings from '@/utils/settings'
 import { fetchData } from '@/utils/helpers/fetchData'
+import { getIdentity } from '@/utils/dlt'
 
-function getCreateOfferingBody (offeringData) {
+function getCreateOfferingBody (offeringData, identity) {
   const keywordArrayFormatted = []
   offeringData.keywords.forEach(keyword => {
     keywordArrayFormatted.push({ '@value': keyword, '@type': 'xsd:string' })
@@ -81,11 +82,11 @@ function getCreateOfferingBody (offeringData) {
         '@id': 'https://uc.sedimark.eu/participant-URI',
         '@type': 'sedimark:Participant',
         'schema:alternateName': {
-          '@value': 'juanrasantana', // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
+          '@value': identity.data.vc.credentialSubject["schema:alternateName"], // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
           '@type': 'xsd:string'
         },
         'schema:accountId': {
-          '@value': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a', // ?? DID --> DLT
+          '@value': identity.data.sub, // ?? DID --> DLT
           '@type': 'xsd:string'
         }
       }
@@ -322,19 +323,29 @@ export async function fetchOfferingsCustom (offeringIds, currentPage) {
  * @param {json} offeringBody - Json structure that represents the offering to create
  * @returns Json response from offering Manager with the created Offering if success.
  */
-export async function createOffering (offeringData) {
+export async function createOffering(offeringData) {
   const url = `${settings.offeringManagerUrl}/offerings`
-  const bodyCreateOffering = getCreateOfferingBody(offeringData)
+  // Added identity get here, as async + if fails, return error and stop advancing.
+  let identity
+  try {
+    identity = await getIdentity()
+  } catch (error) {
+    console.log('Error fetching identity in createOffering!')
+    console.log(error)
+    return { error: 'Failed to get identity', details: error }
+  }
+
+  const bodyCreateOffering = getCreateOfferingBody(offeringData, identity)
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(bodyCreateOffering)
   }
+
   try {
     const data = await fetchData(url, options).then(response => response.json())
     return data
   } catch (error) {
-    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
     console.log('Error on createOffering!')
     console.log(error)
     return { error }
