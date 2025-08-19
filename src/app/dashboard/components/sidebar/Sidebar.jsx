@@ -30,6 +30,12 @@ function SidebarDashboard () {
                 Overview
               </div>
             </Sidebar.Item>
+            <Sidebar.Item href='/dashboard/offerings' className={`${pathname === '/dashboard/offerings' ? 'bg-gray-100' : ''}`}>
+              <div className='flex flex-row gap-2'>
+                <HiShoppingBag className='h-5 w-5' />
+                Offerings
+              </div>
+            </Sidebar.Item>
             <Sidebar.Item href='/dashboard/contracts' className={`${pathname === '/dashboard/contracts' ? 'bg-gray-100' : ''}`}>
               <div className='flex flex-row gap-2'>
                 <HiShoppingBag className='h-5 w-5' />

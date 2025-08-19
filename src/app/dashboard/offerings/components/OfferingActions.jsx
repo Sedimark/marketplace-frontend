@@ -1,0 +1,83 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
+import { HiTrash } from 'react-icons/hi'
+import { deleteOffering } from '@/utils/offeringManager'
+
+export default function OfferingActions ({ offeringUrl }) {
+  const [openModal, setOpenModal] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Only reload in case that the call goes correctly
+  const handleDelete = async () => {
+    try {
+      const result = await deleteOffering(offeringUrl)
+      if (result && !result.error) {
+        setOpenModal(false)
+        window.location.reload()
+      }
+    } catch (error) {
+      console.error('Unexpected error on delete:', error)
+    }
+  }
+
+  if (!mounted) {
+    return (
+      <button
+        onClick={() => setOpenModal(true)}
+        className='bg-red-600 hover:bg-red-700 text-white rounded p-2 transition duration-150 ease-in-out'
+        title='Delete offering'
+      >
+        <HiTrash size={20} />
+      </button>
+    )
+  }
+
+  const modal = (
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50' onClick={() => setOpenModal(false)}>
+      <div className='bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4' onClick={e => e.stopPropagation()}>
+        <div className='text-center'>
+          <HiTrash className='mx-auto mb-4 h-12 w-12 text-red-600' />
+          <h3 className='mb-5 text-lg font-normal text-gray-700'>
+            Are you sure you want to delete the offering (ID: <strong>{offeringUrl}</strong>)?
+            <br />
+            This step is <span className='text-red-600 font-semibold'>irreversible!</span>
+          </h3>
+          <div className='flex justify-center gap-4 mt-6'>
+            <button
+              className='bg-red-600 hover:bg-red-700 text-white rounded px-4 py-2'
+              onClick={handleDelete}
+            >
+              Yes, delete
+            </button>
+            <button
+              className='bg-gray-300 hover:bg-gray-400 rounded px-4 py-2'
+              onClick={() => setOpenModal(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
+    <>
+      <button
+        onClick={() => setOpenModal(true)}
+        className='bg-red-600 hover:bg-red-700 text-white rounded p-2 transition duration-150 ease-in-out'
+        title='Delete offering'
+      >
+        <HiTrash size={20} />
+      </button>
+      {/* ONLY WAY TO DO THIS, as the parent component is server side, the built in 'popup' class that should do everything does nothing */}
+      {openModal && createPortal(modal, document.body)}
+    </>
+  )
+}
