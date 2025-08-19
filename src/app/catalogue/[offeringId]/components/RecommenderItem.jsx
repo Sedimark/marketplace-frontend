@@ -5,7 +5,7 @@ function RecommenderItem ({ vc, providerName, color }) {
   const maxLengthDescription = 60
   const name = vc.title.value.length > maxLengthTitle ? vc.title.value.substring(0, maxLengthTitle) + '...' : vc.title.value
   const description = vc.description.value.length > maxLengthDescription ? vc.description.value.substring(0, maxLengthDescription) + '...' : vc.description.value
-  const issuanceDate = vc.created.value ? new Date(vc.created.value) : new Date()
+  const issuanceDate = vc.issued.value ? new Date(vc.issued.value) : new Date()
   const date = isNaN(issuanceDate.getTime()) ? new Date() : issuanceDate
   const providedBy = providerName ?? 'OTHER'
   return (

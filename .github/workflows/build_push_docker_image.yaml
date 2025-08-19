@@ -11,6 +11,7 @@ jobs:
   build-and-push:
     runs-on: self-hosted
     permissions:
+      contents: read
       packages: write
 
     steps:
@@ -36,14 +37,20 @@ jobs:
           echo "CATALOGUE_URL=${{ secrets.CATALOGUE_URL }}" > .env.production
           echo "RECOMMENDER_URL=${{ secrets.RECOMMENDER_URL }}" >> .env.production
           echo "BROKER_URL=${{ secrets.BROKER_URL }}" >> .env.production
+          echo "DLT_BOOTH_URL=${{ secrets.DLT_BOOTH_URL }}" >> .env.production
+          echo "CONNECTOR_URL=${{ secrets.CONNECTOR_URL }}" >> .env.production
+          echo "CONNECTOR_API_KEY=${{ secrets.CONNECTOR_API_KEY }}" >> .env.production
+          echo "OFFERING_MANAGER_URL=${{ secrets.OFFERING_MANAGER_URL }}" >> .env.production
 
       - name: Kaniko build & push
         uses: aevea/action-kaniko@master
         with:
-          image: marketplace-frontend
-          cache: "true"
+          # image name is empty because of Github namespace, which prefixes the image name with
+          # `sedimark/marketplace-frontend`. See https://github.com/aevea/action-kaniko?tab=readme-ov-file#ghcrio
+          image: ""
           tag: development
           path: .
           debug: true
           registry: ghcr.io
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}

@@ -80,7 +80,9 @@ export async function resolveDID (did) {
       Accept: 'application/json'
     }
   }
-  const url = `${settings.dltBoothUrl}/dids/${did}`
+
+  const params = new URLSearchParams({ did })
+  const url = `${settings.dltBoothUrl}/api/dids?${params.toString()}`
 
   try {
     const data = await fetchData(url, options).then(response => response.json())
