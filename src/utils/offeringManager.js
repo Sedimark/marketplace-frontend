@@ -82,7 +82,7 @@ function getCreateOfferingBody (offeringData, identity) {
         '@id': 'https://uc.sedimark.eu/participant-URI',
         '@type': 'sedimark:Participant',
         'schema:alternateName': {
-          '@value': identity.data.vc.credentialSubject["schema:alternateName"], // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
+          '@value': identity.data.vc.credentialSubject['schema:alternateName'], // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
           '@type': 'xsd:string'
         },
         'schema:accountId': {
@@ -323,7 +323,7 @@ export async function fetchOfferingsCustom (offeringIds, currentPage) {
  * @param {json} offeringBody - Json structure that represents the offering to create
  * @returns Json response from offering Manager with the created Offering if success.
  */
-export async function createOffering(offeringData) {
+export async function createOffering (offeringData) {
   const url = `${settings.offeringManagerUrl}/offerings`
   // Added identity get here, as async + if fails, return error and stop advancing.
   let identity
