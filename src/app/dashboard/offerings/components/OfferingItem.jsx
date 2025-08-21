@@ -4,7 +4,7 @@ import OfferingActions from './OfferingActions'
 
 export default async function OfferingItem ({ offering }) {
   // For now only checking & defaulting keywords, but others could be optional fields...
-    // Base offering details
+  // Base offering details
   const offerId = offering['@id']
   const title = offering['dct:title']?.['@value']
   const license = offering['dct:license']?.['@value']
