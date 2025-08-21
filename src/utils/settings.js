@@ -20,8 +20,10 @@ const settings = {
   numRecommendations: process.env.NUM_RECOMMENDATIONS ?? 5,
   contractsPageSize: 5,
   connectorUrl: process.env.CONNECTOR_URL,
+  offeringManagerUrl: process.env.OFFERING_MANAGER_URL,
   connectorApiKey: process.env.CONNECTOR_API_KEY,
   maxRetriesGetEDR: process.env.MAX_RETRIES_GET_EDR ?? 5,
+  offeringsPageSize: process.env.OFFERING_PAGE_SIZE ?? 5,
   webserverUrl: process.env.WEBSERVER_URL,
   webserverToken: process.env.WEBSERVER_TOKEN
 }
