@@ -15,6 +15,7 @@ export default async function Page ({ searchParams }) {
   const currentPage = Number(searchParams?.page) || 1
   const offeringsIDs = await fetchOfferingsIDs()
   // check if error is returned, no array to length!
+  // Funny enough, I still need to do all this only to know the number of records :/
   let totalPages
   if (Array.isArray(offeringsIDs)) {
     totalPages = calculateTotalPages(offeringsIDs.length, settings.offeringsPageSize)
@@ -26,7 +27,7 @@ export default async function Page ({ searchParams }) {
       <SidebarDashboard />
       <div className='flex flex-col w-full bg-sedimark-light-blue'>
         <Suspense fallback={<LoadingCard />} key={currentPage}>
-          <Offerings offeringsIDs={offeringsIDs} currentPage={currentPage} />
+          <Offerings currentPage={currentPage} />
         </Suspense>
         <CustomPagination totalPages={totalPages} currentPage={currentPage} />
       </div>

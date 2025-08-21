@@ -54,7 +54,6 @@ export async function fetchOffering (offeringId) {
  * @returns An Array of JSON obj representing the Offering.
  */
 export async function deleteOffering (offeringId) {
-  console.log(offeringId)
   const extractedId = offeringId.split('/').pop()
   const url = `${settings.offeringManagerUrl}/offerings/${extractedId}`
   console.log(url)
@@ -96,6 +95,31 @@ export async function fetchOfferingsCustom (offeringIds, currentPage) {
   } catch (error) {
     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
     console.log('Error on fetchOfferingsCustom!')
+    console.log(error)
+    return { error }
+  }
+}
+
+/**
+ * New single fetch with pagination
+ * @async
+ * @param {string} currentPage - Used for pagination.
+ * @returns An Array of JSON obj representing the Offerings.
+ */
+export async function fetchOfferings (currentPage) {
+  const pageSize = parseInt(settings.offeringsPageSize)
+  // Yes, need that -1 on currentPage as they use 0 as page 1
+  const url = `${settings.offeringManagerUrl}/offerings?size=${pageSize}&page=${currentPage - 1}`
+  const options = {
+    method: 'GET'
+  }
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    // Return only the offerings array, as we dont use anything from the new response!
+    return data['sedi:hasOffering'] || []
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on fetchOfferings!')
     console.log(error)
     return { error }
   }
