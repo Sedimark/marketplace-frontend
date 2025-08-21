@@ -52,9 +52,41 @@ export default function FormSteps () {
   const { completeRegistration } = useRegistration()
   const [loading, setLoading] = useState(false)
   const submitID = async (values) => {
-    console.log('Requesting ID to DLT Booth...')
+    // Hijacking this method for identity + webserver. If any of 2 fails, we should not try to continue, right?
+    // Added throw errors to stop future executions in case of errors.
     setLoading(true)
+    setError(null)
 
+    // ---- 1. Submit user details to the webserver ----
+    try {
+      const webserverRes = await fetch('/api/webserver', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          alternate_name: values.username,
+          first_name: values.first_name,
+          last_name: values.last_name,
+          company_name: values.company,
+          website: values.website,
+          image_url: values.picture
+        })
+      })
+
+      const webserverData = await webserverRes.json()
+
+      if (!webserverRes.ok || webserverData?.error) {
+        throw new Error(webserverData?.error || 'Failed to submit user data')
+      }
+    } catch (err) {
+      console.error('Webserver error:', err)
+      setError({ message: 'Failed to submit user data to the webserver.' })
+      setLoading(false)
+      return
+    }
+
+    // ---- 2. Request ID from DLT Booth ----
     try {
       const response = await fetch('/api/identity', {
         method: 'POST',
@@ -65,16 +97,15 @@ export default function FormSteps () {
       })
 
       const idResp = await response.json()
-      console.log('ID Response:')
-      console.log(idResp)
 
-      if (idResp?.error) {
-        setError(idResp.error)
-      } else {
-        setIdentity(idResp)
-        completeRegistration(idResp)
-        handleNext()
+      if (!response.ok || idResp?.error) {
+        throw new Error(idResp?.error || 'Failed to get identity')
       }
+
+      console.log('ID Response:', idResp)
+      setIdentity(idResp)
+      completeRegistration(idResp)
+      handleNext()
     } catch (error) {
       console.error('Error calling identity API:', error)
       setError({ message: error.message || 'Failed to connect to server' })
@@ -82,6 +113,7 @@ export default function FormSteps () {
       setLoading(false)
     }
   }
+
   const handleModalClose = () => {
     setError(null)
     setOpenModal(false)
