@@ -6,6 +6,19 @@ function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+/**
+ * Auxiliar function that detects if the given dataset ID is a URI and encodes it if necessary.
+ * @param {string} datasetID - The dataset ID, possibly a URI.
+ * @returns {string} - The original or URI-encoded dataset ID.
+ */
+function normalizeDatasetID (datasetID) {
+  const uriRegex = /^https?:\/\//i // Matches strings starting with http:// or https://
+  if (uriRegex.test(datasetID)) {
+    return encodeURIComponent(datasetID)
+  }
+  return datasetID
+}
+
 function getContractsQueryBody (contractAgreementIdFilter) {
   const body = {
     '@context': { '@vocab': 'https://w3id.org/edc/v0.0.1/ns/' },
@@ -110,20 +123,33 @@ function getTransferStartBody (connectorId, counterPartyAddress, contractId) {
 
 function getContractNegotiationBody (policyID, counterPartyAddress) {
   const body = {
-  '@context': {
-    '@vocab': "https://w3id.org/edc/v0.0.1/ns/"
-  },
-  '@type': 'ContractRequest',
-  counterPartyAddress,
-  'protocol': 'dataspace-protocol-http',
-  'policy': {
-    '@context': 'http://www.w3.org/ns/odrl.jsonld',
-    '@id': policyID,
-    '@type': 'Offer',
-    'assigner': 'provider',
-    'target': 'assetId'
+    '@context': {
+      '@vocab': 'https://w3id.org/edc/v0.0.1/ns/'
+    },
+    '@type': 'ContractRequest',
+    counterPartyAddress,
+    protocol: 'dataspace-protocol-http',
+    policy: {
+      '@context': 'http://www.w3.org/ns/odrl.jsonld',
+      '@id': policyID,
+      '@type': 'Offer',
+      assigner: 'provider', // ????
+      target: 'assetId' // Should be dataset ID? it does even care what you put here :/
+    }
   }
+  return body
 }
+
+function getDatasetBody (datasetID, counterPartyAddress) {
+  const body = {
+    '@context': {
+      '@vocab': 'https://w3id.org/edc/v0.0.1/ns/'
+    },
+    '@type': 'DatasetRequest',
+    '@id': datasetID,
+    counterPartyAddress,
+    protocol: 'dataspace-protocol-http'
+  }
   return body
 }
 
@@ -334,4 +360,42 @@ export async function contractNegotiation (policyID, counterPartyAddress) {
     console.log(error)
     return { error }
   }
+}
+
+/**
+ * Post call to obtain the dataset from a specific offer.
+ * @async
+ * @param {string} datasetID - WARNING! Can be literal or URIs, in case of URI should be encoded
+ * @param {string} counterPartyAddress - The dataspace protocol URL of the provider connector, usually in the form of <base_url>/protocol or <base_url>/api/dsp.
+ * @returns JSON object representing the dataset.
+ */
+export async function fetchDataset (datasetID, counterPartyAddress) {
+  const url = `${settings.connectorUrl}/v3/catalog/dataset/request`
+  const bodyDataset = getDatasetBody(normalizeDatasetID(datasetID), counterPartyAddress)
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bodyDataset)
+  }
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    return data
+  } catch (error) {
+    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+    console.log('Error on fetchDataset!')
+    console.log(error)
+    return { error }
+  }
+}
+
+export async function contractNegotiationFlow (datasetID, counterPartyAddress) {
+  // FOR TESTING ONLY:
+  // ----- START -----
+  // datasetID = 'http://localhost:8080/offerings/12967911-624e-4fc4-94dd-7cf02e49c2af/assets/57a2d1ab-325f-431f-86a6-67ba78f3c569'
+  // counterPartyAddress = 'http://provider-cp:8282/api/dsp'
+  // ----- END -----
+  const getDataset = await fetchDataset(datasetID, counterPartyAddress)
+  const getContractNegotiation = await contractNegotiation(getDataset['odrl:hasPolicy']['@id'], counterPartyAddress)
+  // maybe add get contract ID on the flow?
+  return getContractNegotiation
 }

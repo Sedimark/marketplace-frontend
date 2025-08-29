@@ -19,11 +19,18 @@ export async function getProviderData (did) {
     return { did }
   }
 
+  const connectorSvc = didDoc.data.service.find(svc => svc.id.endsWith('connector'))
+  if (!connectorSvc || !connectorSvc.serviceEndpoint) {
+    console.log(`No connector service found in DID document for ${did}`)
+    return { did }
+  }
+
   const profile = await getUserData(profileSvc.serviceEndpoint)
+  const providerConnectorURL = connectorSvc.serviceEndpoint
   if (profile.error) {
     console.log(`Error fetching profile for DID ${did}:`, profile.error)
     return { did }
   }
 
-  return { did, ...profile }
+  return { did, ...profile, connector_url: providerConnectorURL }
 }
