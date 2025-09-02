@@ -1,11 +1,21 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Spinner, Toast } from 'flowbite-react'
 import { HiShoppingCart, HiCheckCircle, HiXCircle } from 'react-icons/hi'
 
 function NegotiateCard ({ offering, provider }) {
   const [isLoading, setIsLoading] = useState(false)
   const [toast, setToast] = useState(null)
+
+  useEffect(() => {
+    if (provider.error) {
+      console.error(provider.error)
+      setToast({
+        type: 'error',
+        message: `Provider Error: ${provider.error}`
+      })
+    }
+  }, [provider.error])
 
   const handleNegotiation = async () => {
     setIsLoading(true)
@@ -49,15 +59,11 @@ function NegotiateCard ({ offering, provider }) {
             type='button'
             className='inline-flex w-full justify-center rounded-lg bg-sedimark-deep-blue px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-900 disabled:opacity-50'
             onClick={handleNegotiation}
-            disabled={isLoading}
+            disabled={isLoading || !!provider.error}
           >
             {isLoading
-              ? (
-                <Spinner aria-label='Negotiating...' size='sm' light className='mr-2' />
-                )
-              : (
-                <HiShoppingCart size={18} className='mr-1' />
-                )}
+              ? <Spinner aria-label='Negotiating...' size='sm' light className='mr-2' />
+              : <HiShoppingCart size={18} className='mr-1' />}
             {isLoading ? 'Negotiating...' : 'Negotiate'}
           </button>
         </div>
@@ -72,12 +78,8 @@ function NegotiateCard ({ offering, provider }) {
           >
             <div className='inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg'>
               {toast.type === 'success'
-                ? (
-                  <HiCheckCircle className='h-6 w-6 text-green-700' />
-                  )
-                : (
-                  <HiXCircle className='h-6 w-6 text-red-700' />
-                  )}
+                ? <HiCheckCircle className='h-6 w-6 text-green-700' />
+                : <HiXCircle className='h-6 w-6 text-red-700' />}
             </div>
             <div className='ml-3 text-sm font-normal'>{toast.message}</div>
           </Toast>
