@@ -72,35 +72,6 @@ export async function deleteOffering (offeringId) {
 }
 
 /**
- * Multiple fetch call to obtain a set of Offerings, while maintaining a "pagination" structure.
- * Will simulate the pagination on their side, but it is done here!
- * @async
- * @param {Array} offeringIds - Array of STRINGS to fetch.
- * @param {string} currentPage - Used for pagination.
- * @returns An Array of JSON obj representing the Offerings.
- */
-export async function fetchOfferingsCustom (offeringIds, currentPage) {
-  // Pagination custom
-  try {
-    const pageSize = parseInt(settings.offeringsPageSize)
-    const start = (currentPage - 1) * pageSize
-    const end = start + pageSize
-    const paginatedIds = offeringIds.slice(start, end)
-    const data = await Promise.all(
-      paginatedIds.map((id) =>
-        fetchOffering(id)
-      )
-    )
-    return data
-  } catch (error) {
-    // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
-    console.log('Error on fetchOfferingsCustom!')
-    console.log(error)
-    return { error }
-  }
-}
-
-/**
  * New single fetch with pagination
  * @async
  * @param {string} currentPage - Used for pagination.
@@ -124,3 +95,34 @@ export async function fetchOfferings (currentPage) {
     return { error }
   }
 }
+
+/**
+ * Multiple fetch call to obtain a set of Offerings, while maintaining a "pagination" structure.
+ * Will simulate the pagination on their side, but it is done here!
+ * --------- DEPRECATED -----------
+ * Offering Manager still has the endpoint to work like this function, so this is commented for preserving.
+ * @async
+ * @param {Array} offeringIds - Array of STRINGS to fetch.
+ * @param {string} currentPage - Used for pagination.
+ * @returns An Array of JSON obj representing the Offerings.
+ */
+// export async function fetchOfferingsCustom (offeringIds, currentPage) {
+//   // Pagination custom
+//   try {
+//     const pageSize = parseInt(settings.offeringsPageSize)
+//     const start = (currentPage - 1) * pageSize
+//     const end = start + pageSize
+//     const paginatedIds = offeringIds.slice(start, end)
+//     const data = await Promise.all(
+//       paginatedIds.map((id) =>
+//         fetchOffering(id)
+//       )
+//     )
+//     return data
+//   } catch (error) {
+//     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+//     console.log('Error on fetchOfferingsCustom!')
+//     console.log(error)
+//     return { error }
+//   }
+// }

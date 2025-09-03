@@ -11,6 +11,8 @@ export default async function OfferingItem ({ offering }) {
   const issueDate = offering['dct:issued']?.['@value']
 
   // Handle first asset from 'sedi:hasAsset' array (if available)
+  // The whole platfrom is designed to have always: 1 asset x 1 offer
+  // So we only need the 1st element of the array
   const firstAsset = Array.isArray(offering['sedi:hasAsset'])
     ? offering['sedi:hasAsset'][0]
     : null
@@ -41,12 +43,12 @@ export default async function OfferingItem ({ offering }) {
                   </div>
                 </div>
                 <div className='flex flex-row items-end mt-3'>
-                  <div className='flex flex-row gap-2 w-36 mt-2'>
-                    <HiCalendar size={20} />
-                    <p className='text-sm'>{issueDate}</p>
+                  <div className='flex flex-row mr-8'>
+                    <HiCalendar size={20} className='mr-1' />
+                    <p className='text-sm'>{issueDate ? new Date(issueDate).toLocaleString() : 'Unknown date'}</p>
                   </div>
-                  <div className='flex flex-row gap-2 mt-2'>
-                    <HiLink size={20} />
+                  <div className='flex flex-row'>
+                    <HiLink size={20} className='mr-1' />
                     <p className='text-sm font-semibold break-all'>{assetUrl}</p>
                   </div>
                 </div>
@@ -76,9 +78,9 @@ export default async function OfferingItem ({ offering }) {
                 <HiOutlineScale size={20} className='mr-1' />
                 <p>{license}</p>
               </div>
-              <div className='shrink-0 ml-4'>
-                <OfferingActions offeringUrl={offerId} />
-              </div>
+            </div>
+            <div className='flex justify-end'>
+              <OfferingActions offeringUrl={offerId} />
             </div>
           </div>
         </AccordionContent>
