@@ -1,7 +1,7 @@
 'use client'
 
 // As this needs a rework on interactivity, and now parent is SS, gonna left this for later.
-import { HiChartPie, HiShoppingBag } from 'react-icons/hi'
+import { HiChartPie, HiShoppingBag, HiCube } from 'react-icons/hi'
 import { usePathname } from 'next/navigation'
 // import FilterDatepicker from './FilterDatePicker'
 import { Sidebar } from 'flowbite-react'
@@ -32,7 +32,7 @@ function SidebarDashboard () {
             </Sidebar.Item>
             <Sidebar.Item href='/dashboard/offerings' className={`${pathname === '/dashboard/offerings' ? 'bg-gray-100' : ''}`}>
               <div className='flex flex-row gap-2'>
-                <HiShoppingBag className='h-5 w-5' />
+                <HiCube className='h-5 w-5' />
                 Offerings
               </div>
             </Sidebar.Item>

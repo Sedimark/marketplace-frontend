@@ -8,7 +8,10 @@ import { deleteOffering } from '@/utils/offeringManager'
 export default function OfferingActions ({ offeringUrl }) {
   const [openModal, setOpenModal] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [deleteError, setDeleteError] = useState(null)
 
+  // This is the only way to handle the situation of this component, as its the only client component, that is being called on a server one while being
+  // nested on the accordion. Without this, the Modal from flow-bite wouldn't render correctly!
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -16,13 +19,25 @@ export default function OfferingActions ({ offeringUrl }) {
   // Only reload in case that the call goes correctly
   const handleDelete = async () => {
     try {
-      const result = await deleteOffering(offeringUrl)
-      if (result && !result.error) {
+      setDeleteError(null)
+      const response = await fetch('/api/offeringManager', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ offeringId: offeringUrl })
+      })
+      const result = await response.json()
+
+      if (response.ok && !result.error) {
         setOpenModal(false)
         window.location.reload()
+      } else {
+        setDeleteError(result?.error || 'Failed to delete the offering.')
       }
     } catch (error) {
       console.error('Unexpected error on delete:', error)
+      setDeleteError('An unexpected error occurred. Please try again.')
     }
   }
 
@@ -48,6 +63,9 @@ export default function OfferingActions ({ offeringUrl }) {
             <br />
             This step is <span className='text-red-600 font-semibold'>irreversible!</span>
           </h3>
+          {deleteError && (
+            <p className='text-red-600 font-medium mb-4'>{deleteError}</p>
+          )}
           <div className='flex justify-center gap-4 mt-6'>
             <button
               className='bg-red-600 hover:bg-red-700 text-white rounded px-4 py-2'
@@ -57,7 +75,10 @@ export default function OfferingActions ({ offeringUrl }) {
             </button>
             <button
               className='bg-gray-300 hover:bg-gray-400 rounded px-4 py-2'
-              onClick={() => setOpenModal(false)}
+              onClick={() => {
+                setOpenModal(false)
+                setDeleteError(null)
+              }}
             >
               Cancel
             </button>

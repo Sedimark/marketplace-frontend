@@ -92,7 +92,7 @@ function checkProvidersToFilter (providers) {
   let getProviderFilter = ''
   if (providers !== '' && providers !== undefined) {
     getProviderFilter = `
-    FILTER(str(?publisher) IN (${getSparQLProviderFilter(providers)}))`
+    FILTER(str(?alternateName) IN (${getSparQLProviderFilter(providers)}))`
   }
   return getProviderFilter
 }
@@ -217,11 +217,11 @@ export async function fetchRecommendedOfferings (offeringIds) {
   const sparQLQuery = `
     ${prefixes}
 
-    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?issued ?license
-    WHERE {
+    SELECT DISTINCT ?offering ?asset ?title ?description ?publisher ?alternateName ?issued ?license
+    WHERE { GRAPH ?g {
       ${offeringsData}
       FILTER(?offering IN (${idsString}))
-    }
+    }}
   `
   return fetchFromCatalogue(sparQLQuery)
 }
