@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { HiTrash } from 'react-icons/hi'
-import { deleteOffering } from '@/utils/offeringManager'
 
 export default function OfferingActions ({ offeringUrl }) {
   const [openModal, setOpenModal] = useState(false)

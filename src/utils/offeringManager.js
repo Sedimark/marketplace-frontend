@@ -351,7 +351,7 @@ export async function createOffering (offeringData) {
     return { error }
   }
 }
- /*
+/*
  * Multiple fetch call to obtain a set of Offerings, while maintaining a "pagination" structure.
  * Will simulate the pagination on their side, but it is done here!
  * --------- DEPRECATED -----------
