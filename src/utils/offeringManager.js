@@ -235,7 +235,9 @@ export async function fetchOfferingsIDs () {
   }
   try {
     const data = await fetchData(url, options).then(response => response.json())
-    return data
+    const offeringIds = (data['sedi:hasOffering'] || []).map(offering => offering['@id'])
+
+    return offeringIds
   } catch (error) {
     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
     console.log('Error on fetchOfferingsIDs!')
@@ -273,7 +275,6 @@ export async function fetchOffering (offeringId) {
  * @returns An Array of JSON obj representing the Offering.
  */
 export async function deleteOffering (offeringId) {
-  console.log(offeringId)
   const extractedId = offeringId.split('/').pop()
   const url = `${settings.offeringManagerUrl}/offerings/${extractedId}`
   console.log(url)
@@ -292,29 +293,25 @@ export async function deleteOffering (offeringId) {
 }
 
 /**
- * Multiple fetch call to obtain a set of Offerings, while maintaining a "pagination" structure.
- * Will simulate the pagination on their side, but it is done here!
+ * New single fetch with pagination
  * @async
- * @param {Array} offeringIds - Array of STRINGS to fetch.
  * @param {string} currentPage - Used for pagination.
  * @returns An Array of JSON obj representing the Offerings.
  */
-export async function fetchOfferingsCustom (offeringIds, currentPage) {
-  // Pagination custom
+export async function fetchOfferings (currentPage) {
+  const pageSize = parseInt(settings.offeringsPageSize)
+  // Yes, need that -1 on currentPage as they use 0 as page 1
+  const url = `${settings.offeringManagerUrl}/offerings?size=${pageSize}&page=${currentPage - 1}`
+  const options = {
+    method: 'GET'
+  }
   try {
-    const pageSize = parseInt(settings.offeringsPageSize)
-    const start = (currentPage - 1) * pageSize
-    const end = start + pageSize
-    const paginatedIds = offeringIds.slice(start, end)
-    const data = await Promise.all(
-      paginatedIds.map((id) =>
-        fetchOffering(id)
-      )
-    )
-    return data
+    const data = await fetchData(url, options).then(response => response.json())
+    // Return only the offerings array, as we dont use anything from the new response!
+    return data['sedi:hasOffering'] || []
   } catch (error) {
     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
-    console.log('Error on fetchOfferingsCustom!')
+    console.log('Error on fetchOfferings!')
     console.log(error)
     return { error }
   }
@@ -354,3 +351,33 @@ export async function createOffering (offeringData) {
     return { error }
   }
 }
+ /*
+ * Multiple fetch call to obtain a set of Offerings, while maintaining a "pagination" structure.
+ * Will simulate the pagination on their side, but it is done here!
+ * --------- DEPRECATED -----------
+ * Offering Manager still has the endpoint to work like this function, so this is commented for preserving.
+ * @async
+ * @param {Array} offeringIds - Array of STRINGS to fetch.
+ * @param {string} currentPage - Used for pagination.
+ * @returns An Array of JSON obj representing the Offerings.
+ */
+// export async function fetchOfferingsCustom (offeringIds, currentPage) {
+//   // Pagination custom
+//   try {
+//     const pageSize = parseInt(settings.offeringsPageSize)
+//     const start = (currentPage - 1) * pageSize
+//     const end = start + pageSize
+//     const paginatedIds = offeringIds.slice(start, end)
+//     const data = await Promise.all(
+//       paginatedIds.map((id) =>
+//         fetchOffering(id)
+//       )
+//     )
+//     return data
+//   } catch (error) {
+//     // Will be 2 printed errors as there is a console.log on the fetchData helper, but as is server side can help us id the error.
+//     console.log('Error on fetchOfferingsCustom!')
+//     console.log(error)
+//     return { error }
+//   }
+// }

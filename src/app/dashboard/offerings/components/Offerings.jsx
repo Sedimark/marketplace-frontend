@@ -1,10 +1,10 @@
 import OfferingItem from './OfferingItem'
-import { fetchOfferingsCustom } from '@/utils/offeringManager'
+import { fetchOfferings } from '@/utils/offeringManager'
 import { Alert } from 'flowbite-react'
 import { TbAlertSquareFilled } from 'react-icons/tb'
 
-export default async function Offerings ({ offeringsIDs, currentPage }) {
-  const offerings = await fetchOfferingsCustom(offeringsIDs, currentPage)
+export default async function Offerings ({ currentPage }) {
+  const offerings = await fetchOfferings(currentPage)
 
   return (
     <div className='mt-8'>
