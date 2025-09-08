@@ -33,14 +33,8 @@ export default function PublishForm (brokerAssets) {
       required: true
     }],
     license: '',
-    terms_and_condition: '',
-    data_controller: '',
-    legal_basis: '',
-    purpose: '',
-    data_protection_contract_point: '',
-    consent_withdrawal_contact_point: '',
-    switchQuery: false,
-    switchPII: false,
+    // switchQuery: false,  --- DEPRECATED
+    // switchPII: false,  --- DEPRECATED
     policy: { period: { startDate: '', endDate: '' }, policyName: '' }
   }
   const [openModal, setOpenModal] = useState(false)
@@ -70,14 +64,8 @@ export default function PublishForm (brokerAssets) {
         required: true
       }],
       license: asset.license,
-      terms_and_condition: '',
-      data_controller: '',
-      legal_basis: '',
-      purpose: '',
-      data_protection_contract_point: '',
-      consent_withdrawal_contact_point: '',
-      switchQuery: false,
-      switchPII: false,
+      // switchQuery: false,  --- DEPRECATED
+      // switchPII: false,  --- DEPRECATED
       policy: { period: { startDate: '', endDate: '' }, policyName: '' }
     }
     setInitialValues(setAssetSelected)

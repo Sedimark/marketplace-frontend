@@ -28,25 +28,29 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
       key: yup.string().required('A Key is required for the Header'),
       value: yup.string().required('A Value is required for the Header')
     })),
-    queries: values.switchQuery
-      ? yup.array().of(
-        yup.object().shape({
-          name: yup.string().required('A Name is required'),
-          label: yup.string().required('A Label is required'),
-          description: yup.string().required('A Description is required'),
-          type: yup.string().required().oneOf(['text', '...']).label('type'),
-          default_value: yup.string().required('A Default Value is required'),
-          required: yup.boolean()
-        })
-      )
-      : yup.array(),
+    keywords: yup.array()
+      .of(yup.string().trim().required('Each keyword must be non-empty'))
+      .min(1, 'At least one keyword is required')
+      .required('At least one keyword is required')
+    // queries: values.switchQuery
+    //   ? yup.array().of(
+    //     yup.object().shape({
+    //       name: yup.string().required('A Name is required'),
+    //       label: yup.string().required('A Label is required'),
+    //       description: yup.string().required('A Description is required'),
+    //       type: yup.string().required().oneOf(['text', '...']).label('type'),
+    //       default_value: yup.string().required('A Default Value is required'),
+    //       required: yup.boolean()
+    //     })
+    //   )
+    //   : yup.array(),
     // license: yup.string().required('A License is required'),
     // terms_and_condition: yup.string().required('Terms & Conditions is required'),
-    data_controller: values.switchPII ? yup.string().required('Data Controller required') : yup.string(),
-    legal_basis: values.switchPII ? yup.string().required('Legal Basis required') : yup.string(),
-    purpose: values.switchPII ? yup.string().required('Purpose required') : yup.string(),
-    data_protection_contract_point: values.switchPII ? yup.string().required('Data Protection Contact Point required') : yup.string(),
-    consent_withdrawal_contact_point: values.switchPII ? yup.string().required('Consent Withdrawal Contact Point required') : yup.string()
+    // data_controller: values.switchPII ? yup.string().required('Data Controller required') : yup.string(),
+    // legal_basis: values.switchPII ? yup.string().required('Legal Basis required') : yup.string(),
+    // purpose: values.switchPII ? yup.string().required('Purpose required') : yup.string(),
+    // data_protection_contract_point: values.switchPII ? yup.string().required('Data Protection Contact Point required') : yup.string(),
+    // consent_withdrawal_contact_point: values.switchPII ? yup.string().required('Consent Withdrawal Contact Point required') : yup.string()
     // policy: yup.object().shape({
     //   period: yup.object().shape({
     //     startDate: yup.string().required('A start date is required for the policy'),
@@ -136,6 +140,9 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     }
                   }
                   />
+                  {touched.keywords && errors.keywords && (
+                    <p className='text-sm text-red-600 mt-2'>{errors.keywords}</p>
+                  )}
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
@@ -324,13 +331,13 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                   <CustomTextInput
                     label='License'
                     name='license'
-                    placeholder='MIT'
+                    placeholder='https://opensource.org/license/mit'
                   />
-                  <CustomTextInput
+                  {/* <CustomTextInput
                     label='Terms & Conditions'
                     name='terms_and_condition'
                     placeholder='http://example.url.com/terms.json'
-                  />
+                  /> */}
                   {/* <div className='block mt-4 mb-4'>
                     <ToggleSwitch
                       checked={values.switchPII}

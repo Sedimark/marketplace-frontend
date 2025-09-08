@@ -1,8 +1,9 @@
 import settings from '@/utils/settings'
 import { fetchData } from '@/utils/helpers/fetchData'
 import { getIdentity } from '@/utils/dlt'
+import { getProviderData } from './selectedOffering'
 
-function getCreateOfferingBody (offeringData, identity) {
+function getCreateOfferingBody (offeringData, identity, provider) {
   const keywordArrayFormatted = []
   offeringData.keywords.forEach(keyword => {
     keywordArrayFormatted.push({ '@value': keyword, '@type': 'xsd:string' })
@@ -76,10 +77,12 @@ function getCreateOfferingBody (offeringData, identity) {
     '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id', // Overwritten by OM
     '@type': 'sedimark:Offering',
     'sedimark:isListedBy': {
-      '@id': 'https://uc.sedimark.eu/offerings',
+      // can be `${settings.offeringManagerUrl}/offerings` (value form settings) or provider.connector_url + '/offerings (value from DID resolved)'
+      '@id': `${settings.offeringManagerUrl}/offerings`,
       '@type': 'sedimark:Self-Listing',
       'sedimark:belongsTo': {
-        '@id': 'https://uc.sedimark.eu/participant-URI',
+        // can be `${settings.webserverUrl}` or extracted from the DID
+        '@id': `${settings.webserverUrl}`,
         '@type': 'sedimark:Participant',
         'schema:alternateName': {
           '@value': identity.data.vc.credentialSubject['schema:alternateName'], // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
@@ -160,7 +163,7 @@ function getCreateOfferingBody (offeringData, identity) {
       '@id': 'https://w3id.org/sedimark/vocab/sdm'
     },
     'dct:license': {
-      '@value': offeringData.terms_and_condition,
+      '@value': offeringData.license,
       '@type': 'xsd:string'
     },
     'sedimark:hasAsset': [{
@@ -185,10 +188,12 @@ function getCreateOfferingBody (offeringData, identity) {
         '@value': offeringData.creator, // New field? or setted up by Query the DLT Altername?
         '@type': 'xsd:string'
       },
+      // TODO: Field required by the Offering Manage... ask UC about why is required and where this value come from
       'dcat:theme': {
         '@id': 'https://w3id.org/sedimark/vocab/sdm/entity/vehicle'
       },
       'dcat:keyword': keywordArrayFormatted,
+      // TODO: Field required by the Offering Manage... ask UC about why is required and where this value come from
       'dct:spatial': {
         '@id': 'http://www.wikidata.org/entity/Q12233',
         '@type': 'dct:Location'
@@ -325,17 +330,16 @@ export async function fetchOfferings (currentPage) {
  */
 export async function createOffering (offeringData) {
   const url = `${settings.offeringManagerUrl}/offerings`
-  // Added identity get here, as async + if fails, return error and stop advancing.
-  let identity
-  try {
-    identity = await getIdentity()
-  } catch (error) {
-    console.log('Error fetching identity in createOffering!')
-    console.log(error)
-    return { error: 'Failed to get identity', details: error }
+  const identity = await getIdentity()
+  const provider = await getProviderData(identity.data.sub)
+
+  // Check if identity is missing or returned value is error, as getIdentity has its own error catch.
+  if (!identity || identity.error) {
+    console.log('Invalid or missing identity!')
+    return { error: 'Invalid or missing identity' }
   }
 
-  const bodyCreateOffering = getCreateOfferingBody(offeringData, identity)
+  const bodyCreateOffering = getCreateOfferingBody(offeringData, identity, provider)
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
