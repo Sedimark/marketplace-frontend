@@ -136,8 +136,8 @@ function getCreateOfferingBody (offeringData, identity, provider) {
       'odrl:prohibition': [],
       'odrl:obligation': []
     },
-    'dct:issued': { // Literal by us?
-      '@value': '2025-12-31T00:00:00Z',
+    'dct:issued': { // Added date by us. In case is overwritten, doesn't matter. If not OW, it will be correct
+      '@value': new Date().toISOString(), // current time in ISO 8601 format, as the example was (and supposeldy type datetime)
       '@type': 'xsd:dateTime'
     },
     'dct:language': {
@@ -213,7 +213,7 @@ function getCreateOfferingBody (offeringData, identity, provider) {
           '@type': 'xsd:string'
         },
         'dct:issued': {
-          '@value': '2025-12-31T00:00:00Z', // ???
+          '@value': new Date().toISOString(), // current time in ISO 8601 format, as the example was (and supposeldy type datetime)
           '@type': 'xsd:dateTime'
         },
         'dcat:accessURL': {
