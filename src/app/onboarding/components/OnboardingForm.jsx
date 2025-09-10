@@ -15,6 +15,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRegistration } from '@/context/RegistrationContext'
+import { HiExclamationCircle } from 'react-icons/hi'
 
 /**
  * Custom component to extend Formik into Flowbite React TextInput component.
@@ -51,19 +52,19 @@ export default function FormSteps () {
   const [error, setError] = useState(null)
   const { completeRegistration } = useRegistration()
   const [loading, setLoading] = useState(false)
+  const [didKey, setDidKey] = useState(null)
   const submitID = async (values) => {
     // Hijacking this method for identity + webserver. If any of 2 fails, we should not try to continue, right?
     // Added throw errors to stop future executions in case of errors.
     setLoading(true)
     setError(null)
+    setDidKey(null)
 
-    // ---- 1. Submit user details to the webserver ----
     try {
+      // ---- 1. Submit user details to the webserver ----
       const webserverRes = await fetch('/api/webserver', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           alternate_name: values.username,
           first_name: values.first_name,
@@ -75,40 +76,54 @@ export default function FormSteps () {
       })
 
       const webserverData = await webserverRes.json()
-
       if (!webserverRes.ok || webserverData?.error) {
         throw new Error(webserverData?.error || 'Failed to submit user data')
       }
-    } catch (err) {
-      console.error('Webserver error:', err)
-      setError({ message: 'Failed to submit user data to the webserver.' })
-      setLoading(false)
-      return
-    }
 
-    // ---- 2. Request ID from DLT Booth ----
-    try {
+      // ---- 2. Request ID from DLT Booth ----
       const response = await fetch('/api/identity', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: values.username })
       })
 
       const idResp = await response.json()
-
       if (!response.ok || idResp?.error) {
         throw new Error(idResp?.error || 'Failed to get identity')
       }
 
-      console.log('ID Response:', idResp)
       setIdentity(idResp)
       completeRegistration(idResp)
       handleNext()
+
+      // ---- 3. Resolve created DID for faucet ----
+      const did = idResp?.data?.sub
+      if (!did) {
+        throw new Error('No DID found in identity response')
+      }
+
+      const resolverRes = await fetch('/api/didResolver', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ did })
+      })
+
+      const resolved = await resolverRes.json()
+      if (!resolverRes.ok || resolved?.error) {
+        throw new Error(resolved?.error || 'Failed to resolve DID')
+      }
+
+      // As the response verificationMethod is AN ARRAY, need to search the field on it
+      const vmWithBlockchainId = resolved?.data?.verificationMethod?.find((vm) => vm.blockchainAccountId)
+      const blockchainAccountId = vmWithBlockchainId?.blockchainAccountId
+
+      if (blockchainAccountId) {
+        const [, address] = blockchainAccountId.split('eip155:1:')
+        setDidKey(address)
+      }
     } catch (error) {
-      console.error('Error calling identity API:', error)
-      setError({ message: error.message || 'Failed to connect to server' })
+      console.error('Error:', error)
+      setError({ message: error.message || 'Something went wrong' })
     } finally {
       setLoading(false)
     }
@@ -129,7 +144,8 @@ export default function FormSteps () {
     last_name: yup.string().notRequired(),
     company: yup.string().notRequired(),
     website: yup.string().url().notRequired(invalidURL),
-    picture: yup.string().matches(pictRegex, invalidURL).notRequired(invalidURL)
+    picture: yup.string().matches(pictRegex, invalidURL).notRequired(invalidURL),
+    declaration: yup.bool().oneOf([true], 'You must confirm this to continue')
   })
 
   return (
@@ -160,7 +176,7 @@ export default function FormSteps () {
       {activeStep === 0 &&
         <Card className='w-1/2 mt-6'>
           <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Prerequisites</h5>
-          <p>SEDIMARK relies on the IOTA tangle to store identity and smart contracts. You will be asked a few details to create your profile, but only your username will be published in the IOTA tangle.</p>
+          <p>SEDIMARK relies on the IOTA tangle to store identity and smart contracts. You will be asked a few details to create your profile, but only your username, and the required public URLs to your services (profile server, connector and self-listing) will be published in the IOTA tangle.</p>
           <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
           <div className='flow-root'>
             <Link target='_blank' rel='noreferrer' href='https://www.iota.org/get-started/what-is-iota'>
@@ -181,7 +197,8 @@ export default function FormSteps () {
               last_name: '',
               company: '',
               website: '',
-              picture: ''
+              picture: '',
+              declaration: false
             }}
             validationSchema={validationSchemaStepTwo}
             validateOnBlur
@@ -277,6 +294,22 @@ export default function FormSteps () {
                   </div>
                 </div>
                 <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
+                <div className='flex items-center mb-4'>
+                  <input
+                    id='declaration'
+                    name='declaration'
+                    type='checkbox'
+                    onChange={handleChange}
+                    checked={values.declaration}
+                    className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500'
+                  />
+                  <label htmlFor='declaration' className='ms-2 ml-2 text-sm font-medium text-gray-900'>
+                    I hereby declare that I have not put any personal data in my username or my services URLs.
+                  </label>
+                </div>
+                {errors.declaration && touched.declaration && (
+                  <p className='text-sm mb-4 text-red-500'>{errors.declaration}</p>
+                )}
                 <div className='flow-root'>
                   <Button className='float-right' type='submit'>Next</Button>
                   <Button className='float-left' onClick={() => handlePrev()}>Back</Button>
@@ -292,6 +325,31 @@ export default function FormSteps () {
         <Card className='w-1/2 mt-6'>
           <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Verifiable credentials</h5>
           <Card className='mt-6 '>
+            <div className='flex items-center text-yellow-600 bg-yellow-50 p-4 rounded-lg border border-yellow-200'>
+              <HiExclamationCircle className='h-6 w-6 mr-3 flex-shrink-0' />
+              <div>
+                <p className='font-bold text-md mb-1'>You need to get your funds</p>
+                <p>
+                  Use your key here:&nbsp;
+                  <a href='https://stardust.linksfoundation.com/faucet/l2/' target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
+                    https://stardust.linksfoundation.com/faucet/l2/
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            {didKey && (
+              <>
+                <p>Your key is here:</p>
+                <div className='flex items-center gap-2 bg-gray-100 rounded-md px-4 py-2'>
+                  <code className='text-gray-800 font-mono break-all'>{didKey}</code>
+                  <Button size='xs' color='light' onClick={() => navigator.clipboard.writeText(didKey)}>
+                    Copy to clipboard
+                  </Button>
+                </div>
+              </>
+            )}
+
             <Accordion>
               <Accordion.Panel>
                 <Accordion.Title>Verifiable Credential</Accordion.Title>
