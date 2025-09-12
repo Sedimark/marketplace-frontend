@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import { TagsInput } from 'react-tag-input-component'
 import { Field, FieldArray, Form, Formik } from 'formik'
-import { Accordion, Label, Textarea, Button, Card, Checkbox, ToggleSwitch, Select } from 'flowbite-react'
+import { Accordion, Label, Textarea, Button, Card, Select } from 'flowbite-react'
 import CustomTextInput from '../CustomTextInput'
 import CustomDatepicker from '../CustomDatePicker'
 import style from './tag.module.css'
@@ -28,32 +28,36 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
       key: yup.string().required('A Key is required for the Header'),
       value: yup.string().required('A Value is required for the Header')
     })),
-    queries: values.switchQuery
-      ? yup.array().of(
-        yup.object().shape({
-          name: yup.string().required('A Name is required'),
-          label: yup.string().required('A Label is required'),
-          description: yup.string().required('A Description is required'),
-          type: yup.string().required().oneOf(['text', '...']).label('type'),
-          default_value: yup.string().required('A Default Value is required'),
-          required: yup.boolean()
-        })
-      )
-      : yup.array(),
+    keywords: yup.array()
+      .of(yup.string().trim().required('Each keyword must be non-empty'))
+      .min(1, 'At least one keyword is required')
+      .required('At least one keyword is required')
+    // queries: values.switchQuery
+    //   ? yup.array().of(
+    //     yup.object().shape({
+    //       name: yup.string().required('A Name is required'),
+    //       label: yup.string().required('A Label is required'),
+    //       description: yup.string().required('A Description is required'),
+    //       type: yup.string().required().oneOf(['text', '...']).label('type'),
+    //       default_value: yup.string().required('A Default Value is required'),
+    //       required: yup.boolean()
+    //     })
+    //   )
+    //   : yup.array(),
     // license: yup.string().required('A License is required'),
     // terms_and_condition: yup.string().required('Terms & Conditions is required'),
-    data_controller: values.switchPII ? yup.string().required('Data Controller required') : yup.string(),
-    legal_basis: values.switchPII ? yup.string().required('Legal Basis required') : yup.string(),
-    purpose: values.switchPII ? yup.string().required('Purpose required') : yup.string(),
-    data_protection_contract_point: values.switchPII ? yup.string().required('Data Protection Contact Point required') : yup.string(),
-    consent_withdrawal_contact_point: values.switchPII ? yup.string().required('Consent Withdrawal Contact Point required') : yup.string(),
-    policies: yup.array().of(yup.object().shape({
-      period: yup.object().shape({
-        startDate: yup.string().required('A start date is required for the policy'),
-        endDate: yup.string()
-      }),
-      policyName: yup.string().required('A name is required for the policy')
-    }))
+    // data_controller: values.switchPII ? yup.string().required('Data Controller required') : yup.string(),
+    // legal_basis: values.switchPII ? yup.string().required('Legal Basis required') : yup.string(),
+    // purpose: values.switchPII ? yup.string().required('Purpose required') : yup.string(),
+    // data_protection_contract_point: values.switchPII ? yup.string().required('Data Protection Contact Point required') : yup.string(),
+    // consent_withdrawal_contact_point: values.switchPII ? yup.string().required('Consent Withdrawal Contact Point required') : yup.string()
+    // policy: yup.object().shape({
+    //   period: yup.object().shape({
+    //     startDate: yup.string().required('A start date is required for the policy'),
+    //     endDate: yup.string()
+    //   }),
+    //   policyName: yup.string().required('A name is required for the policy')
+    // })
   }))
 
 /**
@@ -83,7 +87,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
           setOpenModal(true)
         }}
       >
-        {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
+        {({ values, errors, touched, setFieldValue }) => (
           <Form className={`${style.tagInput} ${style.test}`}>
             <Accordion className='bg-white'>
               <Accordion.Panel>
@@ -95,6 +99,11 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     label='Title'
                     name='title'
                     placeholder='Title goes here'
+                  />
+                  <CustomTextInput
+                    label='Creator'
+                    name='creator'
+                    placeholder='Who made this asset?'
                   />
                   <div className='block mb-2'>
                     <Label htmlFor='description' value='Description' />
@@ -116,7 +125,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     placeholder='A URL for a picture'
                   />
                   <div className='block mb-2'>
-                    <Label htmlFor='keywords' value='Keywords here' />
+                    <Label htmlFor='keywords' value='Keywords here (separated by new Line/Enter)' />
                   </div>
                   <TagsInput
                     name='keywords'
@@ -127,10 +136,12 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     // Custom change handler for TagsInput as it doesn't support Formik's handleChange
                     tags => {
                       setFieldValue('keywords', tags)
-                      setFieldTouched('keywords', true, false)
                     }
                   }
                   />
+                  {touched.keywords && errors.keywords && (
+                    <p className='text-sm text-red-600 mt-2'>{errors.keywords}</p>
+                  )}
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
@@ -221,7 +232,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                       )}
                     />
                   </Card>
-                  <Card className='mt-6'>
+                  {/* <Card className='mt-6'>
                     <div className='block mb-2'>
                       <ToggleSwitch
                         checked={values.switchQuery}
@@ -313,20 +324,20 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                         </div>
                       )}
                     />
-                  </Card>
+                  </Card> */}
 
                   <h5 className='mt-6 mb-4 text-2xl font-bold tracking-tight text-gray-900'>Rights & Usage</h5>
                   <CustomTextInput
                     label='License'
                     name='license'
-                    placeholder='MIT'
+                    placeholder='https://opensource.org/license/mit'
                   />
-                  <CustomTextInput
+                  {/* <CustomTextInput
                     label='Terms & Conditions'
                     name='terms_and_condition'
                     placeholder='http://example.url.com/terms.json'
-                  />
-                  <div className='block mt-4 mb-4'>
+                  /> */}
+                  {/* <div className='block mt-4 mb-4'>
                     <ToggleSwitch
                       checked={values.switchPII}
                       label='The dataset contains personal identifiable information'
@@ -374,73 +385,26 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                         </div>
                       </div>
                     </Card>
-                  </div>
+                  </div> */}
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>
             <Accordion className='bg-white mt-4'>
               <Accordion.Panel>
                 <Accordion.Title className='bg-white mb-2 text-2xl font-bold tracking-tight text-gray-900'>
-                  Pricing & Policy
+                  Policy
                 </Accordion.Title>
                 <Accordion.Content>
-                  <div className='block mb-2'>
-                    <h5 className='mb-2 text-xl font-bold tracking-tight text-gray-900'>Policies</h5>
-                  </div>
-                  <FieldArray
-                    name='policies'
-                    render={arrayHelpers => (
+                  <Card className='mb-6'>
+                    <div className='mb-6'>
                       <div>
-                        {values.policies.map((_header, index) => (
-                          <Card className='mb-6' key={index}>
-                            <div className='mb-6' key={index}>
-                              <div className='mb-4'>
-                                <CustomTextInput
-                                  label='Policy name'
-                                  name={`policies.${index}.policyName`}
-                                  placeholder=''
-                                />
-                              </div>
-                              <div>
-                                <CustomDatepicker
-                                  name={`policies.${index}.period`}
-                                  label='Date range'
-                                />
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
-                        <div className='flex justify-end space-x-2'>
-                          <div>
-                            <Button
-                              size='xs'
-                              outline
-                              onClick={() => arrayHelpers.push(initialValues.policies[0])}
-                            >
-                              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-5 h-5 mr-2'>
-                                <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
-                              </svg>
-                              Add policy
-                            </Button>
-                          </div>
-                          <div>
-                            <Button
-                              size='xs'
-                              outline
-                              color='failure'
-                              onClick={() => arrayHelpers.remove()} // insert an empty string at a position
-                              disabled={values.policies.length < 2}
-                            >
-                              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-5 h-5 mr-2'>
-                                <path strokeLinecap='round' strokeLinejoin='round' d='M5 12h14' />
-                              </svg>
-                              Remove policy
-                            </Button>
-                          </div>
-                        </div>
+                        <CustomDatepicker
+                          name='policy.period'
+                          label='Date range'
+                        />
                       </div>
-                    )}
-                  />
+                    </div>
+                  </Card>
                 </Accordion.Content>
               </Accordion.Panel>
             </Accordion>

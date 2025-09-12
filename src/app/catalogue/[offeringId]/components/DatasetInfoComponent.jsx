@@ -11,7 +11,7 @@ function DatasetInfoComponent ({ offering, provider }) {
           <ProviderCard provider={provider} />
         </div>
         <div className='pt-2'>
-          <NegotiateCard />
+          <NegotiateCard offering={offering} provider={provider} />
         </div>
       </div>
     </>

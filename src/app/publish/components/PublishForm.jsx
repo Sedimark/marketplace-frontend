@@ -1,7 +1,8 @@
 'use client'
 import { useState } from 'react'
-import { Button, Card, Dropdown, Modal, Popover } from 'flowbite-react'
+import { Button, Card, Dropdown, Modal, Spinner } from 'flowbite-react'
 import AssetForm from './assetDefinition/AssetForm'
+import Link from 'next/link'
 
 /**
  * PublishForm component for creating or reusing assets.
@@ -16,6 +17,7 @@ import AssetForm from './assetDefinition/AssetForm'
 export default function PublishForm (brokerAssets) {
   const initialValuesEmpty = {
     title: '',
+    creator: '',
     description: '',
     image: '',
     keywords: [],
@@ -31,24 +33,22 @@ export default function PublishForm (brokerAssets) {
       required: true
     }],
     license: '',
-    terms_and_condition: '',
-    data_controller: '',
-    legal_basis: '',
-    purpose: '',
-    data_protection_contract_point: '',
-    consent_withdrawal_contact_point: '',
-    switchQuery: false,
-    switchPII: false,
-    policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
+    // switchQuery: false,  --- DEPRECATED
+    // switchPII: false,  --- DEPRECATED
+    policy: { period: { startDate: '', endDate: '' }, policyName: '' }
   }
   const [openModal, setOpenModal] = useState(false)
   const [initialValues, setInitialValues] = useState(initialValuesEmpty)
   const [currentAsset, setCurrentAsset] = useState(null)
   const existingAssets = brokerAssets
+  const [loadingPublish, setLoadingPublish] = useState(false)
+  const [message, setMessage] = useState({ text: null, type: null })
+  const [responseBody, setResponseBody] = useState(null)
 
   const handleSelectExisting = (asset) => {
     const setAssetSelected = {
       title: asset.title,
+      creator: asset.creator,
       description: asset.description,
       image: asset.image,
       keywords: asset.keyword || [],
@@ -64,15 +64,9 @@ export default function PublishForm (brokerAssets) {
         required: true
       }],
       license: asset.license,
-      terms_and_condition: '',
-      data_controller: '',
-      legal_basis: '',
-      purpose: '',
-      data_protection_contract_point: '',
-      consent_withdrawal_contact_point: '',
-      switchQuery: false,
-      switchPII: false,
-      policies: [{ period: { startDate: '', endDate: '' }, policyName: '' }]
+      // switchQuery: false,  --- DEPRECATED
+      // switchPII: false,  --- DEPRECATED
+      policy: { period: { startDate: '', endDate: '' }, policyName: '' }
     }
     setInitialValues(setAssetSelected)
     setCurrentAsset(asset.id)
@@ -81,8 +75,41 @@ export default function PublishForm (brokerAssets) {
     setInitialValues(initialValuesEmpty)
     setCurrentAsset(`Empty + ${Date.now()}`)
   }
+  const handleCreateAsset = async (offeringData) => {
+    setLoadingPublish(true)
+    setMessage({ text: null, type: null })
+    try {
+      const success = await publishOffering(offeringData)
+      if (success) {
+        setMessage({ text: 'Asset successfully published!', type: 'success' })
+        setCurrentAsset(null)
+        setInitialValues(initialValuesEmpty)
+      } else {
+        setMessage({ text: 'Something went wrong while publishing the asset.', type: 'error' })
+      }
+    } catch (error) {
+      console.error('Publishing failed:', error)
+      setMessage({ text: 'An unexpected error occurred while publishing.', type: 'error' })
+    } finally {
+      setLoadingPublish(false)
+    }
+  }
+  async function publishOffering (offeringData) {
+    const response = await fetch('/api/offeringManager/publish', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(offeringData)
+    })
 
-  console.log(existingAssets)
+    if (response.ok) {
+      const data = await response.json()
+      setResponseBody(data)
+      return true
+    }
+    return false
+  }
   return (
     <div className='flex flex-grow flex-col items-center justify-center bg-gray-50'>
       <Card className=' flex items-center w-1/2 mt-8'>
@@ -115,46 +142,78 @@ export default function PublishForm (brokerAssets) {
           {AssetForm(initialValues, setInitialValues, openModal, setOpenModal)}
         </div>}
 
-      {openModal &&
+      {openModal && (
         <div className='flow-root'>
           <Modal show={openModal} onClose={() => setOpenModal(false)}>
-            <Modal.Header>Review Asset information:</Modal.Header>
-            <Modal.Body>
-              <pre>
-                {JSON.stringify(initialValues, null, 2)}
-              </pre>
-            </Modal.Body>
-            <Modal.Footer>
-
-              <Popover
-                aria-labelledby='default-popover'
-                content={
-                  <div className='w-64 text-sm text-gray-500 dark:text-gray-400'>
-                    <div className='px-3 py-2'>
-                      <p>To close use the X</p>
+            {responseBody
+              ? (
+                <>
+                  <Modal.Header>Offer Published Successfully!</Modal.Header>
+                  <Modal.Body>
+                    <pre className='text-sm bg-gray-100 p-4 rounded'>
+                      {JSON.stringify(responseBody, null, 2)}
+                    </pre>
+                  </Modal.Body>
+                  <Modal.Footer className='flex flex-col items-start w-full space-y-2'>
+                    <div className='flex flex-row space-x-2 w-full'>
+                      <Button
+                        onClick={() => {
+                          setOpenModal(false)
+                          setResponseBody(null)
+                          setCurrentAsset(null)
+                          setInitialValues(initialValuesEmpty)
+                          setMessage(null)
+                        }}
+                      >
+                        Create New Offer
+                      </Button>
+                      <Link href='/dashboard/offerings'>
+                        <Button
+                          color='gray' // Maybe other color?
+                        >
+                          See your Offerings
+                        </Button>
+                      </Link>
                     </div>
-                  </div>
-                }
-              >
-                <Button>I accept</Button>
-              </Popover>
-              <Popover
-                aria-labelledby='default-popover'
-                content={
-                  <div className='w-64 text-sm text-gray-500 dark:text-gray-400'>
-                    <div className='px-3 py-2'>
-                      <p>This is not implemented, what is the next step after submit?</p>
+                  </Modal.Footer>
+                </>
+                )
+              : (
+                <>
+                  <Modal.Header>Review Asset information:</Modal.Header>
+                  <Modal.Body>
+                    <pre>{JSON.stringify(initialValues, null, 2)}</pre>
+                  </Modal.Body>
+                  <Modal.Footer className='flex flex-col items-start w-full space-y-2'>
+                    <div className='flex flex-row space-x-2 w-full'>
+                      <Button onClick={() => handleCreateAsset(initialValues)} disabled={loadingPublish}>
+                        {loadingPublish
+                          ? (
+                            <>
+                              <Spinner size='sm' className='mr-2' />
+                              Publishing...
+                            </>
+                            )
+                          : (
+                              'Confirm'
+                            )}
+                      </Button>
+                      <Button onClick={() => setOpenModal(false)} color='gray'>
+                        Keep Editing
+                      </Button>
                     </div>
-                  </div>
-                }
-              >
-                <Button color='gray'>
-                  Decline
-                </Button>
-              </Popover>
-            </Modal.Footer>
+                    {message?.text && (
+                      <p className={`text-sm w-full mt-1 ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                        {message.text}
+                      </p>
+                    )}
+                  </Modal.Footer>
+                </>
+                )}
           </Modal>
-        </div>}
+        </div>
+      )}
+
     </div>
   )
 }

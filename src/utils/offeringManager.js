@@ -1,5 +1,231 @@
 import settings from '@/utils/settings'
 import { fetchData } from '@/utils/helpers/fetchData'
+import { getIdentity } from '@/utils/dlt'
+import { getProviderData } from './selectedOffering'
+
+function getCreateOfferingBody (offeringData, identity, provider) {
+  const keywordArrayFormatted = []
+  offeringData.keywords.forEach(keyword => {
+    keywordArrayFormatted.push({ '@value': keyword, '@type': 'xsd:string' })
+  })
+  const headersArrayFormatted = []
+  offeringData.headers.forEach(header => {
+    headersArrayFormatted.push({
+      'sedimark:headerName': {
+        '@value': header.key,
+        '@type': 'xsd:string'
+      },
+      'sedimark:headerValue': {
+        '@value': header.value,
+        '@type': 'xsd:string'
+      }
+    })
+  })
+
+  const constraints = []
+
+  // Add date constraints if present on the form
+  if (offeringData.policy?.period?.startDate && offeringData.policy?.period?.endDate) {
+    constraints.push(
+      {
+        'odrl:leftOperand': 'odrl:dateTime',
+        'odrl:operator': { '@id': 'odrl:lteq' },
+        'odrl:rightOperand': {
+          '@value': offeringData.policy.period.startDate,
+          '@type': 'xsd:dateTime'
+        }
+      },
+      {
+        'odrl:leftOperand': 'odrl:dateTime',
+        'odrl:operator': { '@id': 'odrl:gteq' },
+        'odrl:rightOperand': {
+          '@value': offeringData.policy.period.endDate,
+          '@type': 'xsd:dateTime'
+        }
+      }
+    )
+  }
+
+  // Add required constant constraints
+  constraints.push(
+    {
+      'odrl:leftOperand': 'sedi:claimMemberOf',
+      'odrl:operator': { '@id': 'odrl:eq' },
+      'odrl:rightOperand': 'SEDIMARK marketplace'
+    },
+    {
+      'odrl:leftOperand': 'sedi:dataTokenOwnership',
+      'odrl:operator': { '@id': 'odrl:eq' },
+      'odrl:rightOperand': 'true'
+    }
+  )
+
+  const body = {
+    '@context': {
+      '@vocab': 'https://w3id.org/sedimark/vocab/',
+      sedimark: 'https://w3id.org/sedimark/ontology#',
+      dct: 'http://purl.org/dc/terms/',
+      odrl: 'http://www.w3.org/ns/odrl/2/',
+      owl: 'http://www.w3.org/2002/07/owl#',
+      rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+      xml: 'http://www.w3.org/XML/1998/namespace',
+      xsd: 'http://www.w3.org/2001/XMLSchema#',
+      rdfs: 'http://www.w3.org/2000/01/rdf-schema#',
+      dcat: 'http://www.w3.org/ns/dcat#',
+      schema: 'https://schema.org/'
+    },
+    '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id', // Overwritten by OM
+    '@type': 'sedimark:Offering',
+    'sedimark:isListedBy': {
+      // can be `${settings.offeringManagerUrl}/offerings` (value form settings) or provider.connector_url + '/offerings (value from DID resolved)'
+      '@id': `${settings.offeringManagerUrl}/offerings`,
+      '@type': 'sedimark:Self-Listing',
+      'sedimark:belongsTo': {
+        // can be `${settings.webserverUrl}/profile` or extracted from the DID
+        '@id': `${settings.webserverUrl}/profile`,
+        '@type': 'sedimark:Participant',
+        'schema:alternateName': {
+          '@value': identity.data.vc.credentialSubject['schema:alternateName'], // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
+          '@type': 'xsd:string'
+        },
+        'schema:accountId': {
+          '@value': identity.data.sub, // ?? DID --> DLT
+          '@type': 'xsd:string'
+        }
+      }
+    },
+    'sedimark:hasOfferingContract': {
+      '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id/offeringContract/dummy-offeringContract-id', // Overwritten by OM
+      '@type': 'sedimark:OfferingContract',
+      'odrl:profile': 'https://sedimark.eu/odrl/sedi-profile', // Overwritten by OM
+      'odrl:uid': 'https://uc.sedimark.eu/offerings/dummy-offering-id/offeringContract/dummy-offeringContract-id',
+      'odrl:permission': [{
+        'odrl:target': 'https://uc.sedimark.eu/offerings/dummy-offering-id',
+        'odrl:assigner': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a',
+        'odrl:action': 'odrl:use',
+        'odrl:constraint': constraints,
+        'odrl:duty': [ // Whole OBJ is constant
+          {
+            'odrl:action': [
+              {
+                'odrl:action': 'sedi:purchaseDataToken',
+                'odrl:refinement': [
+                  {
+                    'odrl:leftOperand': 'odrl:payAmount',
+                    'odrl:operator': {
+                      '@id': 'odrl:eq'
+                    },
+                    'odrl:rightOperand': { '@value': '1', '@type': 'xsd:decimal' },
+                    'odrl:unit': 'sedi:nativeToken'
+                  }
+                ]
+              }
+            ],
+            'odrl:constraint': [
+              {
+                'odrl:leftOperand': 'odrl:event',
+                'odrl:operator': {
+                  '@id': 'odrl:lt'
+                },
+                'odrl:rightOperand': 'sedi:dspContractAgreementFinalized'
+              }
+            ]
+          }
+        ]
+      }],
+      'odrl:prohibition': [],
+      'odrl:obligation': []
+    },
+    'dct:issued': { // Added date by us. In case is overwritten, doesn't matter. If not OW, it will be correct
+      '@value': new Date().toISOString(), // current time in ISO 8601 format, as the example was (and supposedly type datetime)
+      '@type': 'xsd:dateTime'
+    },
+    'dct:language': {
+      '@value': 'English',
+      '@type': 'xsd:string'
+    },
+    'dct:title': {
+      '@value': offeringData.title, // title will be same as asset title if only 1 asset x offering
+      '@type': 'xsd:string'
+    },
+    'dct:description': {
+      '@value': offeringData.description,
+      '@type': 'xsd:string'
+    },
+    'dct:publisher': {
+      '@id': 'did:iota:lnk:0xf053682e4724ba221e2f49dd0adabba135cd4ccb08d492440e163482064b617a'
+    },
+    'dct:creator': {
+      '@value': offeringData.creator, // New field? Optional, as Profile can be a Company.
+      '@type': 'xsd:string'
+    },
+    'dcat:themeTaxonomy': {
+      '@id': 'https://w3id.org/sedimark/vocab/sdm'
+    },
+    'dct:license': {
+      '@value': offeringData.license,
+      '@type': 'xsd:string'
+    },
+    'sedimark:hasAsset': [{
+      '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id/assets/dummy-asset-id', // Overwritten by OW
+      '@type': 'sedimark:Asset',
+      'dct:title': {
+        '@value': offeringData.title, // Our title field
+        '@type': 'xsd:string'
+      },
+      'sedimark:offeredBy': {
+        '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id'
+      },
+      'dct:description': {
+        '@value': offeringData.description, // Our descr field
+        '@type': 'xsd:string'
+      },
+      'dct:issued': {
+        '@value': new Date().toISOString(),
+        '@type': 'xsd:dateTime'
+      },
+      'dct:creator': {
+        '@value': offeringData.creator,
+        '@type': 'xsd:string'
+      },
+      // TODO: Field required by the Offering Manager... ask UC about why is required and where this value come from
+      'dcat:theme': {
+        '@id': 'https://w3id.org/sedimark/vocab/sdm/entity/vehicle'
+      },
+      'dcat:keyword': keywordArrayFormatted,
+      // TODO: Field required by the Offering Manager... ask UC about why is required and where this value come from
+      'dct:spatial': {
+        '@id': 'http://www.wikidata.org/entity/Q12233',
+        '@type': 'dct:Location'
+      },
+      'sedimark:isProvidedBy': {
+        '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id/assetProvision/dummy-assetProvision-id',
+        '@type': 'sedimark:AssetProvision',
+        'dct:title': {
+          '@value': offeringData.title,
+          '@type': 'xsd:string'
+        },
+        'dct:format': {
+          '@id': 'HttpData'
+        },
+        'dct:description': {
+          '@value': offeringData.description,
+          '@type': 'xsd:string'
+        },
+        'dct:issued': {
+          '@value': new Date().toISOString(), // current time in ISO 8601 format, as the example was (and supposeldy type datetime)
+          '@type': 'xsd:dateTime'
+        },
+        'dcat:accessURL': {
+          '@id': offeringData.url // Access Type
+        },
+        'sedimark:headers': headersArrayFormatted// Filled by US, sent empy in case not in form
+      }
+    }
+    ]
+  }
+  return body
+}
 
 /**
  * Fetch call to obtain ALL the IDs stored on the Offering Manager.
@@ -97,6 +323,39 @@ export async function fetchOfferings (currentPage) {
 }
 
 /**
+ * Fetch call to Create an offering.
+ * @async
+ * @param {json} offeringBody - Json structure that represents the offering to create
+ * @returns Json response from offering Manager with the created Offering if success.
+ */
+export async function createOffering (offeringData) {
+  const url = `${settings.offeringManagerUrl}/offerings`
+  const identity = await getIdentity()
+  const provider = await getProviderData(identity.data.sub)
+
+  // Check if identity is missing or returned value is error, as getIdentity has its own error catch.
+  if (!identity || identity.error) {
+    console.log('Invalid or missing identity!')
+    return { error: 'Invalid or missing identity' }
+  }
+
+  const bodyCreateOffering = getCreateOfferingBody(offeringData, identity, provider)
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bodyCreateOffering)
+  }
+
+  try {
+    const data = await fetchData(url, options).then(response => response.json())
+    return data
+  } catch (error) {
+    console.log('Error on createOffering!')
+    console.log(error)
+    return { error }
+  }
+}
+/*
  * Multiple fetch call to obtain a set of Offerings, while maintaining a "pagination" structure.
  * Will simulate the pagination on their side, but it is done here!
  * --------- DEPRECATED -----------
