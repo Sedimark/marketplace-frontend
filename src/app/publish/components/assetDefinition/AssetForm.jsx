@@ -87,7 +87,7 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
           setOpenModal(true)
         }}
       >
-        {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
+        {({ values, errors, touched, setFieldValue }) => (
           <Form className={`${style.tagInput} ${style.test}`}>
             <Accordion className='bg-white'>
               <Accordion.Panel>
@@ -136,7 +136,6 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                     // Custom change handler for TagsInput as it doesn't support Formik's handleChange
                     tags => {
                       setFieldValue('keywords', tags)
-                      setFieldTouched('keywords', true, false)
                     }
                   }
                   />
@@ -398,13 +397,6 @@ export default function AssetForm (initialValues, setInitialValues, openModal, s
                 <Accordion.Content>
                   <Card className='mb-6'>
                     <div className='mb-6'>
-                      <div className='mb-4'>
-                        <CustomTextInput
-                          label='Policy name'
-                          name='policy.policyName'
-                          placeholder=''
-                        />
-                      </div>
                       <div>
                         <CustomDatepicker
                           name='policy.period'

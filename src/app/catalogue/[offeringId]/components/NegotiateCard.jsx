@@ -12,7 +12,7 @@ function NegotiateCard ({ offering, provider }) {
       console.error(provider.error)
       setToast({
         type: 'error',
-        message: `Provider Error: ${provider.error}`
+        message: `Cannot negotiate offering: ${provider.error}`
       })
     }
   }, [provider.error])
@@ -44,7 +44,7 @@ function NegotiateCard ({ offering, provider }) {
     } catch (error) {
       setToast({
         type: 'error',
-        message: `Error: ${error.message || 'Failed to negotiate contract.'}`
+        message: `Couldn't negotiate offering: ${error.message || 'Failed to negotiate contract.'}`
       })
     } finally {
       setIsLoading(false)
@@ -55,6 +55,22 @@ function NegotiateCard ({ offering, provider }) {
     <>
       <Card className='flex max-w-sm min-w-fit max-h-72 min-h-fit pt-2 sticky top-28'>
         <div className='flex flex-col items-center'>
+          {toast && (
+            <div className='fixed bottom-6 right-6 z-50'>
+              <Toast
+                className={`${
+              toast.type === 'success' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
+            }`}
+              >
+                <div className='inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg'>
+                  {toast.type === 'success'
+                    ? <HiCheckCircle className='h-6 w-6 text-green-700' />
+                    : <HiXCircle className='h-6 w-6 text-red-700' />}
+                </div>
+                <div className='ml-3 text-sm font-normal'>{toast.message}</div>
+              </Toast>
+            </div>
+          )}
           <button
             type='button'
             className='inline-flex w-full justify-center rounded-lg bg-sedimark-deep-blue px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-900 disabled:opacity-50'
@@ -69,22 +85,6 @@ function NegotiateCard ({ offering, provider }) {
         </div>
       </Card>
 
-      {toast && (
-        <div className='fixed bottom-6 right-6 z-50'>
-          <Toast
-            className={`${
-              toast.type === 'success' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
-            }`}
-          >
-            <div className='inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg'>
-              {toast.type === 'success'
-                ? <HiCheckCircle className='h-6 w-6 text-green-700' />
-                : <HiXCircle className='h-6 w-6 text-red-700' />}
-            </div>
-            <div className='ml-3 text-sm font-normal'>{toast.message}</div>
-          </Toast>
-        </div>
-      )}
     </>
   )
 }

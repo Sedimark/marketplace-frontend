@@ -195,11 +195,11 @@ export default function PublishForm (brokerAssets) {
                             </>
                             )
                           : (
-                              'I accept'
+                              'Confirm'
                             )}
                       </Button>
                       <Button onClick={() => setOpenModal(false)} color='gray'>
-                        Decline
+                        Keep Editing
                       </Button>
                     </div>
                     {message?.text && (

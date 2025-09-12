@@ -81,8 +81,8 @@ function getCreateOfferingBody (offeringData, identity, provider) {
       '@id': `${settings.offeringManagerUrl}/offerings`,
       '@type': 'sedimark:Self-Listing',
       'sedimark:belongsTo': {
-        // can be `${settings.webserverUrl}` or extracted from the DID
-        '@id': `${settings.webserverUrl}`,
+        // can be `${settings.webserverUrl}/profile` or extracted from the DID
+        '@id': `${settings.webserverUrl}/profile`,
         '@type': 'sedimark:Participant',
         'schema:alternateName': {
           '@value': identity.data.vc.credentialSubject['schema:alternateName'], // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
@@ -137,7 +137,7 @@ function getCreateOfferingBody (offeringData, identity, provider) {
       'odrl:obligation': []
     },
     'dct:issued': { // Added date by us. In case is overwritten, doesn't matter. If not OW, it will be correct
-      '@value': new Date().toISOString(), // current time in ISO 8601 format, as the example was (and supposeldy type datetime)
+      '@value': new Date().toISOString(), // current time in ISO 8601 format, as the example was (and supposedly type datetime)
       '@type': 'xsd:dateTime'
     },
     'dct:language': {
@@ -181,19 +181,19 @@ function getCreateOfferingBody (offeringData, identity, provider) {
         '@type': 'xsd:string'
       },
       'dct:issued': {
-        '@value': '2025-12-31T00:00:00Z', // ???
+        '@value': new Date().toISOString(),
         '@type': 'xsd:dateTime'
       },
       'dct:creator': {
-        '@value': offeringData.creator, // New field? or setted up by Query the DLT Altername?
+        '@value': offeringData.creator,
         '@type': 'xsd:string'
       },
-      // TODO: Field required by the Offering Manage... ask UC about why is required and where this value come from
+      // TODO: Field required by the Offering Manager... ask UC about why is required and where this value come from
       'dcat:theme': {
         '@id': 'https://w3id.org/sedimark/vocab/sdm/entity/vehicle'
       },
       'dcat:keyword': keywordArrayFormatted,
-      // TODO: Field required by the Offering Manage... ask UC about why is required and where this value come from
+      // TODO: Field required by the Offering Manager... ask UC about why is required and where this value come from
       'dct:spatial': {
         '@id': 'http://www.wikidata.org/entity/Q12233',
         '@type': 'dct:Location'
