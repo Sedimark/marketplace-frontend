@@ -341,11 +341,12 @@ export default function FormSteps () {
             {didKey && (
               <>
                 <p>Your key is here:</p>
-                <div className='flex items-center gap-2 bg-gray-100 rounded-md px-4 py-2'>
+                <div className='relative flex items-center gap-2 bg-gray-100 rounded-md px-4 py-2'>
                   <code className='text-gray-800 font-mono break-all'>{didKey}</code>
-                  <Button size='xs' color='light' onClick={() => navigator.clipboard.writeText(didKey)}>
-                    Copy to clipboard
-                  </Button>
+                  <ClipboardWithIcon
+                    className='right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700 bg-gray-100'
+                    valueToCopy={didKey}
+                  />
                 </div>
               </>
             )}
