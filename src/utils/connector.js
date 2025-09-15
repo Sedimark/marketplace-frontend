@@ -397,7 +397,7 @@ export async function contractNegotiationFlow (datasetID, counterPartyAddress) {
   const getDataset = await fetchDataset(datasetID, counterPartyAddress)
   if (getDataset.error) {
     // Return the error immediately so the flow does not continue + error is sent to be shown on toast
-    return { error: getDataset.error }
+    return { error: 'Failed to get the dataset from the connector!' }
   }
   const getContractNegotiation = await contractNegotiation(getDataset['odrl:hasPolicy']['@id'], counterPartyAddress)
   // maybe add get contract ID on the flow?
