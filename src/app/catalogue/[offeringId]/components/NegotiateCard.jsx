@@ -56,7 +56,7 @@ function NegotiateCard ({ offering, provider }) {
       <Card className='flex max-w-sm min-w-fit max-h-72 min-h-fit pt-2 sticky top-28'>
         <div className='flex flex-col items-center'>
           {toast && (
-            <div className='fixed bottom-6 right-6 z-50'>
+            <div className='mb-4 z-50'>
               <Toast
                 className={`${
               toast.type === 'success' ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
