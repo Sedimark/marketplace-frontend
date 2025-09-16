@@ -31,7 +31,7 @@ export async function submitUserData (userData) {
   } catch (error) {
     console.log('Error on submitUserData!')
     console.log(error)
-    return { error }
+    return { error: 'Unnable to access profile server!' }
   }
 }
 
