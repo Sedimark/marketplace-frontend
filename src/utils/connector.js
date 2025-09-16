@@ -160,7 +160,7 @@ function getDatasetBody (datasetID, counterPartyAddress) {
  * @returns An Array of JSON obj representing the contracts
  */
 export async function fetchContracts (contractAgreementIdFilter) {
-  const url = `${settings.connectorUrl}/management/v3/contractagreements/request`
+  const url = `${settings.connectorUrl}/api/management/v3/contractagreements/request`
   const bodyContract = getContractsQueryBody(contractAgreementIdFilter)
   const options = {
     method: 'POST',
@@ -188,7 +188,7 @@ export async function fetchContracts (contractAgreementIdFilter) {
  * @returns An Array of JSON obj representing the Transfer Process.
  */
 export async function fetchTransferProcess (contractAgreementIdFilter = null) {
-  const url = `${settings.connectorUrl}/management/v3/transferprocesses/request`
+  const url = `${settings.connectorUrl}/api/management/v3/transferprocesses/request`
   const bodyContract = getTransferProcessQueryBody(contractAgreementIdFilter)
   const options = {
     method: 'POST',
@@ -214,7 +214,7 @@ export async function fetchTransferProcess (contractAgreementIdFilter = null) {
  * @returns An Array of JSON obj representing the Negotiations.
  */
 export async function fetchNegotiations (currentPage, showConsumed) {
-  const url = `${settings.connectorUrl}/management/v3/contractnegotiations/request`
+  const url = `${settings.connectorUrl}/api/management/v3/contractnegotiations/request`
   const bodyContract = getNegotiationsQueryBody(currentPage, showConsumed)
   const options = {
     method: 'POST',
@@ -242,7 +242,7 @@ export async function fetchNegotiations (currentPage, showConsumed) {
  * @returns JSON object with some relevant info, not used on the frontend, expected to be a 200.
  */
 export async function transferPush (connectorId, counterPartyAddress, contractId, dataDestination) {
-  const url = `${settings.connectorUrl}/management/v3/transferprocesses`
+  const url = `${settings.connectorUrl}/api/management/v3/transferprocesses`
   const bodyTransferPush = getTransferPushBody(connectorId, counterPartyAddress, contractId, dataDestination)
   const options = {
     method: 'POST',
@@ -261,7 +261,7 @@ export async function transferPush (connectorId, counterPartyAddress, contractId
 }
 
 export async function transferStart (connectorId, counterPartyAddress, contractId) {
-  const url = `${settings.connectorUrl}/management/v3/transferprocesses`
+  const url = `${settings.connectorUrl}/api/management/v3/transferprocesses`
   const bodyTransferStart = getTransferStartBody(connectorId, counterPartyAddress, contractId)
   const options = {
     method: 'POST',
@@ -281,7 +281,7 @@ export async function transferStart (connectorId, counterPartyAddress, contractI
 }
 
 export async function transferGetId (transferIdStart) {
-  const url = `${settings.connectorUrl}/management/v3/transferprocesses/${transferIdStart}`
+  const url = `${settings.connectorUrl}/api/management/v3/transferprocesses/${transferIdStart}`
   const options = {
     method: 'GET',
     headers: {
@@ -302,7 +302,7 @@ export async function transferGetId (transferIdStart) {
 }
 
 export async function transferGetEDR (transferId) {
-  const url = `${settings.connectorUrl}/management/v3/edrs/${transferId}/dataaddress`
+  const url = `${settings.connectorUrl}/api/management/v3/edrs/${transferId}/dataaddress`
   const options = { method: 'GET' }
   const maxRetries = settings.maxRetriesGetEDR
   const retryDelay = 1000
@@ -344,7 +344,7 @@ export async function transferPullFlow (connectorId, counterPartyAddress, contra
  * @returns empty Response, expected to be a 200.
  */
 export async function contractNegotiation (policyID, counterPartyAddress) {
-  const url = `${settings.connectorUrl}/v3/contractnegotiations`
+  const url = `${settings.connectorUrl}/api/management/v3/contractnegotiations`
   const bodyContractNegotiation = getContractNegotiationBody(policyID, counterPartyAddress)
   const options = {
     method: 'POST',
@@ -370,7 +370,7 @@ export async function contractNegotiation (policyID, counterPartyAddress) {
  * @returns JSON object representing the dataset.
  */
 export async function fetchDataset (datasetID, counterPartyAddress) {
-  const url = `${settings.connectorUrl}/v3/catalog/dataset/request`
+  const url = `${settings.connectorUrl}/api/management/v3/catalog/dataset/request`
   const bodyDataset = getDatasetBody(normalizeDatasetID(datasetID), counterPartyAddress)
   const options = {
     method: 'POST',
