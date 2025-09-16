@@ -155,7 +155,7 @@ function getSparQLProvidersQueryString (query) {
     WHERE { GRAPH ?g {
       ${getOfferingQueryFilter(query)}
     }}
-    ORDER BY ?publisher
+    ORDER BY ?alternateName
   `
   return encodeURI(baseString)
 }
