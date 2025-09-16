@@ -85,7 +85,12 @@ export default function FormSteps () {
       const response = await fetch('/api/identity', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: values.username })
+        body: JSON.stringify({
+          username: values.username,
+          profileUrl: values.profileUrl,
+          connectorUrl: values.connectorUrl,
+          selfListingUrl: values.selfListingUrl
+        })
       })
 
       const idResp = await response.json()
@@ -141,6 +146,9 @@ export default function FormSteps () {
   // Using validationSchema for standard validation. Use a custom validate function for more complex cases.
   const validationSchemaStepTwo = yup.object({
     username: yup.string().required('Username is required'),
+    profileUrl: yup.string().url().required(invalidURL),
+    connectorUrl: yup.string().url().required(invalidURL),
+    selfListingUrl: yup.string().url().required(invalidURL),
     first_name: yup.string().notRequired(),
     last_name: yup.string().notRequired(),
     company: yup.string().notRequired(),
@@ -194,6 +202,10 @@ export default function FormSteps () {
           <Formik
             initialValues={{
               username: '',
+              profileUrl: '',
+              connectorUrl: '',
+              selfListingUrl: '',
+              // Optional fields
               first_name: '',
               last_name: '',
               company: '',
@@ -245,6 +257,30 @@ export default function FormSteps () {
                     tooltip='The name under which you will be known in the SEDIMARK ecosystem.'
                     name='username'
                     placeholder='The name under which you will be known in the SEDIMARK ecosystem.'
+                  />
+                </div>
+                <div>
+                  <CustomTextInput
+                    label='Self-listing URL'
+                    tooltip='The public URL where your offering manager self-listing service is hosted, typically: https://my-offering-manager.com/offerings'
+                    name='selfListingUrl'
+                    placeholder='https://my-offering-manager.com/offerings'
+                  />
+                </div>
+                <div>
+                  <CustomTextInput
+                    label='Connector DSP URL'
+                    tooltip='The public URL where the Data Space Protocol (DSP) API of your connector is hosted, typically: https://my-connector.com/api/dsp'
+                    name='connectorUrl'
+                    placeholder='https://my-connector.com/api/dsp'
+                  />
+                </div>
+                <div>
+                  <CustomTextInput
+                    label='Profile server URL'
+                    tooltip='The public URL where your profile data server is hosted, typically: https://my-profile.com/profile'
+                    name='profileUrl'
+                    placeholder='https://my-profile-server.com/profile'
                   />
                 </div>
                 <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />

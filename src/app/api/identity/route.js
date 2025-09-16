@@ -4,7 +4,7 @@ import { handleApiRequest } from '@/utils/helpers/handleApiRequest'
 
 export async function POST (request) {
   return handleApiRequest(async () => {
-    const { username } = await request.json()
+    const { username, profileUrl, connectorUrl, selfListingUrl } = await request.json()
 
     if (!username) {
       return NextResponse.json(
@@ -12,8 +12,26 @@ export async function POST (request) {
         { status: 400 }
       )
     }
+    if (!profileUrl) {
+      return NextResponse.json(
+        { error: { message: 'Profile URL is required' } },
+        { status: 400 }
+      )
+    }
+    if (!connectorUrl) {
+      return NextResponse.json(
+        { error: { message: 'Connector URL is required' } },
+        { status: 400 }
+      )
+    }
+    if (!selfListingUrl) {
+      return NextResponse.json(
+        { error: { message: 'Self Listing URL is required' } },
+        { status: 400 }
+      )
+    }
 
-    const response = await createIdentity(username)
+    const response = await createIdentity(username, profileUrl, connectorUrl, selfListingUrl)
 
     if (response.error) {
       return NextResponse.json(
