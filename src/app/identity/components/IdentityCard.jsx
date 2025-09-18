@@ -1,13 +1,9 @@
 'use client'
-import {
-  Button,
-  Card,
-  Accordion,
-  ClipboardWithIcon
-} from 'flowbite-react'
+
+import { Card, Accordion, ClipboardWithIcon } from 'flowbite-react'
 import { HiExclamationCircle } from 'react-icons/hi'
 
-export default function IdentityCard ({identity, address, error}) {
+export default function IdentityCard ({ identity, address, error }) {
   const hasError = !identity || !address || error
   // Error message block, if identity or address is empty, or really strange error but somehow values filled
   if (hasError) {
@@ -43,16 +39,14 @@ export default function IdentityCard ({identity, address, error}) {
           </div>
         </div>
 
-
-            <p className='mt-4'>Your key is here:</p>
-            <div className='relative flex items-center gap-2 bg-gray-100 rounded-md px-4 py-2'>
-              <code className='text-gray-800 font-mono break-all'>{address}</code>
-              <ClipboardWithIcon
-                className='right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700 bg-gray-100'
-                valueToCopy={address}
-              />
-            </div>
-
+        <p className='mt-4'>Your key is here:</p>
+        <div className='relative flex items-center gap-2 bg-gray-100 rounded-md px-4 py-2'>
+          <code className='text-gray-800 font-mono break-all'>{address}</code>
+          <ClipboardWithIcon
+            className='right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700 bg-gray-100'
+            valueToCopy={address}
+          />
+        </div>
 
         <Accordion className='mt-4'>
           <Accordion.Panel>
