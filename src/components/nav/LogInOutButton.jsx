@@ -63,7 +63,9 @@ export default function LogInOutButton () {
   if (identity?.data) {
     return (
       <div className='flex gap-4 w-25 h-25 items-center'>
-        <Avatar size='md' rounded />
+        <Link href='/identity'>
+          <Avatar size='md' rounded />
+        </Link>
         <p>{identity.data.vc.credentialSubject['schema:alternateName']}</p>
       </div>
     )
