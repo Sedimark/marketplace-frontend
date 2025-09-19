@@ -44,6 +44,5 @@ const cspHeader = `
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    upgrade-insecure-requests;
 `
 module.exports = nextConfig
