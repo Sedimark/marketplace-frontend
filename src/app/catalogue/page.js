@@ -1,6 +1,9 @@
 import SearchBar from '@/components/home/SearchBar'
 import Catalogue from './components/Catalogue'
 
+// DISABLING CACHE for the whole page!
+export const revalidate = 0
+
 /**
  * Catalogue browsing page, consisting of a search bar and a filterable/sortable list of results.
  *
