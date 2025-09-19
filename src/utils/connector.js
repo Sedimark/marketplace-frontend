@@ -16,6 +16,7 @@ function normalizeDatasetID (datasetID) {
   if (uriRegex.test(datasetID)) {
     return encodeURIComponent(datasetID)
   }
+  console.log(`[normalizeDatasetID] Not a URI: "${datasetID}" does not start with http:// or https://`)
   return datasetID
 }
 
