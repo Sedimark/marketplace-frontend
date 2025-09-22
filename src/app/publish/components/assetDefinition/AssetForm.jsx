@@ -25,8 +25,8 @@ const validationSchemaAssetDefinition = yup.lazy(values =>
     url: yup.string().url('Must be a URL').required('URL is required'),
     url_action: yup.string().required().oneOf(['GET']).label('url_action'),
     headers: yup.array().of(yup.object().shape({
-      key: yup.string().required('A Key is required for the Header'),
-      value: yup.string().required('A Value is required for the Header')
+      key: yup.string(),
+      value: yup.string()
     })),
     keywords: yup.array()
       .of(yup.string().trim().required('Each keyword must be non-empty'))

@@ -122,7 +122,7 @@ function getTransferStartBody (connectorId, counterPartyAddress, contractId) {
   return body
 }
 
-function getContractNegotiationBody (policyID, counterPartyAddress) {
+function getContractNegotiationBody (policyID, counterPartyAddress, alternateName) {
   const body = {
     '@context': {
       '@vocab': 'https://w3id.org/edc/v0.0.1/ns/'
@@ -134,7 +134,7 @@ function getContractNegotiationBody (policyID, counterPartyAddress) {
       '@context': 'http://www.w3.org/ns/odrl.jsonld',
       '@id': policyID,
       '@type': 'Offer',
-      assigner: 'provider', // ????
+      assigner: alternateName, // ????
       target: 'assetId' // Should be dataset ID? it does even care what you put here :/
     }
   }
@@ -344,9 +344,11 @@ export async function transferPullFlow (connectorId, counterPartyAddress, contra
  * @param {string} counterPartyAddress - The dataspace protocol URL of the provider connector, usually in the form of <base_url>/protocol or <base_url>/api/dsp.
  * @returns empty Response, expected to be a 200.
  */
-export async function contractNegotiation (policyID, counterPartyAddress) {
+export async function contractNegotiation (policyID, counterPartyAddress, alternateName) {
   const url = `${settings.connectorUrl}/api/management/v3/contractnegotiations`
-  const bodyContractNegotiation = getContractNegotiationBody(policyID, counterPartyAddress)
+  const bodyContractNegotiation = getContractNegotiationBody(policyID, counterPartyAddress, alternateName)
+  console.log('Contract negotiation body to be sent:')
+  console.dir(bodyContractNegotiation)
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -389,18 +391,22 @@ export async function fetchDataset (datasetID, counterPartyAddress) {
   }
 }
 
-export async function contractNegotiationFlow (datasetID, counterPartyAddress) {
+export async function contractNegotiationFlow (datasetID, counterPartyAddress, alternateName) {
   // FOR TESTING ONLY:
   // ----- START -----
   // datasetID = 'http://localhost:8080/offerings/12967911-624e-4fc4-94dd-7cf02e49c2af/assets/57a2d1ab-325f-431f-86a6-67ba78f3c569'
   // counterPartyAddress = 'http://provider-cp:8282/api/dsp'
   // ----- END -----
   const getDataset = await fetchDataset(datasetID, counterPartyAddress)
+  console.log('Dataset obtained from fetchDataset():')
+  console.dir(getDataset)
   if (getDataset.error) {
     // Return the error immediately so the flow does not continue + error is sent to be shown on toast
     return { error: 'Failed to get the dataset from the connector!' }
   }
-  const getContractNegotiation = await contractNegotiation(getDataset['odrl:hasPolicy']['@id'], counterPartyAddress)
+  const getContractNegotiation = await contractNegotiation(getDataset['odrl:hasPolicy']['@id'], counterPartyAddress, alternateName)
+  console.log('Contract negotiation response from contractNegotiation():')
+  console.dir(getContractNegotiation)
   // maybe add get contract ID on the flow?
   return getContractNegotiation
 }

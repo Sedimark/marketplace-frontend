@@ -23,7 +23,7 @@ export default function PublishForm (brokerAssets) {
     keywords: [],
     url: '',
     url_action: 'GET',
-    headers: [{ key: '', value: '' }],
+    headers: [],
     queries: [{
       name: '',
       label: '',

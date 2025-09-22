@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 export async function POST (request) {
   return handleApiRequest(async () => {
     const body = await request.json()
-    const response = await contractNegotiationFlow(body.datasetID, body.counterPartyAddress)
+    const response = await contractNegotiationFlow(body.datasetID, body.counterPartyAddress, body.alternateName)
     if (response.error) {
       return NextResponse.json(
         { error: response.error },
