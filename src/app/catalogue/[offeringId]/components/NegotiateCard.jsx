@@ -27,7 +27,8 @@ function NegotiateCard ({ offering, provider }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           datasetID: offering.asset.value,
-          counterPartyAddress: provider.connector_url
+          counterPartyAddress: provider.connector_url,
+          alternateName: provider.alternate_name
         })
       })
 
