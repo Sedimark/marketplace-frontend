@@ -26,7 +26,7 @@ function NegotiateCard ({ offering, provider }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          datasetID: offering.offering.value,
+          datasetID: offering.asset.value,
           counterPartyAddress: provider.connector_url
         })
       })
