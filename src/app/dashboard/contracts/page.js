@@ -3,6 +3,9 @@ import SidebarDashboard from '../components/sidebar/Sidebar'
 import Contracts from './components/Contracts'
 import CustomPagination from './components/CustomPagination'
 
+// DISABLING CACHE for the whole page!
+export const revalidate = 0
+
 export default function Page ({ searchParams }) {
   const currentPage = Number(searchParams?.page) || 1
   const showConsumed = searchParams.showConsumed === undefined || searchParams.showConsumed === 'true'
