@@ -3,7 +3,7 @@
 import { Card, Accordion, ClipboardWithIcon } from 'flowbite-react'
 import { HiExclamationCircle } from 'react-icons/hi'
 
-export default function IdentityCard ({ identity, address, error }) {
+export default function IdentityCard ({ identity, didResolved, address, error }) {
   const hasError = !identity || !address || error
   // Error message block, if identity or address is empty, or really strange error but somehow values filled
   if (hasError) {
@@ -24,12 +24,12 @@ export default function IdentityCard ({ identity, address, error }) {
 
   return (
     <Card className='w-1/2 mt-6 mx-auto'>
-      <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Verifiable credentials</h5>
+      <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900'>Your Identity, {identity.vc.credentialSubject['schema:alternateName']}.</h5>
       <Card className='mt-6 '>
-        <div className='flex items-center text-yellow-600 bg-yellow-50 p-4 rounded-lg border border-yellow-200'>
+        <div className='flex items-centerp-4'>
           <HiExclamationCircle className='h-6 w-6 mr-3 flex-shrink-0' />
           <div>
-            <p className='font-bold text-md mb-1'>You need to get your funds</p>
+            <p className='font-bold text-md mb-1'>You can get funds at the link using your key:</p>
             <p>
               Use your key here:&nbsp;
               <a href='https://stardust.linksfoundation.com/faucet/l2/' target='_blank' rel='noopener noreferrer' className='text-blue-600 underline'>
@@ -55,6 +55,18 @@ export default function IdentityCard ({ identity, address, error }) {
               <pre>
                 <code>
                   {JSON.stringify(identity, null, 2)}
+                </code>
+              </pre>
+            </Accordion.Content>
+          </Accordion.Panel>
+        </Accordion>
+        <Accordion className='mt-4'>
+          <Accordion.Panel>
+            <Accordion.Title>DID</Accordion.Title>
+            <Accordion.Content className='overflow-auto'>
+              <pre>
+                <code>
+                  {JSON.stringify(didResolved, null, 2)}
                 </code>
               </pre>
             </Accordion.Content>

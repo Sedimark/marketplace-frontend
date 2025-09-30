@@ -16,7 +16,7 @@ export default async function Page () {
   if (blockchainAccountId) {
     const [, address] = blockchainAccountId.split('eip155:1:')
     return (
-      <IdentityCard identity={identity?.data} address={address} error={identity?.error} />
+      <IdentityCard identity={identity?.data} didResolved={responseResolvedDID} address={address} error={identity?.error} />
     )
   }
   return (
