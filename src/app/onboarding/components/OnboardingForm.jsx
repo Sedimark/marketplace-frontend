@@ -8,8 +8,7 @@ import {
   Accordion,
   Modal,
   Spinner,
-  ClipboardWithIcon,
-  Toast
+  ClipboardWithIcon
 } from 'flowbite-react'
 import * as yup from 'yup'
 import { Formik, Form, useField } from 'formik'
@@ -252,7 +251,7 @@ export default function FormSteps () {
                     </div>
                   </Modal.Footer>
                 </Modal>
-                <div className="flex flex-col gap-2 mb-4">
+                <div className='flex flex-col gap-2 mb-4'>
                   <div>
                     <CustomTextInput
                       label='Username'
@@ -334,7 +333,7 @@ export default function FormSteps () {
                   </div>
                 </div>
                 <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
-                <p className="font-medium text-md text-gray-900 mb-2">
+                <p className='font-medium text-md text-gray-900 mb-2'>
                   Please do not enter personal data in this form. We kindly ask you to enter only pseudonyms and/or made-up names or text strings.
                 </p>
                 <div className='flex items-center mb-4'>
