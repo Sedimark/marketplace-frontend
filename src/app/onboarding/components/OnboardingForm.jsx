@@ -252,41 +252,43 @@ export default function FormSteps () {
                     </div>
                   </Modal.Footer>
                 </Modal>
-                <div>
-                  <CustomTextInput
-                    label='Username'
-                    tooltip='The name under which you will be known in the SEDIMARK ecosystem.'
-                    name='username'
-                    placeholder='The name under which you will be known in the SEDIMARK ecosystem.'
-                  />
+                <div className="flex flex-col gap-2 mb-4">
+                  <div>
+                    <CustomTextInput
+                      label='Username'
+                      tooltip='The name under which you will be known in the SEDIMARK ecosystem.'
+                      name='username'
+                      placeholder='The name under which you will be known in the SEDIMARK ecosystem.'
+                    />
+                  </div>
+                  <div>
+                    <CustomTextInput
+                      label='Self-listing URL'
+                      tooltip='The public URL where your offering manager self-listing service is hosted, typically: https://my-offering-manager.com/offerings'
+                      name='selfListingUrl'
+                      placeholder='https://my-offering-manager.com/offerings'
+                    />
+                  </div>
+                  <div>
+                    <CustomTextInput
+                      label='Connector DSP URL'
+                      tooltip='The public URL where the Data Space Protocol (DSP) API of your connector is hosted, typically: https://my-connector.com/api/dsp'
+                      name='connectorUrl'
+                      placeholder='https://my-connector.com/api/dsp'
+                    />
+                  </div>
+                  <div>
+                    <CustomTextInput
+                      label='Profile server URL'
+                      tooltip='The public URL where your profile data server is hosted, typically: https://my-profile.com/profile'
+                      name='profileUrl'
+                      placeholder='https://my-profile-server.com/profile'
+                    />
+                  </div>
                 </div>
-                <div>
-                  <CustomTextInput
-                    label='Self-listing URL'
-                    tooltip='The public URL where your offering manager self-listing service is hosted, typically: https://my-offering-manager.com/offerings'
-                    name='selfListingUrl'
-                    placeholder='https://my-offering-manager.com/offerings'
-                  />
-                </div>
-                <div>
-                  <CustomTextInput
-                    label='Connector DSP URL'
-                    tooltip='The public URL where the Data Space Protocol (DSP) API of your connector is hosted, typically: https://my-connector.com/api/dsp'
-                    name='connectorUrl'
-                    placeholder='https://my-connector.com/api/dsp'
-                  />
-                </div>
-                <div>
-                  <CustomTextInput
-                    label='Profile server URL'
-                    tooltip='The public URL where your profile data server is hosted, typically: https://my-profile.com/profile'
-                    name='profileUrl'
-                    placeholder='https://my-profile-server.com/profile'
-                  />
-                </div>
-                <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
+                <hr className='my-2 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
                 <div className='flex flex-col gap-2'>
-                  <div className='grid gap-6 mb-2 md:grid-cols-2'>
+                  <div className='grid gap-6 md:grid-cols-2'>
                     <div>
                       <CustomTextInput
                         label='First name'
@@ -316,7 +318,7 @@ export default function FormSteps () {
                       placeholder='http://sedimark.com'
                     />
                   </div>
-                  <div className='flex justify-between gap-6 mb-2 pt-4'>
+                  <div className='flex justify-between gap-6'>
                     <div className='w-full'>
                       <CustomTextInput
                         label='Profile picture'
