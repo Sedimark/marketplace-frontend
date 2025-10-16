@@ -8,7 +8,8 @@ import {
   Accordion,
   Modal,
   Spinner,
-  ClipboardWithIcon
+  ClipboardWithIcon,
+  Toast
 } from 'flowbite-react'
 import * as yup from 'yup'
 import { Formik, Form, useField } from 'formik'
@@ -331,6 +332,9 @@ export default function FormSteps () {
                   </div>
                 </div>
                 <hr className='my-4 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10' />
+                <p className="font-medium text-md text-gray-900 mb-2">
+                  Please do not enter personal data in this form. We kindly ask you to enter only pseudonyms and/or made-up names or text strings.
+                </p>
                 <div className='flex items-center mb-4'>
                   <input
                     id='declaration'
@@ -340,8 +344,8 @@ export default function FormSteps () {
                     checked={values.declaration}
                     className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500'
                   />
-                  <label htmlFor='declaration' className='ms-2 ml-2 text-sm font-medium text-gray-900'>
-                    I hereby declare that I have not put any personal data in my username or my services URLs.
+                  <label htmlFor='declaration' className='ms-2 ml-2 text-md font-medium text-gray-900'>
+                    I hereby declare that I have read the above instructions.
                   </label>
                 </div>
                 {errors.declaration && touched.declaration && (
