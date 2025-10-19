@@ -35,13 +35,13 @@ const NewsCarousel = (newsList = [], iteration = 0, cards = 1) => {
                 {news.title}
               </h5>
               <div className='grid grid-cols-3 gap-4 items-center'>
-                  <Image
-                    width={500}
-                    height={500}
-                    style={{ objectFit: 'contain' }}
-                    src={news.image || 'https://sedimark.eu/wp-content/uploads/2022/12/all-logo-banner-circle.png'}
-                    alt={news.title}
-                  />
+                <Image
+                  width={500}
+                  height={500}
+                  style={{ objectFit: 'contain' }}
+                  src={news.image || 'https://sedimark.eu/wp-content/uploads/2022/12/all-logo-banner-circle.png'}
+                  alt={news.title}
+                />
                 <div className='col-span-2 flex flex-col w-full items-center justify-between gap-4'>
                   <p className='italic text-sm text-gray-500 dark:text-gray-400'>
                     {news.meta}

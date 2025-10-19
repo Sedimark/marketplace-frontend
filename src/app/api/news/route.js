@@ -54,7 +54,7 @@ export async function GET () {
       }
     }
 
-    // Ensures at least 1 item 
+    // Ensures at least 1 item
     if (items.length === 0) {
       items.push({
         title: 'Visit Sedimark News',
