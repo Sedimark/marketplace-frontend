@@ -1,38 +1,26 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Carousel, Card, Button } from 'flowbite-react'
 
-const tempNews = [
-  {
-    text: 'After the thrilling session that was held at the EBDVF 2024 in Budapest on October 4th, titled "Leveraging Technologies for Data Management to Implement Data Spaces," where around 30 attendees gathered...',
-    title: 'SEDIMARK at the European Big Data Value Forum (EBDVF) 2024',
-    url: 'https://sedimark.eu/sedimark-at-the-european-big-data-value-forum-ebdvf-2024/'
-  },
-  {
-    text: 'After the thrilling session that was held at the EBDVF 2024 in Budapest on October 4th, titled "Leveraging Technologies for Data Management to Implement Data Spaces," where around 30 attendees gathered...',
-    title: 'SEDIMARK at the European Big Data Value Forum (EBDVF) 2024',
-    url: 'https://sedimark.eu/sedimark-at-the-european-big-data-value-forum-ebdvf-2024/'
-  },
-  {
-    text: 'After the thrilling session that was held at the EBDVF 2024 in Budapest on October 4th, titled "Leveraging Technologies for Data Management to Implement Data Spaces," where around 30 attendees gathered...',
-    title: 'SEDIMARK at the European Big Data Value Forum (EBDVF) 2024',
-    url: 'https://sedimark.eu/sedimark-at-the-european-big-data-value-forum-ebdvf-2024/'
-  },
-  {
-    text: 'After the thrilling session that was held at the EBDVF 2024 in Budapest on October 4th, titled "Leveraging Technologies for Data Management to Implement Data Spaces," where around 30 attendees gathered...',
-    title: 'SEDIMARK at the European Big Data Value Forum (EBDVF) 2024',
-    url: 'https://sedimark.eu/sedimark-at-the-european-big-data-value-forum-ebdvf-2024/'
-  },
-  {
-    text: 'After the thrilling session that was held at the EBDVF 2024 in Budapest on October 4th, titled "Leveraging Technologies for Data Management to Implement Data Spaces," where around 30 attendees gathered...',
-    title: 'SEDIMARK at the European Big Data Value Forum (EBDVF) 2024',
-    url: 'https://sedimark.eu/sedimark-at-the-european-big-data-value-forum-ebdvf-2024/'
-  }
-]
-
-const NewsCarousel = (newsList, iteration = 0, cards = 3) => {
-  if (newsList.length === 0) {
-    return ''
+const NewsCarousel = (newsList = [], iteration = 0, cards = 3) => {
+  if (!newsList || newsList.length === 0) {
+    // Return a safe placeholder slide (Flowbite Carousel expects elements with props)
+    return [(
+      <div key='empty' className='absolute top-1/2 w-full flex justify-center'>
+        <div className='w-1/3 px-[72px]'>
+          <Card className='h-full'>
+            <h5 className='text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
+              Visit Sedimark News
+            </h5>
+            <p className='font-normal text-gray-700 dark:text-gray-400'>
+              See the latest updates at sedimark.eu/news/
+            </p>
+            <Button color='gray' size='sm' onClick={() => { window.location.href = 'https://sedimark.eu/news/' }}> Learn More </Button>
+          </Card>
+        </div>
+      </div>
+    )]
   }
 
   const page = newsList.slice(0, cards)
@@ -65,10 +53,34 @@ const NewsCarousel = (newsList, iteration = 0, cards = 3) => {
 }
 
 const Slideshow = () => {
+  const [news, setNews] = useState([])
+
+  useEffect(() => {
+    let mounted = true
+
+    async function loadNews () {
+      try {
+        const res = await fetch('/api/news')
+        if (!res.ok) {
+          throw new Error(`News API returned ${res.status}`)
+        }
+        const items = await res.json()
+        if (mounted && Array.isArray(items) && items.length > 0) {
+          setNews(items)
+        }
+      } catch (error) {
+        console.error('Failed to load news:', error)
+      }
+    }
+
+    loadNews()
+    return () => { mounted = false }
+  }, [])
+
   return (
     <div className="relative h-[650px] bg-[url('/img/sedimark_bk_light-100.jpg')] bg-cover bg-center w-full text-black">
       <Carousel slideInterval={10000} pauseOnHover>
-        {NewsCarousel(tempNews)}
+        {NewsCarousel(news)}
       </Carousel>
     </div>
   )
