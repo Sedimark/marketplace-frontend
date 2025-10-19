@@ -2,25 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import { Carousel, Card, Button } from 'flowbite-react'
+import Image from 'next/image'
 
-const NewsCarousel = (newsList = [], iteration = 0, cards = 3) => {
+const NewsCarousel = (newsList = [], iteration = 0, cards = 1) => {
   if (!newsList || newsList.length === 0) {
-    // Return a safe placeholder slide (Flowbite Carousel expects elements with props)
-    return [(
-      <div key='empty' className='absolute top-1/2 w-full flex justify-center'>
-        <div className='w-1/3 px-[72px]'>
-          <Card className='h-full'>
-            <h5 className='text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
-              Visit Sedimark News
-            </h5>
-            <p className='font-normal text-gray-700 dark:text-gray-400'>
-              See the latest updates at sedimark.eu/news/
-            </p>
-            <Button color='gray' size='sm' onClick={() => { window.location.href = 'https://sedimark.eu/news/' }}> Learn More </Button>
-          </Card>
-        </div>
-      </div>
-    )]
+    newsList = [{
+      title: 'Visit Sedimark News',
+      text: 'See the latest updates at sedimark.eu/news/',
+      url: 'https://sedimark.eu/news/',
+      meta: '',
+      image: 'https://sedimark.eu/wp-content/uploads/2022/12/all-logo-banner-circle.png'
+    }]
   }
 
   const page = newsList.slice(0, cards)
@@ -32,20 +24,35 @@ const NewsCarousel = (newsList = [], iteration = 0, cards = 3) => {
 
   return [
     (
-      <div key={iteration} className='absolute top-1/2 w-full flex flex-row text-start'>
+      <div key={iteration} className='absolute top-1/2 w-full flex flex-row justify-center gap-16 text-start'>
         {page.map((news, index) => {
           return (
-            <div key={`${iteration}-${index}`} className='w-1/3 px-[72px]'>
-              <Card className='h-full'>
-                <h5 className='text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
-                  {news.title}
-                </h5>
-                <p className='font-normal text-gray-700 dark:text-gray-400'>
-                  {news.text}
-                </p>
-                <Button color='gray' size='sm' onClick={() => { window.location.href = news.url }}> Learn more </Button>
-              </Card>
-            </div>
+            <Card
+              key={`${iteration}-${index}`}
+              className='w-1/2'
+            >
+              <h5 className='text-center text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
+                {news.title}
+              </h5>
+              <div className='grid grid-cols-3 gap-4 items-center'>
+                  <Image
+                    width={500}
+                    height={500}
+                    style={{ objectFit: 'contain' }}
+                    src={news.image || 'https://sedimark.eu/wp-content/uploads/2022/12/all-logo-banner-circle.png'}
+                    alt={news.title}
+                  />
+                <div className='col-span-2 flex flex-col w-full items-center justify-between gap-4'>
+                  <p className='italic text-sm text-gray-500 dark:text-gray-400'>
+                    {news.meta}
+                  </p>
+                  <p className='font-normal text-gray-700 dark:text-gray-400 max-h-40 overflow-y-auto'>
+                    {news.text}
+                  </p>
+                  <Button className='w-full' color='gray' size='sm' onClick={() => { window.location.href = news.url }}> Learn more </Button>
+                </div>
+              </div>
+            </Card>
           )
         })}
       </div>

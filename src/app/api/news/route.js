@@ -3,7 +3,7 @@ import { parse } from 'node-html-parser'
 
 /**
  * Server-side scraper for https://sedimark.eu/news/
- * Returns JSON array: [{ title, text, url }, ...]
+ * Returns JSON array: [{ title, text, image, meta, url }, ...]
  */
 export async function GET () {
   try {
@@ -28,12 +28,10 @@ export async function GET () {
 
     // Get news items by scraping oxy-post divs
     const postEls = root.querySelectorAll('div.oxy-post')
-    console.dir(postEls.length)
     if (postEls && postEls.length > 0) {
       for (const post of postEls.slice(0, maxItems)) {
         const titleEl = post.querySelector('.oxy-post-title')
         const title = titleEl ? (titleEl.text || '').trim() : ''
-        console.dir(title)
 
         const contentEl = post.querySelector('.oxy-post-content')
         const text = contentEl ? (contentEl.text || '').trim().replace(/\s+/g, ' ') : ''
@@ -42,8 +40,16 @@ export async function GET () {
         const href = linkEl ? (linkEl.getAttribute('href') || '') : ''
         const url = resolveUrl(href)
 
+        const metaEl = post.querySelector('.oxy-post-meta')
+        const meta = metaEl ? (metaEl.text || '').trim().replace(/\s+/g, ' ') : ''
+
+        const imageEl = post.querySelector('.oxy-post-image-fixed-ratio')
+        const imageStyle = imageEl.getAttribute('style') || ''
+        const imageMatch = imageStyle.match(/background-image:\s*url\(['"]?(.*?)['"]?\)/i)
+        const image = imageMatch ? imageMatch[1] : ''
+
         if (title) {
-          items.push({ title, text, url })
+          items.push({ title, text, url, meta, image })
         }
       }
     }
