@@ -25,6 +25,12 @@ export async function getProviderData (did) {
     return { did, error: 'No connector service found in DID document' }
   }
 
+  const offeringSvc = didDoc.data.service.find(svc => svc.id.endsWith('self-listing'))
+  if (!offeringSvc || !offeringSvc.serviceEndpoint) {
+    console.log(`No offering manager service found in DID document for ${did}`)
+    return { did, error: 'No offering manager service found in DID document' }
+  }
+
   const profile = await getUserData(profileSvc.serviceEndpoint)
   const providerConnectorURL = connectorSvc.serviceEndpoint
   if (profile.error) {
@@ -32,5 +38,11 @@ export async function getProviderData (did) {
     return { did, error: 'Error fetching profile for DID' }
   }
 
-  return { did, ...profile, connector_url: providerConnectorURL }
+  return {
+    did,
+    ...profile,
+    connector_url: providerConnectorURL,
+    offering_manager_url: offeringSvc.serviceEndpoint,
+    profile_url: profileSvc.serviceEndpoint
+  }
 }

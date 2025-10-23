@@ -77,12 +77,10 @@ function getCreateOfferingBody (offeringData, identity, provider) {
     '@id': 'https://uc.sedimark.eu/offerings/dummy-offering-id', // Overwritten by OM
     '@type': 'sedimark:Offering',
     'sedimark:isListedBy': {
-      // can be `${settings.offeringManagerUrl}/offerings` (value form settings) or provider.connector_url + '/offerings (value from DID resolved)'
-      '@id': `${settings.offeringManagerUrl}/offerings`,
+      '@id': `${provider.offering_manager_url}`,
       '@type': 'sedimark:Self-Listing',
       'sedimark:belongsTo': {
-        // can be `${settings.webserverUrl}/profile` or extracted from the DID
-        '@id': `${settings.webserverUrl}/profile`,
+        '@id': `${provider.profile_url}`,
         '@type': 'sedimark:Participant',
         'schema:alternateName': {
           '@value': identity.data.vc.credentialSubject['schema:alternateName'], // DLT/Profile webserver? Managed by Offering Mangarer? --> Profile
